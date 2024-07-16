@@ -76,7 +76,7 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_20dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/lesson_name"
+        app:layout_constraintTop_toBottomOf="@id/lesson_status_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
