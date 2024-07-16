@@ -17,10 +17,10 @@ guidelines https://initialcommit.com/blog/git-commit-messages-best-practices
 Clone this repository and import into **Android Studio**
 
 ```bash
-git clone https://github.com/mxaln/learning-sun.git
+git clone https://github.com/mxaln/sun-lessons.git
 ```
 
-####  Download and install from [Release](https://github.com/mxaln/learning-sun/releases)
+####  Download and install from [Release](https://github.com/mxaln/sun-lessons/releases)
 
 ## Maintainers
 
