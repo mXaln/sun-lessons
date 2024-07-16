@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_lesson"
+    android:layout_marginTop="@dimen/_10dp"
+    android:padding="@dimen/_16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/rooms"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/lesson_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:maxLines="1"
+            android:text="@string/lesson_name"
+            android:textColor="@color/selector_lesson_text"
+            android:textSize="@dimen/_24sp"
+            android:textStyle="normal"
+            />
+
+        <TextView
+            android:id="@+id/lesson_tally"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/_10dp"
+            android:text="@string/tally_example"
+            android:textColor="@color/selector_lesson_text"
+            android:textSize="@dimen/_20sp"
+            android:textStyle="normal"
+            android:fontFamily="@font/tally"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lesson_status_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rooms">
+
+        <ImageView
+            android:id="@+id/lesson_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_lesson"
+            android:layout_marginEnd="@dimen/_5dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/lesson_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicatorSize="@dimen/_25dp"
+            app:indicatorColor="@color/primary"
+            app:trackColor="@color/primary_light"
+            app:trackThickness="@dimen/_2dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_20dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/lesson_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/learn_symbols"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/learn_image"
+                android:layout_width="@dimen/_60dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/selector_learn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/learn_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_symbols"
+                android:textSize="@dimen/_16sp"
+                android:textColor="@color/dark_gray"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_20dp"
+                app:layout_constraintStart_toEndOf="@id/learn_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/learn_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_lesson"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/learn_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorSize="@dimen/_25dp"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/primary_light"
+                app:trackThickness="@dimen/_2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/test_symbols"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp">
+
+            <ImageView
+                android:id="@+id/test_image"
+                android:layout_width="@dimen/_60dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/selector_test"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/test_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/test_symbols"
+                android:textSize="@dimen/_16sp"
+                android:textColor="@color/selector_lesson_text"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_20dp"
+                app:layout_constraintStart_toEndOf="@id/test_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/test_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_lesson"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/test_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorSize="@dimen/_25dp"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/primary_light"
+                app:trackThickness="@dimen/_2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/build_sentences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp">
+
+            <ImageView
+                android:id="@+id/sentences_image"
+                android:layout_width="@dimen/_60dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/selector_sentences"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/sentences_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/build_sentences"
+                android:textSize="@dimen/_16sp"
+                android:textColor="@color/selector_lesson_text"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_20dp"
+                app:layout_constraintStart_toEndOf="@id/sentences_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/sentences_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_lesson"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/sentences_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorSize="@dimen/_25dp"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/primary_light"
+                app:trackThickness="@dimen/_2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
