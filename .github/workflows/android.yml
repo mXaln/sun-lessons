@@ -41,12 +41,11 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Create Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Upload binary to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: ${{ github.ref_name }}
+          file: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          asset_name: sun-${{ github.ref_name }}
+          overwrite: true
           prerelease: false
-          title: "Release ${{ github.ref_name }}"
-          files: |
-            ${{ steps.sign_app.outputs.signedReleaseFile }}
+          body: "Release ${{ github.ref_name }}"
