@@ -45,7 +45,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: ${{ steps.sign_app.outputs.signedReleaseFile }}
-          asset_name: sun-${{ github.ref_name }}
+          asset_name: sun-${{ github.ref_name }}.apk
           overwrite: true
-          prerelease: false
+          prerelease: true
+          draft: true
           body: "Release ${{ github.ref_name }}"
