@@ -41,8 +41,12 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Upload release APK
-        uses: actions/upload-artifact@v2
+      - name: Create Release
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          name: sun-${{ github.ref_name }}.apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: ${{ github.ref_name }}
+          prerelease: false
+          title: "Release ${{ github.ref_name }}"
+          files: |
+            ${{ steps.sign_app.outputs.signedReleaseFile }}
