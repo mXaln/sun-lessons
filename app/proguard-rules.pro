@@ -36,3 +36,20 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+
+# Proguard configuration for Jackson 2.x
+-keep class com.fasterxml.jackson.databind.ObjectMapper {
+    public <methods>;
+    protected <methods>;
+}
+-keep class com.fasterxml.jackson.databind.ObjectWriter {
+    public ** writeValueAsString(**);
+}
+-keepnames class com.fasterxml.jackson.** { *; }
+-dontwarn com.fasterxml.jackson.databind.**
+-keep class * extends com.fasterxml.jackson.core.type.TypeReference
+
+# Kotlin
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.reflect.** { *; }
+-keep class org.bibletranslationtools.sun.data.model.** { *; }
