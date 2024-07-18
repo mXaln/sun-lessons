@@ -2,6 +2,7 @@ package org.bibletranslationtools.sun.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityIntermediateBinding
@@ -11,15 +12,24 @@ import org.bibletranslationtools.sun.utils.TallyMarkConverter
 class IntermediateActivity : AppCompatActivity() {
     private val binding by lazy { ActivityIntermediateBinding.inflate(layoutInflater) }
 
+    private var id: Int = 1
+    private var part: Int = 1
+    private var type: Int = Constants.LEARN_SYMBOLS
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
-        val id = intent.getIntExtra("id", 1)
-        val part = intent.getIntExtra("part", 1)
-        val type = intent.getIntExtra("type", Constants.LEARN_SYMBOLS)
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        id = intent.getIntExtra("id", 1)
+        part = intent.getIntExtra("part", 1)
+        type = intent.getIntExtra("type", Constants.LEARN_SYMBOLS)
 
         when (type) {
             Constants.LEARN_SYMBOLS -> {
@@ -55,8 +65,10 @@ class IntermediateActivity : AppCompatActivity() {
 
         binding.lessonTitle.text = getString(R.string.lesson_name, id)
         binding.lessonTally.text = TallyMarkConverter.toText(id)
+    }
 
-        binding.toolbar.setNavigationOnClickListener {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
             val intent = Intent(baseContext, LessonListActivity::class.java)
             intent.putExtra("selected", id)
             startActivity(intent)

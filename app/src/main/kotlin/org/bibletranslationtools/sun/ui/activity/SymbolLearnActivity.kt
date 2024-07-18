@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -26,17 +27,16 @@ class SymbolLearnActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
         viewModel.part.value = intent.getIntExtra("part", 1)
 
         binding.lessonTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
         binding.lessonTally.text = TallyMarkConverter.toText(viewModel.lessonId.value)
-
-        binding.toolbar.setNavigationOnClickListener {
-            val intent = Intent(baseContext, LessonListActivity::class.java)
-            intent.putExtra("selected", viewModel.lessonId.value)
-            startActivity(intent)
-        }
 
         setupCardsView()
         setupButtons()
@@ -105,6 +105,14 @@ class SymbolLearnActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         binding.viewPager.unregisterOnPageChangeCallback(callback)
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val intent = Intent(baseContext, LessonListActivity::class.java)
+            intent.putExtra("selected", viewModel.lessonId.value)
+            startActivity(intent)
+        }
     }
 }
 

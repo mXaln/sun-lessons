@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -25,9 +26,9 @@ class TrackProgressActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
         binding.toolbar.setNavigationOnClickListener {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.lessons.layoutManager = GridLayoutManager(this, 5)
@@ -70,5 +71,12 @@ class TrackProgressActivity : AppCompatActivity() {
         val progress = lessons.sumOf { it.totalProgress }.toInt() / lessons.size
         binding.testProgress.progress = progress
         binding.testScore.text = String.format("%1d%%", progress)
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val intent = Intent(baseContext, HomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

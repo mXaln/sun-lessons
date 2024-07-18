@@ -2,6 +2,7 @@ package org.bibletranslationtools.sun.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import org.bibletranslationtools.sun.databinding.ActivityHomeBinding
@@ -16,6 +17,11 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
+
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         binding.learnSymbols.setOnClickListener {
             val intent = Intent(baseContext, LessonListActivity::class.java)
@@ -33,6 +39,12 @@ class HomeActivity : AppCompatActivity() {
         }
 
         viewModel.importLessons()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            finishAffinity()
+        }
     }
 
 }

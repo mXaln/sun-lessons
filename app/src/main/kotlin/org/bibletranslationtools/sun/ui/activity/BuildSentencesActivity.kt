@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -57,14 +58,9 @@ class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSe
             viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
 
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            toolbar.setNavigationOnClickListener {
-                val intent = if (viewModel.isGlobal.value) {
-                    Intent(baseContext, GlobalTestActivity::class.java)
-                } else {
-                    Intent(baseContext, LessonListActivity::class.java)
-                }
-                intent.putExtra("selected", viewModel.lessonId.value)
-                startActivity(intent)
+            onBackPressedDispatcher.addCallback(onBackPressedCallback)
+            binding.toolbar.setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
             }
 
             if (!viewModel.isGlobal.value) {
@@ -302,5 +298,17 @@ class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSe
         correctSymbols.addAll(symbols)
         correctAdapter.submitList(symbols)
         correctAdapter.refresh()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val intent = if (viewModel.isGlobal.value) {
+                Intent(baseContext, GlobalTestActivity::class.java)
+            } else {
+                Intent(baseContext, LessonListActivity::class.java)
+            }
+            intent.putExtra("selected", viewModel.lessonId.value)
+            startActivity(intent)
+        }
     }
 }

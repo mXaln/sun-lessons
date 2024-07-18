@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,11 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
 
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         val selectedLessonId = intent.getIntExtra("selected", 1)
 
         binding.lessonsList.layoutManager = LinearLayoutManager(
@@ -40,11 +46,6 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
                 lessonsAdapter.submitList(it)
                 lessonsAdapter.notifyDataSetChanged()
             }
-        }
-
-        binding.toolbar.setNavigationOnClickListener {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            startActivity(intent)
         }
 
         viewModel.setActiveLesson(selectedLessonId)
@@ -73,5 +74,12 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
     override fun onResume() {
         super.onResume()
         refreshData()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val intent = Intent(baseContext, HomeActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
