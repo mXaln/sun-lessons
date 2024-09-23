@@ -56,7 +56,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_20dp"
         android:paddingHorizontal="@dimen/_20dp" >
@@ -213,8 +214,20 @@
             android:id="@+id/lessons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sp"/>
+            android:layout_marginTop="@dimen/_20sp"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/_10dp"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+
+        <include
+            android:id="@+id/nav_bar"
+            layout="@layout/bottom_navigation"/>
     </LinearLayout>
 
 </LinearLayout>

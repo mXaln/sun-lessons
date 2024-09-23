@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.launch
+import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityTrackProgressBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LessonGridAdapter
 import org.bibletranslationtools.sun.ui.viewmodel.TrackProgressViewModel
 
-class TrackProgressActivity : AppCompatActivity() {
+class  TrackProgressActivity : AppCompatActivity() {
     private val binding by lazy { ActivityTrackProgressBinding.inflate(layoutInflater) }
     private val lessonsAdapter by lazy { LessonGridAdapter(this) }
     private val viewModel: TrackProgressViewModel by viewModels()
@@ -36,6 +37,21 @@ class TrackProgressActivity : AppCompatActivity() {
         binding.lessons.addItemDecoration(
             GridItemOffsetDecoration(5, 30, false)
         )
+
+        binding.navBar.bottomNavigation.selectedItemId = R.id.progress
+        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    val intent = Intent(baseContext, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.lessons -> {
+                    val intent = Intent(baseContext, LessonListActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
 
         lifecycleScope.launch {
             viewModel.lessons.collect {

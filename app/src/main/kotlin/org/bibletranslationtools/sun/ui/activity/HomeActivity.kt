@@ -2,9 +2,11 @@ package org.bibletranslationtools.sun.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityHomeBinding
 import org.bibletranslationtools.sun.ui.viewmodel.HomeViewModel
 
@@ -15,13 +17,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
 
         binding.learnSymbols.setOnClickListener {
             val intent = Intent(baseContext, LessonListActivity::class.java)
@@ -33,9 +30,18 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.trackProgress.setOnClickListener {
-            val intent = Intent(baseContext, TrackProgressActivity::class.java)
-            startActivity(intent)
+        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.progress -> {
+                    val intent = Intent(baseContext, TrackProgressActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.lessons -> {
+                    val intent = Intent(baseContext, LessonListActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
         }
 
         viewModel.importLessons()

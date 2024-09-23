@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.ui.adapter.LessonListAdapter
 import org.bibletranslationtools.sun.databinding.ActivityLessonBinding
 import org.bibletranslationtools.sun.ui.model.LessonModel
@@ -40,6 +41,21 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
             false
         )
         binding.lessonsList.adapter = lessonsAdapter
+
+        binding.navBar.bottomNavigation.selectedItemId = R.id.lessons
+        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    val intent = Intent(baseContext, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.progress -> {
+                    val intent = Intent(baseContext, TrackProgressActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
 
         lifecycleScope.launch {
             viewModel.lessons.collect {

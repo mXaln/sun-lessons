@@ -7,7 +7,7 @@
         <item name="android:statusBarColor">@color/primary</item>
     </style>
 
-    <style name="Theme.SUN" parent="Base.Theme.SUN"/>
+    <style name="Theme.SUN" parent="Base.Theme.SUN" />
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/celestial_blue</item>
@@ -20,5 +20,9 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom_sheet</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom_sheet</item>
+    </style>
+
+    <style name="BottomNavBar" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemBackground">@drawable/menu_item_background</item>
     </style>
 </resources>
