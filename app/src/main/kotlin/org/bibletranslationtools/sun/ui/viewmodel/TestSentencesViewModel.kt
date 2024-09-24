@@ -15,7 +15,7 @@ import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 
-class SentenceTestViewModel(application: Application) : AndroidViewModel(application) {
+class TestSentencesViewModel(application: Application) : AndroidViewModel(application) {
     private val lessonRepository: LessonRepository
     private val sentenceRepository: SentenceRepository
     private val cardsRepository: CardRepository

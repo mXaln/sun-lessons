@@ -13,9 +13,8 @@ import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.data.model.Lesson
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
-import org.bibletranslationtools.sun.utils.Constants
 
-class ReviewViewModel(application: Application) : AndroidViewModel(application) {
+class TestSymbolsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: CardRepository
     private val sentenceRepository: SentenceRepository
     private val lessonRepository: LessonRepository
@@ -25,7 +24,6 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
 
     val questionDone = MutableStateFlow(false)
     val lessonId = MutableStateFlow(1)
-    val part = MutableStateFlow(Constants.PART_ONE)
     val isGlobal = MutableStateFlow(false)
 
     init {
@@ -41,12 +39,6 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
     fun loadLessonCards() {
         viewModelScope.launch {
             mutableCards.value = repository.getAllByLesson(lessonId.value)
-                .filter {
-                    when (part.value) {
-                        Constants.PART_ONE, Constants.PART_TWO -> it.part == part.value
-                        else -> true
-                    }
-                }
         }
     }
 

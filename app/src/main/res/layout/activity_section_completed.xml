@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".ui.activity.SectionCompleteActivity">
+
+    <include android:id="@+id/top_nav_bar"
+        layout="@layout/top_navigation" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_50dp"
+            android:paddingHorizontal="@dimen/_60dp"
+            android:background="@drawable/background_complete">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_120dp"
+                android:src="@drawable/ic_finish"
+                android:layout_marginTop="@dimen/_80dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/test_symbols"
+                android:textSize="@dimen/_30sp"
+                android:textStyle="bold"
+                android:elevation="1dp"
+                android:textColor="@color/accent"
+                android:layout_marginTop="@dimen/_10dp"
+                android:id="@+id/page_title" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_60dp"
+            android:layout_marginBottom="@dimen/_50dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50dp"
+                app:icon="@drawable/ic_arrow_right"
+                app:iconPadding="@dimen/_16dp"
+                app:iconGravity="textEnd" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

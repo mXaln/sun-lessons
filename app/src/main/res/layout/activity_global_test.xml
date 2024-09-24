@@ -109,7 +109,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/build_sentences"
+            android:id="@+id/test_sentences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

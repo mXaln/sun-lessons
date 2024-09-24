@@ -27,15 +27,15 @@ class GlobalTestActivity : AppCompatActivity() {
 
         binding.testSymbols.setOnClickListener {
             if (viewModel.cardsCount.value > 0) {
-                val intent = Intent(baseContext, SymbolReviewActivity::class.java)
+                val intent = Intent(baseContext, TestSymbolsActivity::class.java)
                 intent.putExtra("global", true)
                 startActivity(intent)
             }
         }
 
-        binding.buildSentences.setOnClickListener {
+        binding.testSentences.setOnClickListener {
             if (viewModel.sentencesCount.value > 0) {
-                val intent = Intent(baseContext, BuildSentencesActivity::class.java)
+                val intent = Intent(baseContext, TestSentencesActivity::class.java)
                 intent.putExtra("global", true)
                 startActivity(intent)
             }
@@ -49,7 +49,7 @@ class GlobalTestActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.sentencesCount.collect {
-                binding.buildSentences.isActivated = it > 0
+                binding.testSentences.isActivated = it > 0
             }
         }
 

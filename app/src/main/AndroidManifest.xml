@@ -20,16 +20,22 @@
                 android:name=".ui.activity.LessonListActivity"
                 android:exported="false"/>
         <activity
-                android:name=".ui.activity.SymbolReviewActivity"
+                android:name=".ui.activity.TestSymbolsActivity"
                 android:exported="false"/>
         <activity
-                android:name=".ui.activity.SymbolLearnActivity"
+                android:name=".ui.activity.LearnSymbolsActivity"
                 android:exported="false"/>
         <activity
-            android:name=".ui.activity.IntermediateActivity"
+            android:name=".ui.activity.SectionStartActivity"
             android:exported="false"/>
         <activity
-            android:name=".ui.activity.BuildSentencesActivity"
+            android:name=".ui.activity.SectionCompleteActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.activity.LearnSentencesActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.activity.TestSentencesActivity"
             android:exported="false"/>
         <activity
             android:name=".ui.activity.TrackProgressActivity"

@@ -12,7 +12,7 @@ import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.ui.mapper.LessonMapper
 import org.bibletranslationtools.sun.ui.model.LessonModel
 
-class LessonViewModel(application: Application) : AndroidViewModel(application) {
+class LessonListViewModel(application: Application) : AndroidViewModel(application) {
     private val lessonRepository: LessonRepository
 
     private val activeLessonId = MutableStateFlow(1)

@@ -12,18 +12,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Card
-import org.bibletranslationtools.sun.databinding.ActivityReviewBinding
 import kotlinx.coroutines.*
+import org.bibletranslationtools.sun.databinding.ActivityTestSymbolsBinding
 import org.bibletranslationtools.sun.ui.adapter.ReviewCardAdapter
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
-import org.bibletranslationtools.sun.ui.viewmodel.ReviewViewModel
+import org.bibletranslationtools.sun.ui.viewmodel.TestSymbolsViewModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
-class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelectedListener {
+class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelectedListener {
 
-    private val binding by lazy { ActivityReviewBinding.inflate(layoutInflater) }
-    private val viewModel: ReviewViewModel by viewModels()
+    private val binding by lazy { ActivityTestSymbolsBinding.inflate(layoutInflater) }
+    private val viewModel: TestSymbolsViewModel by viewModels()
     private val gridAdapter: ReviewCardAdapter by lazy {
         ReviewCardAdapter(this)
     }
@@ -37,7 +37,6 @@ class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelect
 
         with(binding) {
             viewModel.lessonId.value = intent.getIntExtra("id", 1)
-            viewModel.part.value = intent.getIntExtra("part", 1)
             viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
 
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -56,7 +55,7 @@ class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelect
             }
 
             answersList.layoutManager = GridLayoutManager(
-                this@SymbolReviewActivity,
+                this@TestSymbolsActivity,
                 2
             )
             answersList.addItemDecoration(
@@ -103,16 +102,9 @@ class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelect
     private fun checkAnswer(selectedCard: Card, position: Int) {
         if (selectedCard.symbol == currentCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                when (viewModel.part.value) {
-                    Constants.PART_ONE, Constants.PART_TWO -> {
-                        currentCard.partiallyDone = true
-                    }
-                    else -> {
-                        currentCard.passed = true
-                        currentCard.done = true
-                        viewModel.updateCard(currentCard)
-                    }
-                }
+                currentCard.passed = true
+                currentCard.done = true
+                viewModel.updateCard(currentCard)
             }
             currentCard.correct = true
             gridAdapter.selectCorrect(position)
@@ -130,12 +122,7 @@ class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelect
         val allCards = viewModel.cards.value.toMutableList()
         allCards.forEach { it.correct = null }
 
-        val inProgressCards = allCards.filter {
-            when (viewModel.part.value) {
-                Constants.PART_ONE, Constants.PART_TWO -> !it.partiallyDone
-                else -> !it.done
-            }
-        }
+        val inProgressCards = allCards.filter { !it.done }
 
         if (inProgressCards.isEmpty()) {
             finishReview()
@@ -174,35 +161,19 @@ class SymbolReviewActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelect
             startActivity(intent)
         } else {
             lifecycleScope.launch {
-                val type: Int
-                when (viewModel.part.value) {
-                    Constants.PART_ONE -> {
-                        viewModel.part.value = Constants.PART_TWO
-                        type = Constants.LEARN_SYMBOLS
-                    }
-                    Constants.PART_TWO -> {
-                        viewModel.part.value = Constants.PART_NONE
-                        type = Constants.TEST_SYMBOLS
-                    }
-                    else -> {
-                        type = Constants.BUILD_SENTENCES
-                    }
-                }
-
-                if (type == Constants.BUILD_SENTENCES && viewModel.getSentencesCount() == 0) {
+                if (viewModel.getSentencesCount() == 0) {
                     goToLessons()
                 } else {
-                    goToNextPart(type)
+                    goToLearnSentences()
                 }
             }
         }
     }
 
-    private fun goToNextPart(type: Int) {
-        val intent = Intent(baseContext, IntermediateActivity::class.java)
+    private fun goToLearnSentences() {
+        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putExtra("part", viewModel.part.value)
-        intent.putExtra("type", type)
+        intent.putExtra("type", Constants.TEST_SENTENCES)
         startActivity(intent)
     }
 

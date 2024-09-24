@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
+import org.bibletranslationtools.sun.databinding.ActivityListLessonsBinding
 import org.bibletranslationtools.sun.ui.adapter.LessonListAdapter
-import org.bibletranslationtools.sun.databinding.ActivityLessonBinding
 import org.bibletranslationtools.sun.ui.model.LessonModel
-import org.bibletranslationtools.sun.ui.viewmodel.LessonViewModel
+import org.bibletranslationtools.sun.ui.viewmodel.LessonListViewModel
+import org.bibletranslationtools.sun.utils.Constants
 
 class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelectedListener {
-    private val binding by lazy { ActivityLessonBinding.inflate(layoutInflater) }
-    private val viewModel: LessonViewModel by viewModels()
+    private val binding by lazy { ActivityListLessonsBinding.inflate(layoutInflater) }
+    private val viewModel: LessonListViewModel by viewModels()
     private val lessonsAdapter by lazy { LessonListAdapter(this, this) }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -81,6 +82,13 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
 
         lesson.isSelected = !lesson.isSelected
         lessonsAdapter.refreshLesson(position)
+    }
+
+    override fun onLessonAction(lessonId: Int, action: Int) {
+        val intent = Intent(this, SectionStartActivity::class.java)
+        intent.putExtra("id", lessonId)
+        intent.putExtra("type", action)
+        startActivity(intent)
     }
 
     private fun refreshData() {

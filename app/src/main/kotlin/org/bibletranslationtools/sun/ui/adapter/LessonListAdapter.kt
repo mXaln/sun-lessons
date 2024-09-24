@@ -1,7 +1,6 @@
 package org.bibletranslationtools.sun.ui.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ItemLessonBinding
-import org.bibletranslationtools.sun.ui.activity.SymbolLearnActivity
-import org.bibletranslationtools.sun.ui.activity.SymbolReviewActivity
-import org.bibletranslationtools.sun.ui.activity.BuildSentencesActivity
 import org.bibletranslationtools.sun.ui.model.LessonModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
@@ -25,6 +21,7 @@ class LessonListAdapter(
 
     interface OnLessonSelectedListener {
         fun onLessonSelected(lesson: LessonModel, position: Int)
+        fun onLessonAction(lessonId: Int, action: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,7 +49,7 @@ class LessonListAdapter(
 
             setLearnSymbols(cardsLearnedProgress, holder)
             setTestSymbols(testSymbolsAvailable, cardsPassedProgress, holder)
-            setBuildSentences(sentencesAvailable, sentencesPassedProgress, hasSentences, holder)
+            setTestSentences(sentencesAvailable, sentencesPassedProgress, hasSentences, holder)
         }
     }
 
@@ -137,10 +134,7 @@ class LessonListAdapter(
 
             learnSymbols.setOnClickListener {
                 val selectedLesson = getItem(holder.bindingAdapterPosition)
-                val intent = Intent(context, SymbolLearnActivity::class.java)
-                intent.putExtra("id", selectedLesson.lesson.id)
-                intent.putExtra("part", Constants.PART_ONE)
-                context.startActivity(intent)
+                listener?.onLessonAction(selectedLesson.lesson.id, Constants.LEARN_SYMBOLS)
             }
         }
     }
@@ -172,17 +166,16 @@ class LessonListAdapter(
             if (available) {
                 testSymbols.setOnClickListener {
                     val selectedLesson = getItem(holder.bindingAdapterPosition)
-                    val intent = Intent(context, SymbolReviewActivity::class.java)
-                    intent.putExtra("id", selectedLesson.lesson.id)
-                    intent.putExtra("part", 1)
-                    context.startActivity(intent)
+                    listener?.onLessonAction(
+                        selectedLesson.lesson.id,
+                        Constants.TEST_SYMBOLS
+                    )
                 }
             }
-
         }
     }
 
-    private fun setBuildSentences(
+    private fun setTestSentences(
         available: Boolean,
         progress: Double,
         hasSentences: Boolean,
@@ -190,8 +183,8 @@ class LessonListAdapter(
     ) {
         with(holder.binding) {
             if (hasSentences) {
-                buildSentences.visibility = View.VISIBLE
-                buildSentences.isActivated = available
+                testSentences.visibility = View.VISIBLE
+                testSentences.isActivated = available
 
                 when {
                     available && progress == 100.0 -> {
@@ -210,15 +203,16 @@ class LessonListAdapter(
                 }
 
                 if (available) {
-                    buildSentences.setOnClickListener {
+                    testSentences.setOnClickListener {
                         val selectedLesson = getItem(holder.bindingAdapterPosition)
-                        val intent = Intent(context, BuildSentencesActivity::class.java)
-                        intent.putExtra("id", selectedLesson.lesson.id)
-                        context.startActivity(intent)
+                        listener?.onLessonAction(
+                            selectedLesson.lesson.id,
+                            Constants.TEST_SENTENCES
+                        )
                     }
                 }
             } else {
-                buildSentences.visibility = View.GONE
+                testSentences.visibility = View.GONE
             }
         }
     }

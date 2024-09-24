@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    app:navigationIcon="@drawable/ic_arrow_back"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40dp">
+
+    <LinearLayout
+        android:id="@+id/current_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/_10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lesson_name"
+            android:textSize="@dimen/_20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:elevation="1dp"
+            android:id="@+id/page_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tally_example"
+            android:textSize="@dimen/_20sp"
+            android:textColor="@color/black"
+            android:elevation="1dp"
+            android:layout_marginStart="@dimen/_10dp"
+            android:fontFamily="@font/tally"
+            android:id="@+id/tally_number"
+            android:padding="@dimen/_4dp"
+            android:gravity="center"
+            android:background="@drawable/background_tally"/>
+    </LinearLayout>
+</androidx.appcompat.widget.Toolbar>

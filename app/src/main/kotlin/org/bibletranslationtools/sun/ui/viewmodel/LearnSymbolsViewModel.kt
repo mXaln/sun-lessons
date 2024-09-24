@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,17 +11,15 @@ import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
-import org.bibletranslationtools.sun.utils.Constants
 
-class LearnViewModel(application: Application) : AndroidViewModel(application) {
+class LearnSymbolsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: CardRepository
     private val mutableCards = MutableStateFlow<List<Card>>(listOf())
 
+    val flipState = MutableStateFlow(EasyFlipView.FlipState.FRONT_SIDE)
     val cards: StateFlow<List<Card>> = mutableCards
-
     val lessonId = MutableStateFlow(1)
-    val part = MutableStateFlow(Constants.PART_ONE)
 
     init {
         val dao = AppDatabase.getDatabase(application).getCardDao()
@@ -30,7 +29,6 @@ class LearnViewModel(application: Application) : AndroidViewModel(application) {
     fun loadCards(): Job {
         return viewModelScope.launch {
             mutableCards.value = repository.getAllByLesson(lessonId.value)
-                .filter { it.part == part.value }
         }
     }
 

@@ -7,11 +7,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.wajahatkarim3.easyflipview.EasyFlipView
+import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.databinding.ItemLearnBinding
 
 
-class LearnCardAdapter : ListAdapter<Card, LearnCardAdapter.ViewHolder>(callback) {
+class LearnCardAdapter(
+    private val flipState: StateFlow<EasyFlipView.FlipState>
+) : ListAdapter<Card, LearnCardAdapter.ViewHolder>(callback) {
+
+    private var flipListener: OnFlipAnimationListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -36,20 +46,32 @@ class LearnCardAdapter : ListAdapter<Card, LearnCardAdapter.ViewHolder>(callback
         }
     }
 
+    fun setFlipListener(listener: OnFlipAnimationListener) {
+        flipListener = listener
+    }
+
     inner class ViewHolder(
-        private val binding: ItemLearnBinding
+        val binding: ItemLearnBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Card) {
             binding.apply {
-                frontTv.text = card.symbol
-                cardViewFlip.setFlipTypeFromRight()
-                cardViewFlip.setFlipDuration(500)
-                cardViewFlip.setToHorizontalType()
+                itemText.text = card.symbol
 
                 Glide.with(itemImage.context)
                     .load(Uri.parse("file:///android_asset/images/symbols/${card.primary}"))
                     .fitCenter()
                     .into(itemImage)
+
+                cardViewFlip.onFlipListener = flipListener
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    flipState.collect {
+                        val currentState = cardViewFlip.currentFlipState
+                        if (it != currentState) {
+                            cardViewFlip.flipTheView()
+                        }
+                    }
+                }
             }
         }
     }

@@ -17,16 +17,16 @@ import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.ui.adapter.TestSymbolAdapter
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.data.model.Symbol
-import org.bibletranslationtools.sun.databinding.ActivitySentencesBinding
+import org.bibletranslationtools.sun.databinding.ActivityTestSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LinearItemOffsetDecoration
-import org.bibletranslationtools.sun.ui.viewmodel.SentenceTestViewModel
+import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
-class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSelectedListener {
-    private val binding by lazy { ActivitySentencesBinding.inflate(layoutInflater) }
-    private val viewModel: SentenceTestViewModel by viewModels()
+class TestSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSelectedListener {
+    private val binding by lazy { ActivityTestSentencesBinding.inflate(layoutInflater) }
+    private val viewModel: TestSentencesViewModel by viewModels()
     private val optionsAdapter: TestSymbolAdapter by lazy {
         TestSymbolAdapter(listener = this)
     }
@@ -72,7 +72,7 @@ class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSe
             }
 
             answersList.layoutManager = LinearLayoutManager(
-                this@BuildSentencesActivity,
+                this@TestSentencesActivity,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
@@ -82,7 +82,7 @@ class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSe
             )
 
             optionsList.layoutManager = GridLayoutManager(
-                this@BuildSentencesActivity,
+                this@TestSentencesActivity,
                 4
             )
             optionsList.adapter = optionsAdapter
@@ -93,7 +93,7 @@ class BuildSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSe
             ))
 
             correctList.layoutManager = LinearLayoutManager(
-                this@BuildSentencesActivity,
+                this@TestSentencesActivity,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
