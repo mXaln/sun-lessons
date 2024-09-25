@@ -18,8 +18,9 @@ import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.LearnSentenceAdapter
 import org.bibletranslationtools.sun.ui.viewmodel.LearnSentencesViewModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSentencesBinding.inflate(layoutInflater) }
@@ -151,8 +152,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = Intent(baseContext, LessonListActivity::class.java)
-            intent.putExtra("selected", viewModel.lessonId.value)
+            val intent = Intent(baseContext, HomeActivity::class.java)
             startActivity(intent)
         }
     }
@@ -160,7 +160,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private fun finishLesson() {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putExtra("type", Constants.LEARN_SENTENCES)
+        intent.putEnumExtra("type", Section.LEARN_SENTENCES)
         startActivity(intent)
     }
 }

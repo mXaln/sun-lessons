@@ -16,8 +16,8 @@ import org.bibletranslationtools.sun.databinding.ActivityListLessonsBinding
 import org.bibletranslationtools.sun.ui.adapter.LessonListAdapter
 import org.bibletranslationtools.sun.ui.model.LessonModel
 import org.bibletranslationtools.sun.ui.viewmodel.LessonListViewModel
-import org.bibletranslationtools.sun.utils.Constants
-import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.Section
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelectedListener {
     private val binding by lazy { ActivityListLessonsBinding.inflate(layoutInflater) }
@@ -89,10 +89,10 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         lessonsAdapter.refreshLesson(position)
     }
 
-    override fun onLessonAction(lessonId: Int, action: Int) {
+    override fun onLessonAction(lessonId: Int, action: Section) {
         val intent = Intent(this, SectionStartActivity::class.java)
         intent.putExtra("id", lessonId)
-        intent.putExtra("type", action)
+        intent.putEnumExtra("type", action)
         startActivity(intent)
     }
 

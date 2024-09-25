@@ -6,15 +6,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionStartedBinding
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.getEnumExtra
 
 class SectionStartActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivitySectionStartedBinding.inflate(layoutInflater) }
 
     private var id: Int = 1
-    private var type: Int = Constants.LEARN_SYMBOLS
+    private var type: Section = Section.LEARN_SYMBOLS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +29,10 @@ class SectionStartActivity : AppCompatActivity() {
         }
 
         id = intent.getIntExtra("id", 1)
-        type = intent.getIntExtra("type", Constants.LEARN_SYMBOLS)
+        type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
 
         when (type) {
-            Constants.LEARN_SYMBOLS -> {
+            Section.LEARN_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.learn_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_learn_large)
@@ -39,7 +40,7 @@ class SectionStartActivity : AppCompatActivity() {
                     startNextSection<LearnSymbolsActivity>()
                 }
             }
-            Constants.TEST_SYMBOLS -> {
+            Section.TEST_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.test_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_test_large)
@@ -47,7 +48,7 @@ class SectionStartActivity : AppCompatActivity() {
                     startNextSection<TestSymbolsActivity>()
                 }
             }
-            Constants.LEARN_SENTENCES -> {
+            Section.LEARN_SENTENCES -> {
                 binding.sectionTitle.text = getString(R.string.learn_sentences)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_learn_sentences_large)

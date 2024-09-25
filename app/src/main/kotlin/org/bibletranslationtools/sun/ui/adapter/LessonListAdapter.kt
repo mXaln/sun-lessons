@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ItemLessonBinding
 import org.bibletranslationtools.sun.ui.model.LessonModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class LessonListAdapter(
@@ -21,7 +21,7 @@ class LessonListAdapter(
 
     interface OnLessonSelectedListener {
         fun onLessonSelected(lesson: LessonModel, position: Int)
-        fun onLessonAction(lessonId: Int, action: Int)
+        fun onLessonAction(lessonId: Int, action: Section)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -137,7 +137,7 @@ class LessonListAdapter(
 
             learnSymbols.setOnClickListener {
                 val selectedLesson = getItem(holder.bindingAdapterPosition)
-                listener?.onLessonAction(selectedLesson.lesson.id, Constants.LEARN_SYMBOLS)
+                listener?.onLessonAction(selectedLesson.lesson.id, Section.LEARN_SYMBOLS)
             }
         }
     }
@@ -171,7 +171,7 @@ class LessonListAdapter(
                     val selectedLesson = getItem(holder.bindingAdapterPosition)
                     listener?.onLessonAction(
                         selectedLesson.lesson.id,
-                        Constants.TEST_SYMBOLS
+                        Section.TEST_SYMBOLS
                     )
                 }
             }
@@ -210,7 +210,7 @@ class LessonListAdapter(
                         val selectedLesson = getItem(holder.bindingAdapterPosition)
                         listener?.onLessonAction(
                             selectedLesson.lesson.id,
-                            Constants.LEARN_SENTENCES
+                            Section.LEARN_SENTENCES
                         )
                     }
                 }
@@ -252,7 +252,7 @@ class LessonListAdapter(
                         val selectedLesson = getItem(holder.bindingAdapterPosition)
                         listener?.onLessonAction(
                             selectedLesson.lesson.id,
-                            Constants.TEST_SENTENCES
+                            Section.TEST_SENTENCES
                         )
                     }
                 }

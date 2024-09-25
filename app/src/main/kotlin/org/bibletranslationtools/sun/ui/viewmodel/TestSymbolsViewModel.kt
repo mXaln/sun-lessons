@@ -11,13 +11,17 @@ import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.data.model.Lesson
+import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
+import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.utils.Section
 
 class TestSymbolsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: CardRepository
     private val sentenceRepository: SentenceRepository
     private val lessonRepository: LessonRepository
+    private val settingsRepository: SettingsRepository
 
     private val mutableCards = MutableStateFlow<List<Card>>(listOf())
     val cards: StateFlow<List<Card>> = mutableCards
@@ -34,6 +38,8 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
         sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
         val lessonDao = AppDatabase.getDatabase(application).getLessonDao()
         lessonRepository = LessonRepository(lessonDao)
+        val settingDao = AppDatabase.getDatabase(application).getSettingDao()
+        settingsRepository = SettingsRepository(settingDao)
     }
 
     fun loadLessonCards() {
@@ -44,20 +50,25 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadAllPassedCards() {
         viewModelScope.launch {
-            mutableCards.value = repository.getAllPassed()
+            mutableCards.value = repository.getAllTested()
         }
     }
 
     suspend fun getSentencesCount(): Int {
         return viewModelScope
             .async {
-                sentenceRepository.getAllCount(lessonId.value)
+                sentenceRepository.countAll(lessonId.value)
             }
             .await()
     }
 
     suspend fun updateCard(card: Card) {
         repository.update(card)
+
+        val lastSection = Setting("last_section", Section.TEST_SYMBOLS.id)
+        val lastLesson = Setting("last_lesson", lessonId.value.toString())
+        settingsRepository.insertOrUpdate(lastSection)
+        settingsRepository.insertOrUpdate(lastLesson)
     }
 
     suspend fun getAllLessons(): List<Lesson> {

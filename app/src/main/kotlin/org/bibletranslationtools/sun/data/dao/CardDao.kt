@@ -22,11 +22,17 @@ interface CardDao {
     @Query("SELECT * FROM cards WHERE id = :id")
     suspend fun get(id: String): Card?
 
-    @Query("SELECT * FROM cards WHERE passed = 1")
-    suspend fun getAllPassed(): List<Card>
+    @Query("SELECT * FROM cards WHERE learned = 1")
+    suspend fun getAllLearned(): List<Card>
 
-    @Query("SELECT COUNT(*) FROM cards WHERE passed = 1")
-    suspend fun getAllPassedCount(): Int
+    @Query("SELECT COUNT(*) FROM cards WHERE learned = 1")
+    suspend fun countAllLearned(): Int
+
+    @Query("SELECT * FROM cards WHERE tested = 1")
+    suspend fun getAllTested(): List<Card>
+
+    @Query("SELECT COUNT(*) FROM cards WHERE tested = 1")
+    suspend fun countAllTested(): Int
 
     @Query("SELECT * FROM cards WHERE lesson_id = :lessonId")
     suspend fun getAllByLesson(lessonId: Int): List<Card>

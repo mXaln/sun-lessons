@@ -10,15 +10,17 @@ import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionCompletedBinding
 import org.bibletranslationtools.sun.ui.viewmodel.SectionStatusViewModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.getEnumExtra
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class SectionCompleteActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySectionCompletedBinding.inflate(layoutInflater) }
     private val viewModel: SectionStatusViewModel by viewModels()
 
     private var id: Int = 1
-    private var type: Int = Constants.LEARN_SYMBOLS
+    private var type: Section = Section.LEARN_SYMBOLS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,31 +34,31 @@ class SectionCompleteActivity : AppCompatActivity() {
         }
 
         id = intent.getIntExtra("id", 1)
-        type = intent.getIntExtra("type", Constants.LEARN_SYMBOLS)
+        type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
 
         when (type) {
-            Constants.LEARN_SYMBOLS -> {
+            Section.LEARN_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.learn_symbols_completed)
                 binding.startButton.setOnClickListener {
-                    goToNextSection(Constants.TEST_SYMBOLS)
+                    navigateToNextSection(Section.TEST_SYMBOLS)
                 }
             }
-            Constants.TEST_SYMBOLS -> {
+            Section.TEST_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.test_symbols_completed)
                 binding.startButton.setOnClickListener {
-                    goToNextSection(Constants.LEARN_SENTENCES)
+                    navigateToNextSection(Section.LEARN_SENTENCES)
                 }
             }
-            Constants.LEARN_SENTENCES -> {
+            Section.LEARN_SENTENCES -> {
                 binding.sectionTitle.text = getString(R.string.learn_sentences_completed)
                 binding.startButton.setOnClickListener {
-                    goToNextSection(Constants.TEST_SENTENCES)
+                    navigateToNextSection(Section.TEST_SENTENCES)
                 }
             }
             else -> {
                 binding.sectionTitle.text = getString(R.string.lesson_completed, id)
                 binding.startButton.setOnClickListener {
-                    goToNextLesson()
+                    navigateToNextLesson()
                 }
             }
         }
@@ -73,26 +75,28 @@ class SectionCompleteActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToNextSection(type: Int) {
-        val intent = Intent(this, SectionStartActivity::class.java)
-        intent.putExtra("id", id)
-        intent.putExtra("type", type)
-        startActivity(intent)
+    private fun navigateToNextSection(type: Section) {
+        lifecycleScope.launch {
+            viewModel.saveSectionStatus(id, type)
+
+            runOnUiThread {
+                val intent = Intent(baseContext, SectionStartActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putEnumExtra("type", type)
+                startActivity(intent)
+            }
+        }
     }
 
-    private fun goToNextLesson() {
+    private fun navigateToNextLesson() {
         lifecycleScope.launch {
-            val lessons = viewModel.getAllLessons().map { it.id }
-            val current = lessons.indexOf(id)
-            var next = 1
-            if (current < lessons.size - 1) {
-                next = lessons[current + 1]
-            }
+            val next = viewModel.getNextLesson(id)
+            viewModel.saveSectionStatus(next, Section.LEARN_SYMBOLS)
 
             runOnUiThread {
                 val intent = Intent(baseContext, SectionStartActivity::class.java)
                 intent.putExtra("id", next)
-                intent.putExtra("type", Constants.LEARN_SYMBOLS)
+                intent.putEnumExtra("type", Section.LEARN_SYMBOLS)
                 startActivity(intent)
             }
         }

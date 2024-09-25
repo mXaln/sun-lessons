@@ -30,13 +30,13 @@ class GlobalTestViewModel(application: Application) : AndroidViewModel(applicati
 
     fun loadAllPassedCardsCount() {
         viewModelScope.launch {
-            mutableCardsCount.value = cardRepository.getAllPassedCount()
+            mutableCardsCount.value = cardRepository.countAllTested()
         }
     }
 
     fun loadAllPassedSentencesCount() {
         viewModelScope.launch {
-            mutableSentencesCount.value = sentenceRepository.getAllPassedCount()
+            mutableSentencesCount.value = sentenceRepository.countAllTested()
         }
     }
 }

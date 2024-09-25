@@ -9,12 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.AppDatabase
-import org.bibletranslationtools.sun.data.model.Sentence
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
+import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
+import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.utils.Section
 
 class LearnSentencesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: SentenceRepository
+    private val settingsRepository: SettingsRepository
 
     private val _sentences = MutableStateFlow<List<SentenceWithSymbols>>(listOf())
     val sentences: StateFlow<List<SentenceWithSymbols>> = _sentences
@@ -25,6 +28,8 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
         val sentenceDao = AppDatabase.getDatabase(application).getSentenceDao()
         val symbolDao = AppDatabase.getDatabase(application).getSymbolDao()
         repository = SentenceRepository(sentenceDao, symbolDao)
+        val settingDao = AppDatabase.getDatabase(application).getSettingDao()
+        settingsRepository = SettingsRepository(settingDao)
     }
 
     fun loadSentences(): Job {
@@ -37,6 +42,11 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
         return viewModelScope.launch {
             repository.update(sentence.sentence)
             _sentences.value = _sentences.value
+
+            val lastSection = Setting("last_section", Section.LEARN_SENTENCES.id)
+            val lastLesson = Setting("last_lesson", lessonId.value.toString())
+            settingsRepository.insertOrUpdate(lastSection)
+            settingsRepository.insertOrUpdate(lastLesson)
         }
     }
 }

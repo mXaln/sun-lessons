@@ -16,7 +16,7 @@ data class LessonModel(
     val cardsLearned get() = cards.count { it.learned }
     val cardsLearnedProgress get() = cardsLearned.toDouble() / cards.size * 100
 
-    val cardsPassed get() = cards.count { it.passed }
+    val cardsPassed get() = cards.count { it.tested }
     val cardsPassedProgress get() = cardsPassed.toDouble() / cards.size * 100
 
     val sentencesLearned get() = sentences.count { it.learned }
@@ -29,7 +29,7 @@ data class LessonModel(
         }
     }
 
-    val sentencesPassed get() = sentences.count { it.passed }
+    val sentencesPassed get() = sentences.count { it.tested }
     val sentencesPassedProgress get() = run {
         // If there are no sentences, return 100% progress
         if (sentences.isNotEmpty()) {

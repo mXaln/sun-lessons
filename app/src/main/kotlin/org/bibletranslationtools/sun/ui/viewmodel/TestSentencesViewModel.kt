@@ -11,14 +11,18 @@ import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.data.model.Lesson
 import org.bibletranslationtools.sun.data.model.Sentence
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
+import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
+import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.utils.Section
 
 class TestSentencesViewModel(application: Application) : AndroidViewModel(application) {
     private val lessonRepository: LessonRepository
     private val sentenceRepository: SentenceRepository
     private val cardsRepository: CardRepository
+    private val settingsRepository: SettingsRepository
 
     val lessonId = MutableStateFlow(1)
     val sentenceDone = MutableStateFlow(false)
@@ -40,6 +44,9 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
 
         val cardDao = AppDatabase.getDatabase(application).getCardDao()
         cardsRepository = CardRepository(cardDao)
+
+        val settingDao = AppDatabase.getDatabase(application).getSettingDao()
+        settingsRepository = SettingsRepository(settingDao)
     }
 
     fun loadSentences() {
@@ -50,12 +57,17 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
 
     fun loadAllPassedSentences() {
         viewModelScope.launch {
-            mutableSentences.value = sentenceRepository.getAllPassedWithSymbols()
+            mutableSentences.value = sentenceRepository.getAllTestedWithSymbols()
         }
     }
 
     suspend fun updateSentence(sentence: Sentence) {
         sentenceRepository.update(sentence)
+
+        val lastSection = Setting("last_section", Section.LEARN_SYMBOLS.id)
+        val lastLesson = Setting("last_lesson", lessonId.value.toString())
+        settingsRepository.insertOrUpdate(lastSection)
+        settingsRepository.insertOrUpdate(lastLesson)
     }
 
     suspend fun getAllLessons(): List<Lesson> {

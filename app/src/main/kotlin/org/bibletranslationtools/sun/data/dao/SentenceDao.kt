@@ -34,14 +34,22 @@ interface SentenceDao {
     suspend fun getAllWithSymbols(lessonId: Int): List<SentenceWithSymbols>
 
     @Transaction
-    @Query("SELECT * FROM sentences WHERE passed = 1")
-    suspend fun getAllPassedWithSymbols(): List<SentenceWithSymbols>
+    @Query("SELECT * FROM sentences WHERE tested = 1")
+    suspend fun getAllTestedWithSymbols(): List<SentenceWithSymbols>
+
+    @Transaction
+    @Query("SELECT COUNT(*) FROM sentences WHERE tested = 1")
+    suspend fun countAllTested(): Int
+
+    @Transaction
+    @Query("SELECT * FROM sentences WHERE learned = 1")
+    suspend fun getAllLearnedWithSymbols(): List<SentenceWithSymbols>
+
+    @Transaction
+    @Query("SELECT COUNT(*) FROM sentences WHERE learned = 1")
+    suspend fun countAllLearned(): Int
 
     @Transaction
     @Query("SELECT COUNT(*) FROM sentences WHERE lesson_id = :lessonId")
-    suspend fun getAllCount(lessonId: Int): Int
-
-    @Transaction
-    @Query("SELECT COUNT(*) FROM sentences WHERE passed = 1")
-    suspend fun getAllPassedCount(): Int
+    suspend fun countAll(lessonId: Int): Int
 }

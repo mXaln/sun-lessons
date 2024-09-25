@@ -21,7 +21,7 @@ import org.bibletranslationtools.sun.databinding.ActivityTestSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LinearItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.AnswerType
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolSelectedListener {
@@ -132,7 +132,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             optionsAdapter.refreshItem(position)
 
             val answerSymbol = symbol.copy()
-            answerSymbol.type = Constants.TYPE_ANSWER
+            answerSymbol.type = AnswerType.ANSWER
 
             lastAnswerPosition++
             answerSymbols[lastAnswerPosition] = answerSymbol
@@ -155,7 +155,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
         if (isSentenceCorrect) {
             lifecycleScope.launch(Dispatchers.IO) {
-                currentSentence.sentence.passed = true
+                currentSentence.sentence.tested = true
                 currentSentence.sentence.answered = true
                 viewModel.updateSentence(currentSentence.sentence)
             }
@@ -265,7 +265,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         symbols.forEach {
             it.selected = false
             it.correct = null
-            it.type = Constants.TYPE_OPTION
+            it.type = AnswerType.OPTION
         }
 
         optionSymbols.clear()
@@ -278,7 +278,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         symbols.forEach {
             it.selected = true
             it.correct = null
-            it.type = Constants.TYPE_ANSWER
+            it.type = AnswerType.ANSWER
         }
 
         answerSymbols.clear()
@@ -291,7 +291,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         symbols.forEach {
             it.selected = true
             it.correct = true
-            it.type = Constants.TYPE_ANSWER
+            it.type = AnswerType.ANSWER
         }
 
         correctSymbols.clear()
@@ -305,9 +305,8 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             val intent = if (viewModel.isGlobal.value) {
                 Intent(baseContext, GlobalTestActivity::class.java)
             } else {
-                Intent(baseContext, LessonListActivity::class.java)
+                Intent(baseContext, HomeActivity::class.java)
             }
-            intent.putExtra("selected", viewModel.lessonId.value)
             startActivity(intent)
         }
     }

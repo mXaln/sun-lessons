@@ -20,6 +20,7 @@ import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
 import org.bibletranslationtools.sun.utils.AssetsProvider
+import org.bibletranslationtools.sun.utils.Section
 
 class HomeViewModel(private val application: Application) : AndroidViewModel(application) {
     private val cardRepository: CardRepository
@@ -103,5 +104,31 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
 
     private suspend fun insertSetting(setting: Setting) {
         settingsRepository.insert(setting)
+    }
+
+    suspend fun navigateToSection(callback: (Section, Int, Boolean) -> Unit) {
+        val lastSection = settingsRepository.get("last_section")?.value?.let {
+            Section.of(it)
+        } ?: Section.LEARN_SYMBOLS
+        val lastLesson = settingsRepository.get("last_lesson")?.value?.toInt() ?: 1
+
+        // Check if there is a progress of learning/testing
+        // If there is, then we should navigate to the lesson
+        // Otherwise navigate to the landing page of the section
+        val started = when (lastSection) {
+            Section.LEARN_SYMBOLS -> {
+                cardRepository.countAllLearned() > 0
+            }
+            Section.TEST_SYMBOLS -> {
+                cardRepository.countAllTested() > 0
+            }
+            Section.LEARN_SENTENCES -> {
+                sentenceRepository.countAllLearned() > 0
+            }
+            else -> {
+                sentenceRepository.countAllTested() > 0
+            }
+        }
+        return callback(lastSection, lastLesson, started)
     }
 }

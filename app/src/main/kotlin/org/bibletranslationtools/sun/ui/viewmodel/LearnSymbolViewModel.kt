@@ -11,10 +11,14 @@ import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
+import org.bibletranslationtools.sun.data.model.Setting
+import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.utils.Section
 
 class LearnSymbolViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: CardRepository
+    private val settingsRepository: SettingsRepository
     private val mutableCards = MutableStateFlow<List<Card>>(listOf())
 
     val flipState = MutableStateFlow(EasyFlipView.FlipState.FRONT_SIDE)
@@ -24,6 +28,8 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
     init {
         val dao = AppDatabase.getDatabase(application).getCardDao()
         repository = CardRepository(dao)
+        val settingDao = AppDatabase.getDatabase(application).getSettingDao()
+        settingsRepository = SettingsRepository(settingDao)
     }
 
     fun loadCards(): Job {
@@ -36,6 +42,11 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
         return viewModelScope.launch {
             repository.update(card)
             mutableCards.value = mutableCards.value
+
+            val lastSection = Setting("last_section", Section.LEARN_SYMBOLS.id)
+            val lastLesson = Setting("last_lesson", lessonId.value.toString())
+            settingsRepository.insertOrUpdate(lastSection)
+            settingsRepository.insertOrUpdate(lastLesson)
         }
     }
 

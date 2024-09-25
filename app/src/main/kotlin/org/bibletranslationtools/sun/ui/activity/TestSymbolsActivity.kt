@@ -19,8 +19,9 @@ import org.bibletranslationtools.sun.databinding.ActivityTestSymbolsBinding
 import org.bibletranslationtools.sun.ui.adapter.TestSymbolAdapter
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.viewmodel.TestSymbolsViewModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelectedListener {
 
@@ -104,8 +105,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     private fun checkAnswer(selectedCard: Card, position: Int) {
         if (selectedCard.symbol == correctCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                correctCard.passed = true
-                correctCard.done = true
+                correctCard.tested = true
                 viewModel.updateCard(correctCard)
             }
             correctCard.correct = true
@@ -138,7 +138,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         val allCards = viewModel.cards.value.toMutableList()
         allCards.forEach { it.correct = null }
 
-        val inProgressCards = allCards.filter { !it.done }
+        val inProgressCards = allCards.filter { !it.tested }
 
         if (inProgressCards.isEmpty()) {
             finishReview()
@@ -178,22 +178,22 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         } else {
             lifecycleScope.launch {
                 if (viewModel.getSentencesCount() == 0) {
-                    goToLessons()
+                    navigateToLessons()
                 } else {
-                    goToLearnSentences()
+                    navigateToLearnSentences()
                 }
             }
         }
     }
 
-    private fun goToLearnSentences() {
+    private fun navigateToLearnSentences() {
         val intent = Intent(this, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putExtra("type", Constants.TEST_SYMBOLS)
+        intent.putEnumExtra("type", Section.TEST_SYMBOLS)
         startActivity(intent)
     }
 
-    private suspend fun goToLessons() {
+    private suspend fun navigateToLessons() {
         val lessons = viewModel.getAllLessons().map { it.id }
         val current = lessons.indexOf(viewModel.lessonId.value)
         var next = 1
@@ -224,9 +224,8 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             val intent = if (viewModel.isGlobal.value) {
                 Intent(baseContext, GlobalTestActivity::class.java)
             } else {
-                Intent(baseContext, LessonListActivity::class.java)
+                Intent(baseContext, HomeActivity::class.java)
             }
-            intent.putExtra("selected", viewModel.lessonId.value)
             startActivity(intent)
         }
     }

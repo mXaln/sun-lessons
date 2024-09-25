@@ -17,19 +17,13 @@ data class Card(
     val secondary: String,
     @ColumnInfo(name = "learned")
     var learned: Boolean = false,
-    @ColumnInfo(name = "passed")
-    var passed: Boolean = false,
-    @ColumnInfo(name = "part")
-    var part: Int = 1,
+    @ColumnInfo(name = "tested")
+    var tested: Boolean = false,
     @ColumnInfo(name = "lesson_id")
     var lessonId: Int? = null,
 ) : TestCard {
     @Ignore
     override var correct: Boolean? = null
-    @Ignore
-    var done = false
-    @Ignore
-    var partiallyDone = false
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,12 +32,12 @@ data class Card(
         return id == card.id &&
                 symbol == card.symbol &&
                 learned == card.learned &&
-                passed == card.passed &&
+                tested == card.tested &&
                 lessonId == card.lessonId
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(id, symbol, learned, passed, lessonId)
+        return Objects.hash(id, symbol, learned, tested, lessonId)
     }
 }
 

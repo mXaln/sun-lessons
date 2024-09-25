@@ -38,36 +38,31 @@
           "id": "1f",
           "symbol": "\uE23E",
           "primary": "6.jpg",
-          "secondary": "26.jpg",
-          "part": 2
+          "secondary": "26.jpg"
         },
         {
           "id": "1g",
           "symbol": "\uE311",
           "primary": "7.jpg",
-          "secondary": "27.jpg",
-          "part": 2
+          "secondary": "27.jpg"
         },
         {
           "id": "1h",
           "symbol": "\uE11F",
           "primary": "8.jpg",
-          "secondary": "28.jpg",
-          "part": 2
+          "secondary": "28.jpg"
         },
         {
           "id": "1i",
           "symbol": "\uE071",
           "primary": "9.jpg",
-          "secondary": "29.jpg",
-          "part": 2
+          "secondary": "29.jpg"
         },
         {
           "id": "1j",
           "symbol": "\uE263",
           "primary": "10.jpg",
-          "secondary": "30.jpg",
-          "part": 2
+          "secondary": "30.jpg"
         }
       ],
       "sentences": [
@@ -170,36 +165,31 @@
           "id": "2f",
           "symbol": "\uE272",
           "primary": "16.jpg",
-          "secondary": "58.jpg",
-          "part": 2
+          "secondary": "58.jpg"
         },
         {
           "id": "2g",
           "symbol": "\uE15F",
           "primary": "17.jpg",
-          "secondary": "59.jpg",
-          "part": 2
+          "secondary": "59.jpg"
         },
         {
           "id": "2h",
           "symbol": "\uE384",
           "primary": "18.jpg",
-          "secondary": "60.jpg",
-          "part": 2
+          "secondary": "60.jpg"
         },
         {
           "id": "2i",
           "symbol": "\uE23C",
           "primary": "19.jpg",
-          "secondary": "61.jpg",
-          "part": 2
+          "secondary": "61.jpg"
         },
         {
           "id": "2j",
           "symbol": "\uE315",
           "primary": "20.jpg",
-          "secondary": "62.jpg",
-          "part": 2
+          "secondary": "62.jpg"
         }
       ],
       "sentences": [
@@ -366,36 +356,31 @@
           "id": "3g",
           "symbol": "\uE291",
           "primary": "43.jpg",
-          "secondary": "44.jpg",
-          "part": 2
+          "secondary": "44.jpg"
         },
         {
           "id": "3h",
           "symbol": "\uE292",
           "primary": "45.jpg",
-          "secondary": "46.jpg",
-          "part": 2
+          "secondary": "46.jpg"
         },
         {
           "id": "3i",
           "symbol": "\uE293",
           "primary": "47.jpg",
-          "secondary": "48.jpg",
-          "part": 2
+          "secondary": "48.jpg"
         },
         {
           "id": "3j",
           "symbol": "\uE294",
           "primary": "49.jpg",
-          "secondary": "50.jpg",
-          "part": 2
+          "secondary": "50.jpg"
         },
         {
           "id": "3k",
           "symbol": "\uE295",
           "primary": "51.jpg",
-          "secondary": "52.jpg",
-          "part": 2
+          "secondary": "52.jpg"
         }
       ],
       "sentences": []
@@ -431,29 +416,25 @@
           "id": "4e",
           "symbol": "“",
           "primary": "67.png",
-          "secondary": "67.png",
-          "part": 2
+          "secondary": "67.png"
         },
         {
           "id": "4f",
           "symbol": "'",
           "primary": "68.png",
-          "secondary": "68.png",
-          "part": 2
+          "secondary": "68.png"
         },
         {
           "id": "4g",
           "symbol": "\uE390",
           "primary": "69.png",
-          "secondary": "69.png",
-          "part": 2
+          "secondary": "69.png"
         },
         {
           "id": "4h",
           "symbol": "\uEA47",
           "primary": "70.png",
-          "secondary": "70.png",
-          "part": 2
+          "secondary": "70.png"
         }
       ],
       "sentences": [
@@ -760,8 +741,7 @@
           "id": "5d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -799,8 +779,7 @@
           "id": "6d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -838,8 +817,7 @@
           "id": "7d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -877,8 +855,7 @@
           "id": "8d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -916,8 +893,7 @@
           "id": "9d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -955,8 +931,7 @@
           "id": "10d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Symbol
 import org.bibletranslationtools.sun.databinding.ItemSymbolTestBinding
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.AnswerType
 
 class TestSentenceAdapter(
     private val listener: OnSymbolSelectedListener? = null
@@ -33,7 +33,7 @@ class TestSentenceAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return getItem(position).type
+        return getItem(position).type.ordinal
     }
 
     companion object {
@@ -105,7 +105,7 @@ class TestSentenceAdapter(
         val normalSize = itemView.context.resources.getDimension(R.dimen._86dp).toInt()
 
         return when (itemViewType) {
-            Constants.TYPE_OPTION -> normalSize
+            AnswerType.OPTION.ordinal -> normalSize
             else -> {
                 if (itemCount <= 4) {
                     normalSize

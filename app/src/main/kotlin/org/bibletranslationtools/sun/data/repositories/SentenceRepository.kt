@@ -38,16 +38,24 @@ class SentenceRepository(
         return sentenceDao.getAllWithSymbols(lessonId)
     }
 
-    suspend fun getAllPassedWithSymbols(): List<SentenceWithSymbols> {
-        return sentenceDao.getAllPassedWithSymbols()
+    suspend fun getAllLearnedWithSymbols(): List<SentenceWithSymbols> {
+        return sentenceDao.getAllLearnedWithSymbols()
     }
 
-    suspend fun getAllCount(lessonId: Int): Int {
-        return sentenceDao.getAllCount(lessonId)
+    suspend fun countAllLearned(): Int {
+        return sentenceDao.countAllLearned()
     }
 
-    suspend fun getAllPassedCount(): Int {
-        return sentenceDao.getAllPassedCount()
+    suspend fun getAllTestedWithSymbols(): List<SentenceWithSymbols> {
+        return sentenceDao.getAllTestedWithSymbols()
+    }
+
+    suspend fun countAllTested(): Int {
+        return sentenceDao.countAllTested()
+    }
+
+    suspend fun countAll(lessonId: Int): Int {
+        return sentenceDao.countAll(lessonId)
     }
 
 }
