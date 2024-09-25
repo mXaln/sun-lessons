@@ -13,39 +13,37 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSymbolsBinding
-import org.bibletranslationtools.sun.ui.adapter.LearnCardAdapter
-import org.bibletranslationtools.sun.ui.viewmodel.LearnSymbolsViewModel
+import org.bibletranslationtools.sun.ui.adapter.LearnSymbolAdapter
+import org.bibletranslationtools.sun.ui.viewmodel.LearnSymbolViewModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSymbolsBinding.inflate(layoutInflater) }
     private val adapter by lazy {
-        LearnCardAdapter(viewModel.flipState)
+        LearnSymbolAdapter(viewModel.flipState)
             .apply { setFlipListener(this@LearnSymbolsActivity) }
     }
-    private val viewModel: LearnSymbolsViewModel by viewModels()
+    private val viewModel: LearnSymbolViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.navBar.toolbar)
+        setSupportActionBar(binding.topNavBar.toolbar)
         supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.navBar.toolbar.setNavigationOnClickListener {
+        binding.topNavBar.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
 
-        binding.navBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
-        binding.navBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
+        binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
+        binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
 
         setupCardsView()
         setupButtons()
@@ -78,10 +76,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     viewModel.flipState.value = FlipState.FRONT_SIDE
                     viewPager.currentItem = currentItem + 1
                 } else {
-                    val intent = Intent(baseContext, SectionCompleteActivity::class.java)
-                    intent.putExtra("id", viewModel.lessonId.value)
-                    intent.putExtra("type", Constants.LEARN_SYMBOLS)
-                    startActivity(intent)
+                    finishLesson()
                 }
             }
             showAnswer.setOnClickListener {
@@ -160,6 +155,13 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             intent.putExtra("selected", viewModel.lessonId.value)
             startActivity(intent)
         }
+    }
+
+    private fun finishLesson() {
+        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+        intent.putExtra("id", viewModel.lessonId.value)
+        intent.putExtra("type", Constants.LEARN_SYMBOLS)
+        startActivity(intent)
     }
 }
 

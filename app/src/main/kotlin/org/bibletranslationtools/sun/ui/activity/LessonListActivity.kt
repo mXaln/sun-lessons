@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import org.bibletranslationtools.sun.ui.adapter.LessonListAdapter
 import org.bibletranslationtools.sun.ui.model.LessonModel
 import org.bibletranslationtools.sun.ui.viewmodel.LessonListViewModel
 import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelectedListener {
     private val binding by lazy { ActivityListLessonsBinding.inflate(layoutInflater) }
@@ -26,11 +28,11 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.topNavBar.toolbar)
         supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.toolbar.setNavigationOnClickListener {
+        binding.topNavBar.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -43,8 +45,11 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         )
         binding.lessonsList.adapter = lessonsAdapter
 
-        binding.navBar.bottomNavigation.selectedItemId = R.id.lessons
-        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+        binding.topNavBar.pageTitle.text = getString(R.string.lessons)
+        binding.topNavBar.tallyNumber.visibility = View.GONE
+
+        binding.bottomNavBar.bottomNavigation.selectedItemId = R.id.lessons
+        binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
                     val intent = Intent(baseContext, HomeActivity::class.java)

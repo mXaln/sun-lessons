@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+        binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.progress -> {
                     val intent = Intent(baseContext, TrackProgressActivity::class.java)

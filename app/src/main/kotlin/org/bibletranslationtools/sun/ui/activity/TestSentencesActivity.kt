@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
-import org.bibletranslationtools.sun.ui.adapter.TestSymbolAdapter
+import org.bibletranslationtools.sun.ui.adapter.TestSentenceAdapter
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.data.model.Symbol
 import org.bibletranslationtools.sun.databinding.ActivityTestSentencesBinding
@@ -24,17 +24,17 @@ import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
-class TestSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSelectedListener {
+class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolSelectedListener {
     private val binding by lazy { ActivityTestSentencesBinding.inflate(layoutInflater) }
     private val viewModel: TestSentencesViewModel by viewModels()
-    private val optionsAdapter: TestSymbolAdapter by lazy {
-        TestSymbolAdapter(listener = this)
+    private val optionsAdapter: TestSentenceAdapter by lazy {
+        TestSentenceAdapter(listener = this)
     }
-    private val answersAdapter: TestSymbolAdapter by lazy {
-        TestSymbolAdapter()
+    private val answersAdapter: TestSentenceAdapter by lazy {
+        TestSentenceAdapter()
     }
-    private val correctAdapter: TestSymbolAdapter by lazy {
-        TestSymbolAdapter()
+    private val correctAdapter: TestSentenceAdapter by lazy {
+        TestSentenceAdapter()
     }
 
     private lateinit var currentSentence: SentenceWithSymbols
@@ -59,16 +59,16 @@ class TestSentencesActivity : AppCompatActivity(), TestSymbolAdapter.OnSymbolSel
 
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
-            binding.toolbar.setNavigationOnClickListener {
+            binding.topNavBar.toolbar.setNavigationOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 
             if (!viewModel.isGlobal.value) {
-                lessonNameContainer.visibility = View.VISIBLE
-                lessonTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
-                lessonTally.text = TallyMarkConverter.toText(viewModel.lessonId.value)
+                binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
+                binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
             } else {
-                lessonNameContainer.visibility = View.GONE
+                binding.topNavBar.pageTitle.visibility = View.GONE
+                binding.topNavBar.tallyNumber.visibility = View.GONE
             }
 
             answersList.layoutManager = LinearLayoutManager(

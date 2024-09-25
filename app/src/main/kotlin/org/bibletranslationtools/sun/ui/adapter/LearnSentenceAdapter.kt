@@ -13,34 +13,35 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.bibletranslationtools.sun.data.model.Card
-import org.bibletranslationtools.sun.databinding.ItemLearnBinding
+import org.bibletranslationtools.sun.data.model.Sentence
+import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
+import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
 
 
-class LearnCardAdapter(
+class LearnSentenceAdapter(
     private val flipState: StateFlow<EasyFlipView.FlipState>
-) : ListAdapter<Card, LearnCardAdapter.ViewHolder>(callback) {
+) : ListAdapter<SentenceWithSymbols, LearnSentenceAdapter.ViewHolder>(callback) {
 
     private var flipListener: OnFlipAnimationListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemLearnBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemSentenceLearnBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val card = getItem(position)
-        holder.bind(card)
+        val sentence = getItem(position)
+        holder.bind(sentence)
     }
 
     companion object {
-        val callback = object : DiffUtil.ItemCallback<Card>() {
-            override fun areItemsTheSame(oldItem: Card, newItem: Card): Boolean {
-                return oldItem.id == newItem.id
+        val callback = object : DiffUtil.ItemCallback<SentenceWithSymbols>() {
+            override fun areItemsTheSame(oldItem: SentenceWithSymbols, newItem: SentenceWithSymbols): Boolean {
+                return oldItem.sentence.id == newItem.sentence.id
             }
 
-            override fun areContentsTheSame(oldItem: Card, newItem: Card): Boolean {
+            override fun areContentsTheSame(oldItem: SentenceWithSymbols, newItem: SentenceWithSymbols): Boolean {
                 return oldItem == newItem
             }
         }
@@ -51,14 +52,14 @@ class LearnCardAdapter(
     }
 
     inner class ViewHolder(
-        val binding: ItemLearnBinding
+        val binding: ItemSentenceLearnBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(card: Card) {
+        fun bind(sentence: SentenceWithSymbols) {
             binding.apply {
-                itemText.text = card.symbol
+                itemText.text = sentence.symbols.joinToString(" ") { it.name }
 
                 Glide.with(itemImage.context)
-                    .load(Uri.parse("file:///android_asset/images/symbols/${card.primary}"))
+                    .load(Uri.parse("file:///android_asset/images/sentences/${sentence.sentence.correct}"))
                     .fitCenter()
                     .into(itemImage)
 

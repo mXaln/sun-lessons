@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -24,11 +25,11 @@ class  TrackProgressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.topNavBar.toolbar)
         supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.toolbar.setNavigationOnClickListener {
+        binding.topNavBar.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -38,8 +39,11 @@ class  TrackProgressActivity : AppCompatActivity() {
             GridItemOffsetDecoration(5, 30, false)
         )
 
-        binding.navBar.bottomNavigation.selectedItemId = R.id.progress
-        binding.navBar.bottomNavigation.setOnItemSelectedListener { item ->
+        binding.topNavBar.pageTitle.text = getString(R.string.track_progress)
+        binding.topNavBar.tallyNumber.visibility = View.GONE
+
+        binding.bottomNavBar.bottomNavigation.selectedItemId = R.id.progress
+        binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
                     val intent = Intent(baseContext, HomeActivity::class.java)
@@ -63,11 +67,6 @@ class  TrackProgressActivity : AppCompatActivity() {
                     setTestScore()
                 }
             }
-        }
-
-        binding.toolbar.setNavigationOnClickListener {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            startActivity(intent)
         }
 
         viewModel.loadLessons()

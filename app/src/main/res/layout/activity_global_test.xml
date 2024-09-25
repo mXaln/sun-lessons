@@ -96,7 +96,7 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_test"/>
+                android:src="@drawable/selector_symbols_test"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,12 +120,12 @@
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_sentences"/>
+                android:src="@drawable/selector_test_sentences"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/build_sentences"
+                android:text="@string/test_sentences"
                 android:layout_marginStart="@dimen/_20dp"
                 android:textSize="@dimen/_24sp"
                 android:textColor="@color/selector_lesson_text"

@@ -13,22 +13,24 @@ import com.bumptech.glide.Glide
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Card
 import kotlinx.coroutines.*
+import org.bibletranslationtools.sun.data.model.Answer
+import org.bibletranslationtools.sun.data.model.TestCard
 import org.bibletranslationtools.sun.databinding.ActivityTestSymbolsBinding
-import org.bibletranslationtools.sun.ui.adapter.ReviewCardAdapter
+import org.bibletranslationtools.sun.ui.adapter.TestSymbolAdapter
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.viewmodel.TestSymbolsViewModel
 import org.bibletranslationtools.sun.utils.Constants
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
-class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelectedListener {
+class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelectedListener {
 
     private val binding by lazy { ActivityTestSymbolsBinding.inflate(layoutInflater) }
     private val viewModel: TestSymbolsViewModel by viewModels()
-    private val gridAdapter: ReviewCardAdapter by lazy {
-        ReviewCardAdapter(this)
+    private val gridAdapter: TestSymbolAdapter by lazy {
+        TestSymbolAdapter(this)
     }
 
-    private lateinit var currentCard: Card
+    private lateinit var correctCard: Card
     private val reviewCards = arrayListOf<Card>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,16 +44,16 @@ class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelecte
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
-            binding.toolbar.setNavigationOnClickListener {
+            binding.topNavBar.toolbar.setNavigationOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
 
             if (!viewModel.isGlobal.value) {
-                lessonNameContainer.visibility = View.VISIBLE
-                lessonTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
-                lessonTally.text = TallyMarkConverter.toText(viewModel.lessonId.value)
+                binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
+                binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
             } else {
-                lessonNameContainer.visibility = View.GONE
+                binding.topNavBar.pageTitle.visibility = View.GONE
+                binding.topNavBar.tallyNumber.visibility = View.GONE
             }
 
             answersList.layoutManager = GridLayoutManager(
@@ -100,19 +102,33 @@ class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelecte
     }
 
     private fun checkAnswer(selectedCard: Card, position: Int) {
-        if (selectedCard.symbol == currentCard.symbol) {
+        if (selectedCard.symbol == correctCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                currentCard.passed = true
-                currentCard.done = true
-                viewModel.updateCard(currentCard)
+                correctCard.passed = true
+                correctCard.done = true
+                viewModel.updateCard(correctCard)
             }
-            currentCard.correct = true
-            gridAdapter.selectCorrect(position)
+            correctCard.correct = true
+
+            val answerCards = listOf(
+                Answer(true),
+                correctCard
+            )
+            gridAdapter.submitList(answerCards)
+            gridAdapter.selectCorrect(correctCard)
         } else {
-            currentCard.correct = true
+            correctCard.correct = true
             selectedCard.correct = false
+
+            val answerCards = listOf(
+                Answer(false),
+                selectedCard,
+                Answer(true),
+                correctCard
+            )
+            gridAdapter.submitList(answerCards)
             gridAdapter.selectIncorrect(position)
-            gridAdapter.selectCorrect(currentCard)
+            gridAdapter.selectCorrect(correctCard)
         }
     }
 
@@ -130,28 +146,28 @@ class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelecte
         }
 
         setRandomCard(inProgressCards)
-        allCards.remove(currentCard)
+        allCards.remove(correctCard)
 
         val incorrectCards = allCards.shuffled().take(3)
 
-        setAnswers((listOf(currentCard) + incorrectCards).shuffled())
+        setAnswers((listOf(correctCard) + incorrectCards).shuffled())
 
-        gridAdapter.submitList(reviewCards)
+        gridAdapter.submitList(reviewCards as List<TestCard>)
 
         Glide.with(baseContext)
-            .load(Uri.parse("file:///android_asset/images/symbols/${currentCard.secondary}"))
+            .load(Uri.parse("file:///android_asset/images/symbols/${correctCard.secondary}"))
             .fitCenter()
             .into(binding.itemImage)
     }
 
     private fun setRandomCard(cards: List<Card>) {
-        if (this::currentCard.isInitialized && cards.size > 1) {
-            val oldCard = currentCard.copy()
-            while (oldCard == currentCard) {
-                currentCard = cards.random()
+        if (this::correctCard.isInitialized && cards.size > 1) {
+            val oldCard = correctCard.copy()
+            while (oldCard == correctCard) {
+                correctCard = cards.random()
             }
         } else {
-            currentCard = cards.random()
+            correctCard = cards.random()
         }
     }
 
@@ -171,9 +187,9 @@ class TestSymbolsActivity : AppCompatActivity(), ReviewCardAdapter.OnCardSelecte
     }
 
     private fun goToLearnSentences() {
-        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+        val intent = Intent(this, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putExtra("type", Constants.TEST_SENTENCES)
+        intent.putExtra("type", Constants.TEST_SYMBOLS)
         startActivity(intent)
     }
 

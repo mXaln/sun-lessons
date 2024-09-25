@@ -41,15 +41,18 @@ class LessonListAdapter(
             val cardsLearnedProgress = lesson.cardsLearnedProgress
             val testSymbolsAvailable = cardsLearnedProgress == 100.0
             val cardsPassedProgress = lesson.cardsPassedProgress
-            val sentencesAvailable = cardsPassedProgress == 100.0
+            val learnSentencesAvailable = cardsPassedProgress == 100.0
+            val sentencesLearnedProgress = lesson.sentencesLearnedProgress
             val sentencesPassedProgress = lesson.sentencesPassedProgress
+            val testSentencesAvailable = sentencesLearnedProgress == 100.0
             val hasSentences = lesson.sentences.isNotEmpty()
 
             setLessonStatus(lesson, holder)
 
             setLearnSymbols(cardsLearnedProgress, holder)
             setTestSymbols(testSymbolsAvailable, cardsPassedProgress, holder)
-            setTestSentences(sentencesAvailable, sentencesPassedProgress, hasSentences, holder)
+            setLearnSentences(learnSentencesAvailable, sentencesLearnedProgress, hasSentences, holder)
+            setTestSentences(testSentencesAvailable, sentencesPassedProgress, hasSentences, holder)
         }
     }
 
@@ -124,12 +127,12 @@ class LessonListAdapter(
             learnSymbols.isActivated = true
 
             if (progress == 100.0) {
-                learnStatus.visibility = View.VISIBLE
-                learnProgress.visibility = View.GONE
+                learnSymbolsStatus.visibility = View.VISIBLE
+                learnSymbolsProgress.visibility = View.GONE
             } else {
-                learnStatus.visibility = View.GONE
-                learnProgress.visibility = View.VISIBLE
-                learnProgress.progress = progress.toInt()
+                learnSymbolsStatus.visibility = View.GONE
+                learnSymbolsProgress.visibility = View.VISIBLE
+                learnSymbolsProgress.progress = progress.toInt()
             }
 
             learnSymbols.setOnClickListener {
@@ -149,17 +152,17 @@ class LessonListAdapter(
 
             when {
                 available && progress == 100.0 -> {
-                    testStatus.visibility = View.VISIBLE
-                    testProgress.visibility = View.GONE
+                    testSymbolsStatus.visibility = View.VISIBLE
+                    testSymbolsProgress.visibility = View.GONE
                 }
                 available && progress < 100.0 -> {
-                    testStatus.visibility = View.GONE
-                    testProgress.visibility = View.VISIBLE
-                    testProgress.progress = progress.toInt()
+                    testSymbolsStatus.visibility = View.GONE
+                    testSymbolsProgress.visibility = View.VISIBLE
+                    testSymbolsProgress.progress = progress.toInt()
                 }
                 else -> {
-                    testStatus.visibility = View.VISIBLE
-                    testProgress.visibility = View.GONE
+                    testSymbolsStatus.visibility = View.VISIBLE
+                    testSymbolsProgress.visibility = View.GONE
                 }
             }
 
@@ -171,6 +174,48 @@ class LessonListAdapter(
                         Constants.TEST_SYMBOLS
                     )
                 }
+            }
+        }
+    }
+
+    private fun setLearnSentences(
+        available: Boolean,
+        progress: Double,
+        hasSentences: Boolean,
+        holder: ViewHolder
+    ) {
+        with(holder.binding) {
+            if (hasSentences) {
+                learnSentences.visibility = View.VISIBLE
+                learnSentences.isActivated = available
+
+                when {
+                    available && progress == 100.0 -> {
+                        learnSentencesStatus.visibility = View.VISIBLE
+                        learnSentencesProgress.visibility = View.GONE
+                    }
+                    available && progress < 100.0 -> {
+                        learnSentencesStatus.visibility = View.GONE
+                        learnSentencesProgress.visibility = View.VISIBLE
+                        learnSentencesProgress.progress = progress.toInt()
+                    }
+                    else -> {
+                        learnSentencesStatus.visibility = View.VISIBLE
+                        learnSentencesProgress.visibility = View.GONE
+                    }
+                }
+
+                if (available) {
+                    learnSentences.setOnClickListener {
+                        val selectedLesson = getItem(holder.bindingAdapterPosition)
+                        listener?.onLessonAction(
+                            selectedLesson.lesson.id,
+                            Constants.LEARN_SENTENCES
+                        )
+                    }
+                }
+            } else {
+                learnSentences.visibility = View.GONE
             }
         }
     }
@@ -188,17 +233,17 @@ class LessonListAdapter(
 
                 when {
                     available && progress == 100.0 -> {
-                        sentencesStatus.visibility = View.VISIBLE
-                        sentencesProgress.visibility = View.GONE
+                        testSentencesStatus.visibility = View.VISIBLE
+                        testSentencesProgress.visibility = View.GONE
                     }
                     available && progress < 100.0 -> {
-                        sentencesStatus.visibility = View.GONE
-                        sentencesProgress.visibility = View.VISIBLE
-                        sentencesProgress.progress = progress.toInt()
+                        testSentencesStatus.visibility = View.GONE
+                        testSentencesProgress.visibility = View.VISIBLE
+                        testSentencesProgress.progress = progress.toInt()
                     }
                     else -> {
-                        sentencesStatus.visibility = View.VISIBLE
-                        sentencesProgress.visibility = View.GONE
+                        testSentencesStatus.visibility = View.VISIBLE
+                        testSentencesProgress.visibility = View.GONE
                     }
                 }
 

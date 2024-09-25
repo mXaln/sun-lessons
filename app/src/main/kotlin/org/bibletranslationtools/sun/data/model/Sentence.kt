@@ -15,6 +15,8 @@ data class Sentence (
     val incorrect: String,
     @ColumnInfo(name = "passed")
     var passed: Boolean = false,
+    @ColumnInfo(name = "learned")
+    var learned: Boolean = false,
     @ColumnInfo(name = "lesson_id")
     var lessonId: Int? = null
 ) {

@@ -33,7 +33,7 @@
                 android:elevation="1dp"
                 android:textColor="@color/primary"
                 android:layout_marginTop="@dimen/_10dp"
-                android:id="@+id/page_title" />
+                android:id="@+id/section_title" />
 
             <TextView
                 android:layout_width="wrap_content"

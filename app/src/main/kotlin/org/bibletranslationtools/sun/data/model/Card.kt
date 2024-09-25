@@ -8,7 +8,7 @@ import java.util.Objects
 @Entity(tableName = "cards", primaryKeys = ["id"])
 data class Card(
     @ColumnInfo(name = "id")
-    val id: String,
+    override val id: String,
     @ColumnInfo(name = "symbol")
     val symbol: String,
     @ColumnInfo(name = "primary")
@@ -23,9 +23,9 @@ data class Card(
     var part: Int = 1,
     @ColumnInfo(name = "lesson_id")
     var lessonId: Int? = null,
-) {
+) : TestCard {
     @Ignore
-    var correct: Boolean? = null
+    override var correct: Boolean? = null
     @Ignore
     var done = false
     @Ignore
@@ -44,5 +44,18 @@ data class Card(
 
     override fun hashCode(): Int {
         return Objects.hash(id, symbol, learned, passed, lessonId)
+    }
+}
+
+data class Answer(
+    override var correct: Boolean?
+) : TestCard {
+
+    override val id: String
+        get() = if (correct == true) CORRECT else INCORRECT
+
+    private companion object {
+        const val CORRECT = "correct"
+        const val INCORRECT = "incorrect"
     }
 }

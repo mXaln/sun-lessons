@@ -32,41 +32,35 @@ class SectionStartActivity : AppCompatActivity() {
 
         when (type) {
             Constants.LEARN_SYMBOLS -> {
-                binding.pageTitle.text = getString(R.string.learn_symbols)
+                binding.sectionTitle.text = getString(R.string.learn_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_learn_large)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, LearnSymbolsActivity::class.java)
-                    intent.putExtra("id", id)
-                    startActivity(intent)
+                    startNextSection<LearnSymbolsActivity>()
                 }
             }
             Constants.TEST_SYMBOLS -> {
-                binding.pageTitle.text = getString(R.string.test_symbols)
+                binding.sectionTitle.text = getString(R.string.test_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_test_large)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, TestSymbolsActivity::class.java)
-                    intent.putExtra("id", id)
-                    startActivity(intent)
+                    startNextSection<TestSymbolsActivity>()
                 }
             }
             Constants.LEARN_SENTENCES -> {
-                binding.pageTitle.text = getString(R.string.learn_sentences)
+                binding.sectionTitle.text = getString(R.string.learn_sentences)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
-                binding.image.setImageResource(R.drawable.ic_learn_large)
+                binding.image.setImageResource(R.drawable.ic_learn_sentences_large)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, LearnSentencesActivity::class.java)
-                    intent.putExtra("id", id)
-                    startActivity(intent)
+                    startNextSection<LearnSentencesActivity>()
                 }
             }
             else -> {
-                binding.pageTitle.text = getString(R.string.lesson_completed, id)
+                binding.sectionTitle.text = getString(R.string.test_sentences)
+                binding.lessonTitle.text = getString(R.string.lesson_name, id)
+                binding.image.setImageResource(R.drawable.ic_test_sentences_large)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, TestSentencesActivity::class.java)
-                    intent.putExtra("id", id)
-                    startActivity(intent)
+                    startNextSection<TestSentencesActivity>()
                 }
             }
         }
@@ -81,5 +75,11 @@ class SectionStartActivity : AppCompatActivity() {
             intent.putExtra("selected", id)
             startActivity(intent)
         }
+    }
+
+    private inline fun <reified T : AppCompatActivity> startNextSection() {
+        val intent = Intent(this, T::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 }

@@ -12,7 +12,7 @@ import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
 
-class LearnSymbolsViewModel(application: Application) : AndroidViewModel(application) {
+class LearnSymbolViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: CardRepository
     private val mutableCards = MutableStateFlow<List<Card>>(listOf())

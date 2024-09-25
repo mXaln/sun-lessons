@@ -36,34 +36,25 @@ class SectionCompleteActivity : AppCompatActivity() {
 
         when (type) {
             Constants.LEARN_SYMBOLS -> {
-                binding.pageTitle.text = getString(R.string.learn_symbols_completed)
+                binding.sectionTitle.text = getString(R.string.learn_symbols_completed)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, SectionStartActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("type", Constants.TEST_SYMBOLS)
-                    startActivity(intent)
+                    goToNextSection(Constants.TEST_SYMBOLS)
                 }
             }
             Constants.TEST_SYMBOLS -> {
-                binding.pageTitle.text = getString(R.string.test_symbols_completed)
+                binding.sectionTitle.text = getString(R.string.test_symbols_completed)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, SectionStartActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("type", Constants.LEARN_SENTENCES)
-                    startActivity(intent)
+                    goToNextSection(Constants.LEARN_SENTENCES)
                 }
             }
             Constants.LEARN_SENTENCES -> {
-                binding.pageTitle.text = getString(R.string.learn_sentences_completed)
+                binding.sectionTitle.text = getString(R.string.learn_sentences_completed)
                 binding.startButton.setOnClickListener {
-                    val intent = Intent(baseContext, SectionStartActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("type", Constants.TEST_SENTENCES)
-                    startActivity(intent)
+                    goToNextSection(Constants.TEST_SENTENCES)
                 }
             }
             else -> {
-                binding.pageTitle.text = getString(R.string.lesson_completed, id)
+                binding.sectionTitle.text = getString(R.string.lesson_completed, id)
                 binding.startButton.setOnClickListener {
                     goToNextLesson()
                 }
@@ -80,6 +71,13 @@ class SectionCompleteActivity : AppCompatActivity() {
             intent.putExtra("selected", id)
             startActivity(intent)
         }
+    }
+
+    private fun goToNextSection(type: Int) {
+        val intent = Intent(this, SectionStartActivity::class.java)
+        intent.putExtra("id", id)
+        intent.putExtra("type", type)
+        startActivity(intent)
     }
 
     private fun goToNextLesson() {

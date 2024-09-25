@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.wajahatkarim3.easyflipview.EasyFlipView
+        android:id="@+id/card_view_flip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:flipFrom="right"
+        app:flipType="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardCornerRadius="8dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/_400dp"
+            android:background="@drawable/flash_card_bg"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_write"
+                android:id="@+id/item_image"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:padding="@dimen/_4dp"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="@dimen/_400dp"
+            android:text="@string/sun_example"
+            android:textStyle="bold"
+            android:textSize="@dimen/_280sp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            app:autoSizeTextType="uniform"
+            android:fontFamily="@font/sun"
+            android:background="@drawable/flash_card_bg"/>
+
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
+</FrameLayout>

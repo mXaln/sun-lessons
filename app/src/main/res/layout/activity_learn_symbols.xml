@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.activity.LearnSymbolsActivity">
 
-    <include android:id="@+id/nav_bar" layout="@layout/top_navigation" />
+    <include android:id="@+id/top_nav_bar" layout="@layout/top_navigation" />
 
     <FrameLayout
         android:layout_width="match_parent"
