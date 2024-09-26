@@ -90,7 +90,7 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
     }
 
     override fun onLessonAction(lessonId: Int, action: Section) {
-        val intent = Intent(this, SectionStartActivity::class.java)
+        val intent = Intent(baseContext, SectionStartActivity::class.java)
         intent.putExtra("id", lessonId)
         intent.putEnumExtra("type", action)
         startActivity(intent)

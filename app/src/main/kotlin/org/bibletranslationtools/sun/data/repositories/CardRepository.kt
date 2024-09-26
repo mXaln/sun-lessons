@@ -21,8 +21,8 @@ class CardRepository(private val cardDao: CardDao) {
         return cardDao.get(id)
     }
 
-    suspend fun getAllByLesson(lessonId: Int): List<Card> {
-        return cardDao.getAllByLesson(lessonId)
+    suspend fun getByLesson(lessonId: Int): List<Card> {
+        return cardDao.getByLesson(lessonId)
     }
 
     suspend fun getAllLearned(): List<Card> {
@@ -30,7 +30,7 @@ class CardRepository(private val cardDao: CardDao) {
     }
 
     suspend fun countAllLearned(): Int {
-        return cardDao.countAllLearned()
+        return cardDao.allLearnedCount()
     }
 
     suspend fun getAllTested(): List<Card> {
@@ -38,7 +38,27 @@ class CardRepository(private val cardDao: CardDao) {
     }
 
     suspend fun countAllTested(): Int {
-        return cardDao.countAllTested()
+        return cardDao.allTestedCount()
+    }
+
+    suspend fun getByLessonCount(lessonId: Int): Int {
+        return cardDao.getByLessonCount(lessonId)
+    }
+
+    suspend fun getLearnedByLesson(lessonId: Int): List<Card> {
+        return cardDao.getLearnedByLesson(lessonId)
+    }
+
+    suspend fun getLearnedByLessonCount(lessonId: Int): Int {
+        return cardDao.getLearnedByLessonCount(lessonId)
+    }
+
+    suspend fun getTestedByLesson(lessonId: Int): List<Card> {
+        return cardDao.getTestedByLesson(lessonId)
+    }
+
+    suspend fun getTestedByLessonCount(lessonId: Int): Int {
+        return cardDao.getTestedByLessonCount(lessonId)
     }
 
 }

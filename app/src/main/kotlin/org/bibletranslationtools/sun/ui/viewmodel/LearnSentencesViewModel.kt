@@ -43,8 +43,8 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
             repository.update(sentence.sentence)
             _sentences.value = _sentences.value
 
-            val lastSection = Setting("last_section", Section.LEARN_SENTENCES.id)
-            val lastLesson = Setting("last_lesson", lessonId.value.toString())
+            val lastSection = Setting(Setting.LAST_SECTION, Section.LEARN_SENTENCES.id)
+            val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
             settingsRepository.insertOrUpdate(lastSection)
             settingsRepository.insertOrUpdate(lastLesson)
         }

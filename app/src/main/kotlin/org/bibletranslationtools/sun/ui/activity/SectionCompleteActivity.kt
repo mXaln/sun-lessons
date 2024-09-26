@@ -69,8 +69,7 @@ class SectionCompleteActivity : AppCompatActivity() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = Intent(baseContext, LessonListActivity::class.java)
-            intent.putExtra("selected", id)
+            val intent = Intent(baseContext, HomeActivity::class.java)
             startActivity(intent)
         }
     }

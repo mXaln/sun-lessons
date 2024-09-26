@@ -30,32 +30,39 @@ class SentenceRepository(
         return sentenceDao.get(id)
     }
 
-    suspend fun getAll(lessonId: Int): List<Sentence> {
-        return sentenceDao.getAll(lessonId)
+    suspend fun getByLesson(lessonId: Int): List<Sentence> {
+        return sentenceDao.getByLesson(lessonId)
     }
 
     suspend fun getAllWithSymbols(lessonId: Int): List<SentenceWithSymbols> {
-        return sentenceDao.getAllWithSymbols(lessonId)
+        return sentenceDao.getByLessonWithSymbols(lessonId)
     }
 
     suspend fun getAllLearnedWithSymbols(): List<SentenceWithSymbols> {
         return sentenceDao.getAllLearnedWithSymbols()
     }
 
-    suspend fun countAllLearned(): Int {
-        return sentenceDao.countAllLearned()
+    suspend fun allLearnedCount(): Int {
+        return sentenceDao.allLearnedCount()
     }
 
     suspend fun getAllTestedWithSymbols(): List<SentenceWithSymbols> {
         return sentenceDao.getAllTestedWithSymbols()
     }
 
-    suspend fun countAllTested(): Int {
-        return sentenceDao.countAllTested()
+    suspend fun allTestedCount(): Int {
+        return sentenceDao.allTestedCount()
     }
 
-    suspend fun countAll(lessonId: Int): Int {
-        return sentenceDao.countAll(lessonId)
+    suspend fun getByLessonCount(lessonId: Int): Int {
+        return sentenceDao.getByLessonCount(lessonId)
     }
 
+    suspend fun getLearnedByLessonCount(lessonId: Int): Int {
+        return sentenceDao.getLearnedByLessonCount(lessonId)
+    }
+
+    suspend fun getTestedByLessonCount(lessonId: Int): Int {
+        return sentenceDao.getTestedByLessonCount(lessonId)
+    }
 }

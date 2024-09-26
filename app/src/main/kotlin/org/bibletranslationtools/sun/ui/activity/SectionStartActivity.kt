@@ -79,7 +79,7 @@ class SectionStartActivity : AppCompatActivity() {
     }
 
     private inline fun <reified T : AppCompatActivity> startNextSection() {
-        val intent = Intent(this, T::class.java)
+        val intent = Intent(baseContext, T::class.java)
         intent.putExtra("id", id)
         startActivity(intent)
     }

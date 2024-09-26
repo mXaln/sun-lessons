@@ -40,19 +40,19 @@ class LessonListAdapter(
 
             val cardsLearnedProgress = lesson.cardsLearnedProgress
             val testSymbolsAvailable = cardsLearnedProgress == 100.0
-            val cardsPassedProgress = lesson.cardsPassedProgress
-            val learnSentencesAvailable = cardsPassedProgress == 100.0
+            val cardsTestedProgress = lesson.cardsTestedProgress
+            val learnSentencesAvailable = cardsTestedProgress == 100.0
             val sentencesLearnedProgress = lesson.sentencesLearnedProgress
-            val sentencesPassedProgress = lesson.sentencesPassedProgress
+            val sentencesTestedProgress = lesson.sentencesTestedProgress
             val testSentencesAvailable = sentencesLearnedProgress == 100.0
             val hasSentences = lesson.sentences.isNotEmpty()
 
             setLessonStatus(lesson, holder)
 
             setLearnSymbols(cardsLearnedProgress, holder)
-            setTestSymbols(testSymbolsAvailable, cardsPassedProgress, holder)
+            setTestSymbols(testSymbolsAvailable, cardsTestedProgress, holder)
             setLearnSentences(learnSentencesAvailable, sentencesLearnedProgress, hasSentences, holder)
-            setTestSentences(testSentencesAvailable, sentencesPassedProgress, hasSentences, holder)
+            setTestSentences(testSentencesAvailable, sentencesTestedProgress, hasSentences, holder)
         }
     }
 

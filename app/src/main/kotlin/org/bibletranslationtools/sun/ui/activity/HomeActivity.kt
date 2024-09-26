@@ -25,18 +25,39 @@ class HomeActivity : AppCompatActivity() {
 
         binding.learnSymbols.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.navigateToSection { section, lessonId, started ->
-                    val cls = if (started) {
-                        when (section) {
-                            Section.LEARN_SYMBOLS -> LearnSymbolsActivity::class.java
-                            Section.TEST_SYMBOLS -> TestSymbolsActivity::class.java
-                            Section.LEARN_SENTENCES -> LearnSentencesActivity::class.java
-                            else -> TestSentencesActivity::class.java
+                viewModel.navigateToSection { lastSection, lastLesson, state ->
+                    var section = lastSection
+                    val cls = when (state) {
+                        HomeViewModel.SectionState.NOT_STARTED -> {
+                            SectionStartActivity::class.java
                         }
-                    } else SectionStartActivity::class.java
+                        HomeViewModel.SectionState.IN_PROGRESS -> {
+                            when (lastSection) {
+                                Section.LEARN_SYMBOLS -> LearnSymbolsActivity::class.java
+                                Section.TEST_SYMBOLS -> TestSymbolsActivity::class.java
+                                Section.LEARN_SENTENCES -> LearnSentencesActivity::class.java
+                                else -> TestSentencesActivity::class.java
+                            }
+                        }
+                        HomeViewModel.SectionState.COMPLETED -> {
+                            var newCls: Class<*> = SectionStartActivity::class.java
+                            section = when (lastSection) {
+                                Section.LEARN_SYMBOLS -> Section.TEST_SYMBOLS
+                                Section.TEST_SYMBOLS -> Section.LEARN_SENTENCES
+                                Section.LEARN_SENTENCES -> Section.TEST_SENTENCES
+                                else -> {
+                                    // When we complete test sentences, we land on completed page
+                                    // instead of starting page
+                                    newCls = SectionCompleteActivity::class.java
+                                    Section.TEST_SENTENCES
+                                }
+                            }
+                            newCls
+                        }
+                    }
 
-                    val intent = Intent(this@HomeActivity, cls)
-                    intent.putExtra("id", lessonId)
+                    val intent = Intent(baseContext, cls)
+                    intent.putExtra("id", lastLesson)
                     intent.putEnumExtra("type", section)
                     startActivity(intent)
                 }
@@ -44,18 +65,18 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.testSymbols.setOnClickListener {
-            val intent = Intent(this, GlobalTestActivity::class.java)
+            val intent = Intent(baseContext, GlobalTestActivity::class.java)
             startActivity(intent)
         }
 
         binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.progress -> {
-                    val intent = Intent(this, TrackProgressActivity::class.java)
+                    val intent = Intent(baseContext, TrackProgressActivity::class.java)
                     startActivity(intent)
                 }
                 R.id.lessons -> {
-                    val intent = Intent(this, LessonListActivity::class.java)
+                    val intent = Intent(baseContext, LessonListActivity::class.java)
                     startActivity(intent)
                 }
             }

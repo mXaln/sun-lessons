@@ -23,8 +23,8 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
     private val lessonRepository: LessonRepository
     private val settingsRepository: SettingsRepository
 
-    private val mutableCards = MutableStateFlow<List<Card>>(listOf())
-    val cards: StateFlow<List<Card>> = mutableCards
+    private val _cards = MutableStateFlow<List<Card>>(listOf())
+    val cards: StateFlow<List<Card>> = _cards
 
     val questionDone = MutableStateFlow(false)
     val lessonId = MutableStateFlow(1)
@@ -44,20 +44,20 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadLessonCards() {
         viewModelScope.launch {
-            mutableCards.value = repository.getAllByLesson(lessonId.value)
+            _cards.value = repository.getByLesson(lessonId.value)
         }
     }
 
-    fun loadAllPassedCards() {
+    fun loadAllTestedCards() {
         viewModelScope.launch {
-            mutableCards.value = repository.getAllTested()
+            _cards.value = repository.getAllTested()
         }
     }
 
     suspend fun getSentencesCount(): Int {
         return viewModelScope
             .async {
-                sentenceRepository.countAll(lessonId.value)
+                sentenceRepository.getByLessonCount(lessonId.value)
             }
             .await()
     }
@@ -65,8 +65,8 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
     suspend fun updateCard(card: Card) {
         repository.update(card)
 
-        val lastSection = Setting("last_section", Section.TEST_SYMBOLS.id)
-        val lastLesson = Setting("last_lesson", lessonId.value.toString())
+        val lastSection = Setting(Setting.LAST_SECTION, Section.TEST_SYMBOLS.id)
+        val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
     }

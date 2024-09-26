@@ -76,8 +76,9 @@ class  TrackProgressActivity : AppCompatActivity() {
         val lessons = viewModel.lessons.value
 
         binding.learnCount.text = lessons.sumOf { it.cardsLearned }.toString()
-        binding.learnProgress.progress =
-            lessons.sumOf { it.cardsLearnedProgress }.toInt() / lessons.size
+        binding.learnProgress.progress = lessons.sumOf {
+            it.cardsLearnedProgress
+        }.toInt() / lessons.size
     }
 
     @SuppressLint("DefaultLocale")

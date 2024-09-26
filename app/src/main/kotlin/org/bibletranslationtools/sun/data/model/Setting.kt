@@ -9,4 +9,10 @@ data class Setting(
     val name: String,
     @ColumnInfo(name = "value")
     val value: String
-)
+) {
+    companion object {
+        const val VERSION = "version"
+        const val LAST_SECTION = "last_section"
+        const val LAST_LESSON = "last_lesson"
+    }
+}

@@ -27,11 +27,11 @@ interface SentenceDao {
 
     @Transaction
     @Query("SELECT * FROM sentences WHERE lesson_id = :lessonId")
-    suspend fun getAll(lessonId: Int): List<Sentence>
+    suspend fun getByLesson(lessonId: Int): List<Sentence>
 
     @Transaction
     @Query("SELECT * FROM sentences WHERE lesson_id = :lessonId")
-    suspend fun getAllWithSymbols(lessonId: Int): List<SentenceWithSymbols>
+    suspend fun getByLessonWithSymbols(lessonId: Int): List<SentenceWithSymbols>
 
     @Transaction
     @Query("SELECT * FROM sentences WHERE tested = 1")
@@ -39,7 +39,7 @@ interface SentenceDao {
 
     @Transaction
     @Query("SELECT COUNT(*) FROM sentences WHERE tested = 1")
-    suspend fun countAllTested(): Int
+    suspend fun allTestedCount(): Int
 
     @Transaction
     @Query("SELECT * FROM sentences WHERE learned = 1")
@@ -47,9 +47,21 @@ interface SentenceDao {
 
     @Transaction
     @Query("SELECT COUNT(*) FROM sentences WHERE learned = 1")
-    suspend fun countAllLearned(): Int
+    suspend fun allLearnedCount(): Int
+
+    @Transaction
+    @Query("SELECT * FROM sentences WHERE learned = 1 AND lesson_id = :lessonId")
+    suspend fun getLearnedByLesson(lessonId: Int): List<Sentence>
 
     @Transaction
     @Query("SELECT COUNT(*) FROM sentences WHERE lesson_id = :lessonId")
-    suspend fun countAll(lessonId: Int): Int
+    suspend fun getByLessonCount(lessonId: Int): Int
+
+    @Transaction
+    @Query("SELECT COUNT(*) FROM sentences WHERE learned = 1 AND lesson_id = :lessonId")
+    suspend fun getLearnedByLessonCount(lessonId: Int): Int
+
+    @Transaction
+    @Query("SELECT COUNT(*) FROM sentences WHERE tested = 1 AND lesson_id = :lessonId")
+    suspend fun getTestedByLessonCount(lessonId: Int): Int
 }

@@ -22,7 +22,9 @@ import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LinearItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
 import org.bibletranslationtools.sun.utils.AnswerType
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolSelectedListener {
     private val binding by lazy { ActivityTestSentencesBinding.inflate(layoutInflater) }
@@ -118,7 +120,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             }
 
             if (viewModel.isGlobal.value) {
-                viewModel.loadAllPassedSentences()
+                viewModel.loadAllTestedSentences()
             } else {
                 viewModel.loadSentences()
             }
@@ -240,16 +242,10 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             startActivity(intent)
         } else {
             lifecycleScope.launch {
-                val lessons = viewModel.getAllLessons().map { it.id }
-                val current = lessons.indexOf(viewModel.lessonId.value)
-                var next = 1
-                if (current < lessons.size - 1) {
-                    next = lessons[current + 1]
-                }
-
                 runOnUiThread {
-                    val intent = Intent(baseContext, LessonListActivity::class.java)
-                    intent.putExtra("selected", next)
+                    val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+                    intent.putExtra("id", viewModel.lessonId.value)
+                    intent.putEnumExtra("type", Section.TEST_SENTENCES)
                     startActivity(intent)
                 }
             }

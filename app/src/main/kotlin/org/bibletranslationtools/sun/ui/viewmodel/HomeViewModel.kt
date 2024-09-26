@@ -71,7 +71,7 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
                     }
 
                     insertSetting(
-                        Setting("version", lessonSuite.version.toString())
+                        Setting(Setting.VERSION, lessonSuite.version.toString())
                     )
                 }
             }
@@ -106,29 +106,44 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
         settingsRepository.insert(setting)
     }
 
-    suspend fun navigateToSection(callback: (Section, Int, Boolean) -> Unit) {
-        val lastSection = settingsRepository.get("last_section")?.value?.let {
-            Section.of(it)
-        } ?: Section.LEARN_SYMBOLS
+    suspend fun navigateToSection(callback: (Section, Int, SectionState) -> Unit) {
+        val lastSection = settingsRepository
+            .get("last_section")
+            ?.value
+            ?.let { Section.of(it) } ?: Section.LEARN_SYMBOLS
         val lastLesson = settingsRepository.get("last_lesson")?.value?.toInt() ?: 1
 
-        // Check if there is a progress of learning/testing
-        // If there is, then we should navigate to the lesson
-        // Otherwise navigate to the landing page of the section
-        val started = when (lastSection) {
+        val all: Int
+        val done: Int
+        when (lastSection) {
             Section.LEARN_SYMBOLS -> {
-                cardRepository.countAllLearned() > 0
+                all = cardRepository.getByLessonCount(lastLesson)
+                done = cardRepository.getLearnedByLessonCount(lastLesson)
             }
             Section.TEST_SYMBOLS -> {
-                cardRepository.countAllTested() > 0
+                all = cardRepository.getByLessonCount(lastLesson)
+                done = cardRepository.getTestedByLessonCount(lastLesson)
             }
             Section.LEARN_SENTENCES -> {
-                sentenceRepository.countAllLearned() > 0
+                all = sentenceRepository.getByLessonCount(lastLesson)
+                done = sentenceRepository.getLearnedByLessonCount(lastLesson)
             }
             else -> {
-                sentenceRepository.countAllTested() > 0
+                all = sentenceRepository.getByLessonCount(lastLesson)
+                done = sentenceRepository.getTestedByLessonCount(lastLesson)
             }
         }
-        return callback(lastSection, lastLesson, started)
+        val sectionState = when {
+            done == all -> SectionState.COMPLETED
+            done > 0 -> SectionState.IN_PROGRESS
+            else -> SectionState.NOT_STARTED
+        }
+        return callback(lastSection, lastLesson, sectionState)
+    }
+
+    enum class SectionState {
+        NOT_STARTED,
+        IN_PROGRESS,
+        COMPLETED
     }
 }

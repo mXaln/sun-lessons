@@ -34,7 +34,7 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadCards(): Job {
         return viewModelScope.launch {
-            mutableCards.value = repository.getAllByLesson(lessonId.value)
+            mutableCards.value = repository.getByLesson(lessonId.value)
         }
     }
 
@@ -43,8 +43,8 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
             repository.update(card)
             mutableCards.value = mutableCards.value
 
-            val lastSection = Setting("last_section", Section.LEARN_SYMBOLS.id)
-            val lastLesson = Setting("last_lesson", lessonId.value.toString())
+            val lastSection = Setting(Setting.LAST_SECTION, Section.LEARN_SYMBOLS.id)
+            val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
             settingsRepository.insertOrUpdate(lastSection)
             settingsRepository.insertOrUpdate(lastLesson)
         }

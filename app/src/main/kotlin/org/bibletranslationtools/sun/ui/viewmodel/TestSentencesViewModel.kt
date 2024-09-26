@@ -55,7 +55,7 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun loadAllPassedSentences() {
+    fun loadAllTestedSentences() {
         viewModelScope.launch {
             mutableSentences.value = sentenceRepository.getAllTestedWithSymbols()
         }
@@ -64,8 +64,8 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
     suspend fun updateSentence(sentence: Sentence) {
         sentenceRepository.update(sentence)
 
-        val lastSection = Setting("last_section", Section.LEARN_SYMBOLS.id)
-        val lastLesson = Setting("last_lesson", lessonId.value.toString())
+        val lastSection = Setting(Setting.LAST_SECTION, Section.TEST_SENTENCES.id)
+        val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
     }
@@ -75,6 +75,6 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
     }
 
     suspend fun getAllCards(): List<Card> {
-        return cardsRepository.getAllByLesson(lessonId.value)
+        return cardsRepository.getByLesson(lessonId.value)
     }
 }

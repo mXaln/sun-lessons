@@ -53,8 +53,8 @@ class GlobalTestActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.loadAllPassedCardsCount()
-        viewModel.loadAllPassedSentencesCount()
+        viewModel.loadAllTestedCardsCount()
+        viewModel.loadAllTestedSentencesCount()
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

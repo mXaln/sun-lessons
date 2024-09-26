@@ -86,7 +86,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             }
 
             if (viewModel.isGlobal.value) {
-                viewModel.loadAllPassedCards()
+                viewModel.loadAllTestedCards()
             } else {
                 viewModel.loadLessonCards()
             }
@@ -187,7 +187,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     }
 
     private fun navigateToLearnSentences() {
-        val intent = Intent(this, SectionCompleteActivity::class.java)
+        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
         intent.putEnumExtra("type", Section.TEST_SYMBOLS)
         startActivity(intent)

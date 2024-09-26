@@ -30,8 +30,8 @@ class SectionStatusViewModel(application: Application) : AndroidViewModel(applic
     }
 
     suspend fun saveSectionStatus(lessonId: Int, section: Section) {
-        val lastSection = Setting("last_section", section.id)
-        val lastLesson = Setting("last_lesson", lessonId.toString())
+        val lastSection = Setting(Setting.LAST_SECTION, section.id)
+        val lastLesson = Setting(Setting.LAST_LESSON, lessonId.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
     }
