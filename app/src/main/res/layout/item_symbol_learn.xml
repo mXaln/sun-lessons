@@ -8,7 +8,7 @@
     <com.wajahatkarim3.easyflipview.EasyFlipView
         android:id="@+id/card_view_flip"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/_500dp"
         app:flipFrom="right"
         app:flipType="horizontal"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/_400dp"
             android:background="@drawable/flash_card_bg"
             android:layout_gravity="center">
 
@@ -38,7 +37,6 @@
             android:id="@+id/item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/_400dp"
             android:text="@string/sun_example"
             android:textStyle="bold"
             android:textSize="@dimen/_280sp"

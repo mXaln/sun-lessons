@@ -177,35 +177,20 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             startActivity(intent)
         } else {
             lifecycleScope.launch {
-                if (viewModel.getSentencesCount() == 0) {
-                    navigateToLessons()
-                } else {
-                    navigateToLearnSentences()
-                }
+                navigateToNextSection()
             }
         }
     }
 
-    private fun navigateToLearnSentences() {
+    private suspend fun navigateToNextSection() {
+        val section = if (viewModel.getSentencesCount() == 0) {
+            Section.TEST_SENTENCES
+        } else Section.TEST_SYMBOLS
+
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putEnumExtra("type", Section.TEST_SYMBOLS)
+        intent.putEnumExtra("type", section)
         startActivity(intent)
-    }
-
-    private suspend fun navigateToLessons() {
-        val lessons = viewModel.getAllLessons().map { it.id }
-        val current = lessons.indexOf(viewModel.lessonId.value)
-        var next = 1
-        if (current < lessons.size - 1) {
-            next = lessons[current + 1]
-        }
-
-        runOnUiThread {
-            val intent = Intent(baseContext, LessonListActivity::class.java)
-            intent.putExtra("selected", next)
-            startActivity(intent)
-        }
     }
 
     private fun setAnswers(cards: List<Card>) {

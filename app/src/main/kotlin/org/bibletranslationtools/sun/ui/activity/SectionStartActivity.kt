@@ -3,16 +3,22 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionStartedBinding
+import org.bibletranslationtools.sun.ui.viewmodel.SectionStatusViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.getEnumExtra
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class SectionStartActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivitySectionStartedBinding.inflate(layoutInflater) }
+    private val viewModel: SectionStatusViewModel by viewModels()
 
     private var id: Int = 1
     private var type: Section = Section.LEARN_SYMBOLS
@@ -30,6 +36,11 @@ class SectionStartActivity : AppCompatActivity() {
 
         id = intent.getIntExtra("id", 1)
         type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
+
+        // Finish lesson if there are no sentences
+        lifecycleScope.launch {
+            finishLesson()
+        }
 
         when (type) {
             Section.LEARN_SYMBOLS -> {
@@ -82,5 +93,14 @@ class SectionStartActivity : AppCompatActivity() {
         val intent = Intent(baseContext, T::class.java)
         intent.putExtra("id", id)
         startActivity(intent)
+    }
+
+    private suspend fun finishLesson() {
+        if (viewModel.sentencesByLessonCount(id) == 0) {
+            val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+            intent.putExtra("id", id)
+            intent.putEnumExtra("type", Section.TEST_SENTENCES)
+            startActivity(intent)
+        }
     }
 }

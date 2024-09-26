@@ -38,6 +38,15 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
         sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
         val settingsDao = AppDatabase.getDatabase(application).getSettingDao()
         settingsRepository = SettingsRepository(settingsDao)
+
+        // TODO Remove debug code
+        /*viewModelScope.launch {
+            settingsRepository.update(Setting(Setting.LAST_SECTION, Section.TEST_SYMBOLS.id))
+            settingsRepository.update(Setting(Setting.LAST_LESSON, "3"))
+            val lastCard = cardRepository.getByLesson(3).last()
+            lastCard.tested = false
+            cardRepository.update(lastCard)
+        }*/
     }
 
     fun importLessons(): Job {
@@ -115,6 +124,7 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
 
         val all: Int
         val done: Int
+
         when (lastSection) {
             Section.LEARN_SYMBOLS -> {
                 all = cardRepository.getByLessonCount(lastLesson)
@@ -133,11 +143,13 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
                 done = sentenceRepository.getTestedByLessonCount(lastLesson)
             }
         }
+
         val sectionState = when {
             done == all -> SectionState.COMPLETED
             done > 0 -> SectionState.IN_PROGRESS
             else -> SectionState.NOT_STARTED
         }
+
         return callback(lastSection, lastLesson, sectionState)
     }
 

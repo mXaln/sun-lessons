@@ -5,18 +5,23 @@ import androidx.lifecycle.AndroidViewModel
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
+import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
 import org.bibletranslationtools.sun.utils.Section
 
 class SectionStatusViewModel(application: Application) : AndroidViewModel(application) {
     private val lessonRepository: LessonRepository
     private val settingsRepository: SettingsRepository
+    private val sentenceRepository: SentenceRepository
 
     init {
         val lessonDao = AppDatabase.getDatabase(application).getLessonDao()
         lessonRepository = LessonRepository(lessonDao)
         val settingsDao = AppDatabase.getDatabase(application).getSettingDao()
         settingsRepository = SettingsRepository(settingsDao)
+        val symbolDao = AppDatabase.getDatabase(application).getSymbolDao()
+        val sentenceDao = AppDatabase.getDatabase(application).getSentenceDao()
+        sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
     }
 
     suspend fun getNextLesson(id: Int): Int {
@@ -34,5 +39,9 @@ class SectionStatusViewModel(application: Application) : AndroidViewModel(applic
         val lastLesson = Setting(Setting.LAST_LESSON, lessonId.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
+    }
+
+    suspend fun sentencesByLessonCount(lessonId: Int): Int {
+        return sentenceRepository.getByLessonCount(lessonId)
     }
 }

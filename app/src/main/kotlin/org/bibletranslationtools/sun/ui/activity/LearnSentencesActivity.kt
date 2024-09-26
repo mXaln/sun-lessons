@@ -13,6 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSentencesBinding
@@ -120,6 +122,13 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
             lifecycleScope.launch {
                 viewModel.sentences.collect { sentences ->
                     adapter.submitList(sentences)
+
+                    launch(Dispatchers.Main) {
+                        delay(100)
+                        sentences.firstOrNull { !it.sentence.learned }?.let {
+                            viewPager.currentItem = sentences.indexOf(it)
+                        }
+                    }
                 }
             }
 

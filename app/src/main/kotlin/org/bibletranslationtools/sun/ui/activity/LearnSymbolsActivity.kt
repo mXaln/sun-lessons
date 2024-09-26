@@ -13,6 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSymbolsBinding
@@ -119,6 +121,13 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             lifecycleScope.launch {
                 viewModel.cards.collect { cards ->
                     adapter.submitList(cards)
+
+                    launch(Dispatchers.Main) {
+                        delay(100)
+                        cards.firstOrNull { !it.learned }?.let {
+                            viewPager.currentItem = cards.indexOf(it)
+                        }
+                    }
                 }
             }
 
