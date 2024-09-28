@@ -52,6 +52,7 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
     fun loadSentences() {
         viewModelScope.launch {
             mutableSentences.value = sentenceRepository.getAllWithSymbols(lessonId.value)
+                .filter { !it.sentence.tested }
         }
     }
 

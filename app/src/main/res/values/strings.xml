@@ -31,4 +31,6 @@
     <string name="test_symbols_hint">Choose the symbol that reflects the image</string>
     <string name="correct">Correct</string>
     <string name="incorrect">Incorrect</string>
+    <string name="show">Show</string>
+    <string name="hide">Hide</string>
 </resources>

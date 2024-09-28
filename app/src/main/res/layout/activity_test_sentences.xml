@@ -14,18 +14,29 @@
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/_20dp"
-        android:layout_marginHorizontal="@dimen/_20dp">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_220dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_write" />
+            android:src="@drawable/ic_write"
+            android:layout_margin="@dimen/_50dp"/>
     </FrameLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/answer_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/incorrect"
+        android:textColor="@drawable/selector_answer"
+        app:icon="@drawable/ic_close_24"
+        app:iconTint="@drawable/selector_answer"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/answers_container"
@@ -62,8 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_20dp"
-                android:layout_gravity="center_horizontal"
-                />
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
         <LinearLayout
@@ -77,8 +87,7 @@
                 android:id="@+id/options_list"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                />
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -88,17 +97,32 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:orientation="horizontal"
-        android:layout_marginVertical="@dimen/_20dp">
+        android:layout_marginVertical="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/next_button"
-            android:layout_width="match_parent"
+            android:id="@+id/show_answer"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_50dp"
+            android:layout_weight="1"
+            android:text="@string/hide"
+            app:icon="@drawable/selector_show_answer"
+            app:iconSize="@dimen/_25dp"
+            app:iconPadding="10dp"
+            app:iconGravity="textStart"/>
+
+        <View
+            android:layout_width="@dimen/_20dp"
+            android:layout_height="1dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_sentence"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50dp"
+            android:layout_weight="1"
             app:icon="@drawable/ic_arrow_right"
             app:iconPadding="0dp"
-            app:iconGravity="textStart"
-            android:layout_marginHorizontal="@dimen/_20dp"
-            android:layout_marginBottom="@dimen/_20dp"/>
+            app:iconGravity="textStart"/>
     </LinearLayout>
 
 </LinearLayout>

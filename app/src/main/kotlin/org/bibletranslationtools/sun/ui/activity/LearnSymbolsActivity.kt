@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -59,7 +58,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
 
     private fun setupButtons() {
         with(binding) {
-            prevButton.visibility = View.GONE
+            prevButton.visibility = View.INVISIBLE
             prevButton.setOnClickListener {
                 nextButton.visibility = View.VISIBLE
                 val currentItem = viewPager.currentItem
@@ -67,7 +66,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     viewModel.flipState.value = FlipState.FRONT_SIDE
                     viewPager.currentItem = currentItem - 1
                     if (viewPager.currentItem == 0) {
-                        prevButton.visibility = View.GONE
+                        prevButton.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -93,17 +92,11 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     when (it) {
                         FlipState.FRONT_SIDE -> {
                             binding.showAnswer.text = getString(R.string.see_answer)
-                            binding.showAnswer.icon = AppCompatResources.getDrawable(
-                                this@LearnSymbolsActivity,
-                                R.drawable.ic_eye_open
-                            )
+                            binding.showAnswer.isActivated = true
                         }
                         FlipState.BACK_SIDE -> {
                             binding.showAnswer.text = getString(R.string.hide_answer)
-                            binding.showAnswer.icon = AppCompatResources.getDrawable(
-                                this@LearnSymbolsActivity,
-                                R.drawable.ic_eye_closed
-                            )
+                            binding.showAnswer.isActivated = false
                         }
                     }
                 }

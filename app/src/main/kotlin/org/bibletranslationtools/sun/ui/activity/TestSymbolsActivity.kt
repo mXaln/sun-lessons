@@ -64,7 +64,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             answersList.addItemDecoration(
                 GridItemOffsetDecoration(
                     2,
-                    20,
+                    40,
                     false
                 )
             )

@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Symbol
-import org.bibletranslationtools.sun.databinding.ItemSymbolTestBinding
+import org.bibletranslationtools.sun.databinding.ItemSentenceTestBinding
+import org.bibletranslationtools.sun.ui.control.SymbolFrameLayout
 import org.bibletranslationtools.sun.utils.AnswerType
 
 class TestSentenceAdapter(
@@ -23,7 +24,7 @@ class TestSentenceAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemSymbolTestBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemSentenceTestBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -54,7 +55,7 @@ class TestSentenceAdapter(
     }
 
     inner class ViewHolder(
-        private val binding: ItemSymbolTestBinding
+        private val binding: ItemSentenceTestBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(symbol: Symbol) {
             binding.apply {
@@ -64,13 +65,19 @@ class TestSentenceAdapter(
 
                 cardText.text = symbol.name
 
+                // Activated - Correct
+                // Selected - Incorrect
+
                 when(symbol.correct) {
-                    true -> cardFrame.isActivated = true
-                    false -> cardFrame.isSelected = true
+                    true -> cardFrame.state = SymbolFrameLayout.State.CORRECT
+                    false -> cardFrame.state = SymbolFrameLayout.State.INCORRECT
                     else -> {
-                        cardFrame.isActivated = false
-                        cardFrame.isSelected = false
+                        cardFrame.state = SymbolFrameLayout.State.DEFAULT
                     }
+                }
+
+                if (symbol.selected) {
+                    cardFrame.state = SymbolFrameLayout.State.SELECTED
                 }
 
                 root.setOnClickListener {

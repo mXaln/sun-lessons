@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="sun">
+        <attr name="state_symbol" format="enum">
+            <enum name="state_default" value="0" />
+            <enum name="state_selected" value="1" />
+            <enum name="state_correct" value="2" />
+            <enum name="state_incorrect" value="3" />
+        </attr>
+        <!-- Define custom drawable states -->
+        <attr name="state_default" format="boolean" />
+        <attr name="state_selected" format="boolean" />
+        <attr name="state_correct" format="boolean" />
+        <attr name="state_incorrect" format="boolean" />
+    </declare-styleable>
+</resources>

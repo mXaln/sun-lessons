@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,8 +40,10 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         TestSentenceAdapter()
     }
 
-    private lateinit var currentSentence: SentenceWithSymbols
+    private lateinit var correctSentence: SentenceWithSymbols
     private var lastAnswerPosition = -1
+    private var isAnswerCorrect = false
+    private var correctAnswerShown = false
 
     private val optionSymbols = arrayListOf<Symbol>()
     private val answerSymbols = arrayListOf<Symbol>()
@@ -112,7 +115,31 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 }
             }
 
-            nextButton.setOnClickListener {
+            showAnswer.setOnClickListener {
+                // If the answer is correct, do nothing
+                if (isAnswerCorrect) return@setOnClickListener
+
+                if (it.isActivated) {
+                    correctAnswerShown = true
+                    correctContainer.visibility = View.VISIBLE
+                    answersContainer.visibility = View.GONE
+                    showAnswer.text = getString(R.string.hide)
+                    answerResult.isActivated = true
+                    answerResult.icon = getDrawable(R.drawable.ic_check_24)
+                    answerResult.text = getString(R.string.correct)
+                    binding.nextSentence.visibility = View.VISIBLE
+                } else {
+                    correctContainer.visibility = View.GONE
+                    answersContainer.visibility = View.VISIBLE
+                    showAnswer.text = getString(R.string.show)
+                    answerResult.isActivated = false
+                    answerResult.icon = getDrawable(R.drawable.ic_close_24)
+                    answerResult.text = getString(R.string.incorrect)
+                }
+                it.isActivated = !it.isActivated
+            }
+
+            nextSentence.setOnClickListener {
                 if (viewModel.sentenceDone.value) {
                     setNextSentence()
                     viewModel.sentenceDone.value = false
@@ -129,12 +156,12 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     override fun onSymbolSelected(symbol: Symbol, position: Int) {
         if (!viewModel.sentenceDone.value) {
-            symbol.correct = true
             symbol.selected = true
             optionsAdapter.refreshItem(position)
 
             val answerSymbol = symbol.copy()
             answerSymbol.type = AnswerType.ANSWER
+            answerSymbol.selected = true
 
             lastAnswerPosition++
             answerSymbols[lastAnswerPosition] = answerSymbol
@@ -144,38 +171,58 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             if (lastAnswerPosition >= answersAdapter.itemCount - 1) {
                 checkAnswer()
                 viewModel.sentenceDone.value = true
-                binding.nextButton.isEnabled = true
+                binding.nextSentence.isEnabled = true
                 lastAnswerPosition = -1
             }
         }
     }
 
     private fun checkAnswer() {
-        val correctSymbols = currentSentence.symbols
+        val correctSymbols = correctSentence.symbols
 
         val isSentenceCorrect = correctSymbols.map { it.id } == answerSymbols.map { it.id }
 
         if (isSentenceCorrect) {
+            isAnswerCorrect = true
             lifecycleScope.launch(Dispatchers.IO) {
-                currentSentence.sentence.tested = true
-                currentSentence.sentence.answered = true
-                viewModel.updateSentence(currentSentence.sentence)
+                correctSentence.sentence.tested = true
+                correctSentence.sentence.answered = true
+                viewModel.updateSentence(correctSentence.sentence)
             }
+            binding.answerResult.isActivated = true
+            binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_check_24)
+            binding.answerResult.text = getString(R.string.correct)
+            binding.showAnswer.visibility = View.GONE
+            binding.nextSentence.visibility = View.VISIBLE
+        } else {
+            binding.answerResult.isActivated = false
+            binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_close_24)
+            binding.answerResult.text = getString(R.string.incorrect)
+            binding.showAnswer.visibility = View.VISIBLE
         }
 
         answerSymbols.zip(correctSymbols).withIndex().forEach { (index, pair) ->
+            pair.first.selected = false
             pair.first.correct = pair.first.name == pair.second.name
             answersAdapter.refreshItem(index)
         }
 
         setCorrectSymbols(correctSymbols)
 
-        binding.correctContainer.visibility = View.VISIBLE
+        binding.answerResult.visibility = View.VISIBLE
+        binding.correctContainer.visibility = View.GONE
         binding.optionsContainer.visibility = View.GONE
     }
 
     private fun setNextSentence() {
-        binding.nextButton.isEnabled = false
+        isAnswerCorrect = false
+        correctAnswerShown = false
+        binding.nextSentence.isEnabled = false
+        binding.showAnswer.isActivated = true
+        binding.showAnswer.text = getString(R.string.show)
+        binding.showAnswer.visibility = View.GONE
+        binding.answersContainer.visibility = View.VISIBLE
+        binding.nextSentence.visibility = View.GONE
 
         val allSentences = viewModel.sentences.value.toMutableList()
         val inProgressSentences = allSentences.filter { !it.sentence.answered }
@@ -188,7 +235,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         setRandomSentence(inProgressSentences)
 
         Glide.with(baseContext)
-            .load(Uri.parse("file:///android_asset/images/sentences/${currentSentence.sentence.correct}"))
+            .load(Uri.parse("file:///android_asset/images/sentences/${correctSentence.sentence.correct}"))
             .fitCenter()
             .into(binding.itemImage)
 
@@ -196,7 +243,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             val cards = viewModel.getAllCards()
             val cardSymbols = cards.map { Symbol(id = 0, name = it.symbol, sort = 0) }
             val totalOptions =
-                if (currentSentence.symbols.size > OPTIONS_SHORT) OPTIONS_LONG else OPTIONS_SHORT
+                if (correctSentence.symbols.size > OPTIONS_SHORT) OPTIONS_LONG else OPTIONS_SHORT
 
             val allSymbols = cardSymbols + allSentences
                 .map { it.symbols }
@@ -204,21 +251,22 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
             val incorrectSymbols = allSymbols
                 .filter { symbol ->
-                    val correctSymbols = currentSentence.symbols
+                    val correctSymbols = correctSentence.symbols
                     correctSymbols.none { it.name == symbol.name }
                 }
                 .distinctBy { it.name }
                 .shuffled()
-                .take(totalOptions - currentSentence.symbols.size)
+                .take(totalOptions - correctSentence.symbols.size)
 
-            val options = (currentSentence.symbols + incorrectSymbols).shuffled()
+            val options = (correctSentence.symbols + incorrectSymbols).shuffled()
             setOptions(options)
 
-            val answers = currentSentence.symbols.map { it.copy(name = "") }
+            val answers = correctSentence.symbols.map { it.copy(name = "") }
             setAnswers(answers)
 
             setCorrectSymbols(listOf())
 
+            binding.answerResult.visibility = View.GONE
             binding.correctContainer.visibility = View.GONE
             binding.optionsContainer.visibility = View.VISIBLE
         }
@@ -226,13 +274,13 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private fun setRandomSentence(sentences: List<SentenceWithSymbols>) {
         // Try to select a sentence that has not been asked before
-        if (this::currentSentence.isInitialized && sentences.size > 1) {
-            val oldSentence = currentSentence.copy()
-            while (oldSentence == currentSentence) {
-                currentSentence = sentences.random()
+        if (this::correctSentence.isInitialized && sentences.size > 1) {
+            val oldSentence = correctSentence.copy()
+            while (oldSentence == correctSentence) {
+                correctSentence = sentences.random()
             }
         } else {
-            currentSentence = sentences.random()
+            correctSentence = sentences.random()
         }
     }
 
@@ -272,7 +320,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private fun setAnswers(symbols: List<Symbol>) {
         symbols.forEach {
-            it.selected = true
+            it.selected = false
             it.correct = null
             it.type = AnswerType.ANSWER
         }
@@ -285,7 +333,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private fun setCorrectSymbols(symbols: List<Symbol>) {
         symbols.forEach {
-            it.selected = true
+            it.selected = false
             it.correct = true
             it.type = AnswerType.ANSWER
         }
