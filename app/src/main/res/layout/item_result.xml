@@ -14,7 +14,7 @@
         android:padding="@dimen/_5dp"
         android:layout_gravity="center">
 
-        <com.google.android.material.button.MaterialButton
+        <org.bibletranslationtools.sun.ui.control.SymbolButton
             android:id="@+id/answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

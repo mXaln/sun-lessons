@@ -39,7 +39,9 @@ class SectionStartActivity : AppCompatActivity() {
 
         // Finish lesson if there are no sentences
         lifecycleScope.launch {
-            finishLesson()
+            if (type == Section.LEARN_SENTENCES || type == Section.TEST_SENTENCES) {
+                finishLesson()
+            }
         }
 
         when (type) {

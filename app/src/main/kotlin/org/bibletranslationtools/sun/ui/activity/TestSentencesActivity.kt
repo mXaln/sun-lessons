@@ -21,6 +21,7 @@ import org.bibletranslationtools.sun.data.model.Symbol
 import org.bibletranslationtools.sun.databinding.ActivityTestSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LinearItemOffsetDecoration
+import org.bibletranslationtools.sun.ui.control.SymbolState
 import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
 import org.bibletranslationtools.sun.utils.AnswerType
 import org.bibletranslationtools.sun.utils.Section
@@ -124,16 +125,22 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                     correctContainer.visibility = View.VISIBLE
                     answersContainer.visibility = View.GONE
                     showAnswer.text = getString(R.string.hide)
-                    answerResult.isActivated = true
-                    answerResult.icon = getDrawable(R.drawable.ic_check_24)
+                    answerResult.state = SymbolState.CORRECT
+                    answerResult.icon = AppCompatResources.getDrawable(
+                        baseContext,
+                        R.drawable.ic_check_24
+                    )
                     answerResult.text = getString(R.string.correct)
                     binding.nextSentence.visibility = View.VISIBLE
                 } else {
                     correctContainer.visibility = View.GONE
                     answersContainer.visibility = View.VISIBLE
                     showAnswer.text = getString(R.string.show)
-                    answerResult.isActivated = false
-                    answerResult.icon = getDrawable(R.drawable.ic_close_24)
+                    answerResult.state = SymbolState.INCORRECT
+                    answerResult.icon = AppCompatResources.getDrawable(
+                        baseContext,
+                        R.drawable.ic_close_24
+                    )
                     answerResult.text = getString(R.string.incorrect)
                 }
                 it.isActivated = !it.isActivated
@@ -189,13 +196,13 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 correctSentence.sentence.answered = true
                 viewModel.updateSentence(correctSentence.sentence)
             }
-            binding.answerResult.isActivated = true
+            binding.answerResult.state = SymbolState.CORRECT
             binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_check_24)
             binding.answerResult.text = getString(R.string.correct)
             binding.showAnswer.visibility = View.GONE
             binding.nextSentence.visibility = View.VISIBLE
         } else {
-            binding.answerResult.isActivated = false
+            binding.answerResult.state = SymbolState.INCORRECT
             binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_close_24)
             binding.answerResult.text = getString(R.string.incorrect)
             binding.showAnswer.visibility = View.VISIBLE

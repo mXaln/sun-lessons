@@ -10,8 +10,9 @@ import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Answer
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.data.model.TestCard
-import org.bibletranslationtools.sun.databinding.ItemAnswerBinding
+import org.bibletranslationtools.sun.databinding.ItemResultBinding
 import org.bibletranslationtools.sun.databinding.ItemSymbolTestBinding
+import org.bibletranslationtools.sun.ui.control.SymbolState
 
 class TestSymbolAdapter(
     private val listener: OnCardSelectedListener? = null
@@ -30,7 +31,7 @@ class TestSymbolAdapter(
                 SymbolViewHolder(binding)
             }
             else -> {
-                val binding = ItemAnswerBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemResultBinding.inflate(layoutInflater, parent, false)
                 AnswerViewHolder(binding)
             }
         }
@@ -73,11 +74,10 @@ class TestSymbolAdapter(
                 cardText.text = card.symbol
 
                 when(card.correct) {
-                    true -> cardFrame.isActivated = true
-                    false -> cardFrame.isSelected = true
+                    true -> cardFrame.state = SymbolState.CORRECT
+                    false -> cardFrame.state = SymbolState.INCORRECT
                     else -> {
-                        cardFrame.isActivated = false
-                        cardFrame.isSelected = false
+                        cardFrame.state = SymbolState.DEFAULT
                     }
                 }
 
@@ -90,15 +90,15 @@ class TestSymbolAdapter(
     }
 
     inner class AnswerViewHolder(
-        private val binding: ItemAnswerBinding
+        private val binding: ItemResultBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: Answer) {
             with(binding) {
                 if (card.correct == true) {
-                    answer.isActivated = true
+                    answer.state = SymbolState.CORRECT
                     answer.text = root.context.getString(R.string.correct)
                 } else {
-                    answer.isActivated = false
+                    answer.state = SymbolState.INCORRECT
                     answer.text = root.context.getString(R.string.incorrect)
                 }
             }

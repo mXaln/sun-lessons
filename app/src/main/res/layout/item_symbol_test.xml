@@ -7,7 +7,7 @@
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent">
 
-    <FrameLayout
+    <org.bibletranslationtools.sun.ui.control.SymbolFrameLayout
         android:id="@+id/card_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +26,6 @@
             android:textColor="@android:color/black"
             android:textAlignment="center"
             android:fontFamily="@font/sun" />
-    </FrameLayout>
+    </org.bibletranslationtools.sun.ui.control.SymbolFrameLayout>
 
 </androidx.cardview.widget.CardView>

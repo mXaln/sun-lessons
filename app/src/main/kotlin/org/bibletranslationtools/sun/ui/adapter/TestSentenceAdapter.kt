@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.data.model.Symbol
 import org.bibletranslationtools.sun.databinding.ItemSentenceTestBinding
-import org.bibletranslationtools.sun.ui.control.SymbolFrameLayout
+import org.bibletranslationtools.sun.ui.control.SymbolState
 import org.bibletranslationtools.sun.utils.AnswerType
 
 class TestSentenceAdapter(
@@ -69,15 +69,15 @@ class TestSentenceAdapter(
                 // Selected - Incorrect
 
                 when(symbol.correct) {
-                    true -> cardFrame.state = SymbolFrameLayout.State.CORRECT
-                    false -> cardFrame.state = SymbolFrameLayout.State.INCORRECT
+                    true -> cardFrame.state = SymbolState.CORRECT
+                    false -> cardFrame.state = SymbolState.INCORRECT
                     else -> {
-                        cardFrame.state = SymbolFrameLayout.State.DEFAULT
+                        cardFrame.state = SymbolState.DEFAULT
                     }
                 }
 
                 if (symbol.selected) {
-                    cardFrame.state = SymbolFrameLayout.State.SELECTED
+                    cardFrame.state = SymbolState.SELECTED
                 }
 
                 root.setOnClickListener {

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_symbol_correct" android:state_activated="true" />
-    <item android:drawable="@drawable/ic_symbol_incorrect" android:state_selected="true" />
-    <item android:drawable="@drawable/background_idle" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:drawable="@drawable/ic_symbol_correct"
+        app:state_correct="true" />
+    <item
+        android:drawable="@drawable/ic_symbol_incorrect"
+        app:state_incorrect="true" />
+    <item
+        android:drawable="@drawable/background_idle" />
 </selector>

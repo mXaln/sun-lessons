@@ -26,7 +26,7 @@
             android:layout_margin="@dimen/_50dp"/>
     </FrameLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <org.bibletranslationtools.sun.ui.control.SymbolButton
         android:id="@+id/answer_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
