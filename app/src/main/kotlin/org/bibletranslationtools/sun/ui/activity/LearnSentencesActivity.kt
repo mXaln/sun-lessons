@@ -74,11 +74,19 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
                 val currentItem = viewPager.currentItem
-                if (currentItem < viewModel.sentences.value.size - 1) {
-                    viewModel.flipState.value = FlipState.FRONT_SIDE
-                    viewPager.currentItem = currentItem + 1
-                } else {
-                    finishLesson()
+                val unlearnedCards = viewModel.sentences.value.filter { !it.sentence.learned }.size
+                when {
+                    currentItem < viewModel.sentences.value.size - 1 -> {
+                        viewPager.currentItem = currentItem + 1
+                        viewModel.flipState.value = FlipState.FRONT_SIDE
+                    }
+                    unlearnedCards > 0 -> {
+                        // User skipped some cards, so show the first unlearned card
+                        val unlearnedItem = viewModel.sentences.value.indexOfFirst { !it.sentence.learned }
+                        viewPager.currentItem = unlearnedItem
+                        viewModel.flipState.value = FlipState.FRONT_SIDE
+                    }
+                    else -> finishLesson()
                 }
             }
             showAnswer.setOnClickListener {
@@ -119,7 +127,8 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                     launch(Dispatchers.Main) {
                         delay(100)
                         sentences.firstOrNull { !it.sentence.learned }?.let {
-                            viewPager.currentItem = sentences.indexOf(it)
+                            // Scroll to the last learned card
+                            viewPager.currentItem = sentences.indexOf(it) - 1
                         }
                     }
                 }

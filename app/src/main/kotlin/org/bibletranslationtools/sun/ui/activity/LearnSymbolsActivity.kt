@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -73,11 +74,20 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
                 val currentItem = viewPager.currentItem
-                if (currentItem < viewModel.cards.value.size - 1) {
-                    viewModel.flipState.value = FlipState.FRONT_SIDE
-                    viewPager.currentItem = currentItem + 1
-                } else {
-                    finishLesson()
+                val unlearnedCards = viewModel.cards.value.filter { !it.learned }.size
+                when {
+                    currentItem < viewModel.cards.value.size - 1 -> {
+                        viewPager.currentItem = currentItem + 1
+                        viewModel.flipState.value = FlipState.FRONT_SIDE
+                    }
+                    unlearnedCards > 0 -> {
+                        // User skipped some cards, so show the first unlearned card
+                        val unlearnedItem = viewModel.cards.value.indexOfFirst { !it.learned }
+                        viewPager.currentItem = unlearnedItem
+                        viewModel.flipState.value = FlipState.FRONT_SIDE
+
+                    }
+                    else -> finishLesson()
                 }
             }
             showAnswer.setOnClickListener {
@@ -118,7 +128,8 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     launch(Dispatchers.Main) {
                         delay(100)
                         cards.firstOrNull { !it.learned }?.let {
-                            viewPager.currentItem = cards.indexOf(it)
+                            // Scroll to the last learned card
+                            viewPager.currentItem = cards.indexOf(it) - 1
                         }
                     }
                 }
