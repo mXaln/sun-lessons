@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.databinding.ActivityGlobalTestBinding
 import org.bibletranslationtools.sun.ui.viewmodel.GlobalTestViewModel
@@ -42,15 +44,19 @@ class GlobalTestActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.cardsCount.collect {
-                binding.testSymbols.isActivated = it > 0
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.cardsCount.collect {
+                        binding.testSymbols.isActivated = it > 0
+                    }
+                }
+                launch {
+                    viewModel.sentencesCount.collect {
+                        binding.testSentences.isActivated = it > 0
+                    }
+                }
             }
-        }
 
-        lifecycleScope.launch {
-            viewModel.sentencesCount.collect {
-                binding.testSentences.isActivated = it > 0
-            }
         }
 
         viewModel.loadAllTestedCardsCount()

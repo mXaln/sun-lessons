@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionStartedBinding
@@ -125,7 +127,7 @@ class SectionStartActivity : AppCompatActivity() {
     private fun startTestSection() {
         lifecycleScope.launch {
             viewModel.getLastTestSession()?.let { section ->
-                when(section) {
+                when (section) {
                     Section.TEST_SYMBOLS -> startNextSection<TestSymbolsActivity>()
                     else -> startNextSection<TestSentencesActivity>()
                 }

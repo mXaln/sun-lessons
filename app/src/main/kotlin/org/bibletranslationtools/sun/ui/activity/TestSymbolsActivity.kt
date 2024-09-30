@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import org.bibletranslationtools.sun.R
@@ -65,9 +67,11 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             answersList.adapter = gridAdapter
 
             lifecycleScope.launch {
-                viewModel.cards.collect {
-                    if (it.isNotEmpty()) {
-                        setNextQuestion()
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.cards.collect {
+                        if (it.isNotEmpty()) {
+                            setNextQuestion()
+                        }
                     }
                 }
             }
@@ -167,21 +171,21 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     }
 
     private fun finishTest() {
-        lifecycleScope.launch {
-            navigateToNextSection()
-        }
+        navigateToNextSection()
     }
 
-    private suspend fun navigateToNextSection() {
-        val section = if (viewModel.getSentencesCount() == 0) {
-            Section.TEST_SENTENCES
-        } else Section.TEST_SYMBOLS
+    private fun navigateToNextSection() {
+        lifecycleScope.launch {
+            val section = if (viewModel.getSentencesCount() == 0) {
+                Section.TEST_SENTENCES
+            } else Section.TEST_SYMBOLS
 
-        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
-        intent.putExtra("id", viewModel.lessonId.value)
-        intent.putEnumExtra("type", section)
-        intent.putExtra("global", viewModel.isGlobal.value)
-        startActivity(intent)
+            val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+            intent.putExtra("id", viewModel.lessonId.value)
+            intent.putEnumExtra("type", section)
+            intent.putExtra("global", viewModel.isGlobal.value)
+            startActivity(intent)
+        }
     }
 
     private fun setAnswers(cards: List<Card>) {

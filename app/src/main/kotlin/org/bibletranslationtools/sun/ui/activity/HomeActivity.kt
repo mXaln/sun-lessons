@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityHomeBinding
@@ -31,6 +33,7 @@ class HomeActivity : AppCompatActivity() {
                         HomeViewModel.SectionState.NOT_STARTED -> {
                             SectionStartActivity::class.java
                         }
+
                         HomeViewModel.SectionState.IN_PROGRESS -> {
                             when (lastSection) {
                                 Section.LEARN_SYMBOLS -> LearnSymbolsActivity::class.java
@@ -39,6 +42,7 @@ class HomeActivity : AppCompatActivity() {
                                 else -> TestSentencesActivity::class.java
                             }
                         }
+
                         HomeViewModel.SectionState.COMPLETED -> {
                             var newCls: Class<*> = SectionStartActivity::class.java
                             section = when (lastSection) {
@@ -82,6 +86,7 @@ class HomeActivity : AppCompatActivity() {
                     val intent = Intent(baseContext, TrackProgressActivity::class.java)
                     startActivity(intent)
                 }
+
                 R.id.lessons -> {
                     val intent = Intent(baseContext, LessonListActivity::class.java)
                     startActivity(intent)

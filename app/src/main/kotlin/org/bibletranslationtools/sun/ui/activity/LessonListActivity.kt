@@ -7,7 +7,9 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -64,9 +66,11 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         }
 
         lifecycleScope.launch {
-            viewModel.lessons.collect {
-                lessonsAdapter.submitList(it)
-                lessonsAdapter.notifyDataSetChanged()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.lessons.collect {
+                    lessonsAdapter.submitList(it)
+                    lessonsAdapter.notifyDataSetChanged()
+                }
             }
         }
 

@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
@@ -84,15 +86,18 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                 }
             }
             lifecycleScope.launch {
-                viewModel.flipState.collect {
-                    when (it) {
-                        FlipState.FRONT_SIDE -> {
-                            binding.showAnswer.text = getString(R.string.see_answer)
-                            binding.showAnswer.isActivated = true
-                        }
-                        FlipState.BACK_SIDE -> {
-                            binding.showAnswer.text = getString(R.string.hide_answer)
-                            binding.showAnswer.isActivated = false
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.flipState.collect {
+                        when (it) {
+                            FlipState.FRONT_SIDE -> {
+                                binding.showAnswer.text = getString(R.string.see_answer)
+                                binding.showAnswer.isActivated = true
+                            }
+
+                            FlipState.BACK_SIDE -> {
+                                binding.showAnswer.text = getString(R.string.hide_answer)
+                                binding.showAnswer.isActivated = false
+                            }
                         }
                     }
                 }
@@ -134,15 +139,17 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             TabLayoutMediator(tabs, viewPager) {_,_ ->}.attach()
 
             lifecycleScope.launch {
-                viewModel.cards.collect { cards ->
-                    adapter.submitList(cards)
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.cards.collect { cards ->
+                        adapter.submitList(cards)
 
-                    if (!viewModel.isGlobal.value) {
-                        launch(Dispatchers.Main) {
-                            delay(100)
-                            cards.firstOrNull { !it.learned }?.let {
-                                // Scroll to the last learned card
-                                viewPager.currentItem = cards.indexOf(it) - 1
+                        if (!viewModel.isGlobal.value) {
+                            launch(Dispatchers.Main) {
+                                delay(100)
+                                cards.firstOrNull { !it.learned }?.let {
+                                    // Scroll to the last learned card
+                                    viewPager.currentItem = cards.indexOf(it) - 1
+                                }
                             }
                         }
                     }

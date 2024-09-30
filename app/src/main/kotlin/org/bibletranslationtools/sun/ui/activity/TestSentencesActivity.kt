@@ -7,7 +7,9 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -108,9 +110,11 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             )
 
             lifecycleScope.launch {
-                viewModel.sentences.collect {
-                    if (it.isNotEmpty()) {
-                        setNextSentence()
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.sentences.collect {
+                        if (it.isNotEmpty()) {
+                            setNextSentence()
+                        }
                     }
                 }
             }
@@ -288,15 +292,11 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
     }
 
     private fun finishTest() {
-        lifecycleScope.launch {
-            runOnUiThread {
-                val intent = Intent(baseContext, SectionCompleteActivity::class.java)
-                intent.putExtra("id", viewModel.lessonId.value)
-                intent.putEnumExtra("type", Section.TEST_SENTENCES)
-                intent.putExtra("global", viewModel.isGlobal.value)
-                startActivity(intent)
-            }
-        }
+        val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+        intent.putExtra("id", viewModel.lessonId.value)
+        intent.putEnumExtra("type", Section.TEST_SENTENCES)
+        intent.putExtra("global", viewModel.isGlobal.value)
+        startActivity(intent)
     }
 
     override fun onDestroy() {

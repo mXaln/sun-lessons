@@ -7,7 +7,9 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
@@ -58,13 +60,15 @@ class  TrackProgressActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.lessons.collect {
-                lessonsAdapter.submitList(it)
-                lessonsAdapter.notifyDataSetChanged()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.lessons.collect {
+                    lessonsAdapter.submitList(it)
+                    lessonsAdapter.notifyDataSetChanged()
 
-                if (it.isNotEmpty()) {
-                    setLearnProgress()
-                    setTestScore()
+                    if (it.isNotEmpty()) {
+                        setLearnProgress()
+                        setTestScore()
+                    }
                 }
             }
         }
