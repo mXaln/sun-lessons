@@ -49,7 +49,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/learn_symbols"
+            android:id="@+id/learn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -59,7 +59,7 @@
             <LinearLayout
                 android:layout_width="@dimen/_220dp"
                 android:layout_height="@dimen/_220dp"
-                android:background="@drawable/background_home_item"
+                android:background="@drawable/background_idle"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 android:gravity="center"
@@ -85,7 +85,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/test_symbols"
+            android:id="@+id/test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -97,7 +97,7 @@
                 android:layout_width="@dimen/_220dp"
                 android:layout_height="@dimen/_220dp"
                 android:orientation="vertical"
-                android:background="@drawable/background_home_item"
+                android:background="@drawable/background_idle"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="@dimen/_20dp">

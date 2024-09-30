@@ -22,6 +22,7 @@ class SectionStartActivity : AppCompatActivity() {
 
     private var id: Int = 1
     private var type: Section = Section.LEARN_SYMBOLS
+    private var global: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,7 @@ class SectionStartActivity : AppCompatActivity() {
 
         id = intent.getIntExtra("id", 1)
         type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
+        global = intent.getBooleanExtra("global", false)
 
         // Finish lesson if there are no sentences
         lifecycleScope.launch {
@@ -69,12 +71,20 @@ class SectionStartActivity : AppCompatActivity() {
                     startNextSection<LearnSentencesActivity>()
                 }
             }
-            else -> {
+            Section.TEST_SENTENCES -> {
                 binding.sectionTitle.text = getString(R.string.test_sentences)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
                 binding.image.setImageResource(R.drawable.ic_test_sentences_large)
                 binding.startButton.setOnClickListener {
                     startNextSection<TestSentencesActivity>()
+                }
+            }
+            else -> {
+                binding.sectionTitle.text = getString(R.string.test_knowledge)
+                binding.lessonTitle.text = getString(R.string.lesson_name, id)
+                binding.image.setImageResource(R.drawable.ic_test_menu)
+                binding.startButton.setOnClickListener {
+                    startTestSection()
                 }
             }
         }
@@ -85,15 +95,21 @@ class SectionStartActivity : AppCompatActivity() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            intent.putExtra("selected", id)
-            startActivity(intent)
+            if (global) {
+                val intent = Intent(baseContext, LessonListActivity::class.java)
+                intent.putExtra("selected", id)
+                startActivity(intent)
+            } else {
+                val intent = Intent(baseContext, HomeActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     private inline fun <reified T : AppCompatActivity> startNextSection() {
         val intent = Intent(baseContext, T::class.java)
         intent.putExtra("id", id)
+        intent.putExtra("global", global)
         startActivity(intent)
     }
 
@@ -103,6 +119,17 @@ class SectionStartActivity : AppCompatActivity() {
             intent.putExtra("id", id)
             intent.putEnumExtra("type", Section.TEST_SENTENCES)
             startActivity(intent)
+        }
+    }
+
+    private fun startTestSection() {
+        lifecycleScope.launch {
+            viewModel.getLastTestSession()?.let { section ->
+                when(section) {
+                    Section.TEST_SYMBOLS -> startNextSection<TestSymbolsActivity>()
+                    else -> startNextSection<TestSentencesActivity>()
+                }
+            }
         }
     }
 }

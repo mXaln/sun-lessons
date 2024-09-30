@@ -7,7 +7,8 @@ enum class Section(val id: String) {
     LEARN_SYMBOLS("learn_symbols"),
     TEST_SYMBOLS("test_symbols"),
     LEARN_SENTENCES("learn_sentences"),
-    TEST_SENTENCES("test_sentences");
+    TEST_SENTENCES("test_sentences"),
+    TEST_ALL("test_all");
 
     companion object {
         private val map = entries.toTypedArray().associateBy { it.id.lowercase() }

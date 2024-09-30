@@ -45,12 +45,7 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
     fun loadLessonCards() {
         viewModelScope.launch {
             _cards.value = repository.getByLesson(lessonId.value)
-        }
-    }
-
-    fun loadAllTestedCards() {
-        viewModelScope.launch {
-            _cards.value = repository.getAllTested()
+                .filter { !it.tested }
         }
     }
 

@@ -21,6 +21,7 @@ class SectionCompleteActivity : AppCompatActivity() {
 
     private var id: Int = 1
     private var type: Section = Section.LEARN_SYMBOLS
+    private var isGlobal = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,7 @@ class SectionCompleteActivity : AppCompatActivity() {
 
         id = intent.getIntExtra("id", 1)
         type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
+        isGlobal = intent.getBooleanExtra("global", false)
 
         when (type) {
             Section.LEARN_SYMBOLS -> {
@@ -56,7 +58,10 @@ class SectionCompleteActivity : AppCompatActivity() {
                 }
             }
             else -> {
-                binding.sectionTitle.text = getString(R.string.lesson_completed, id)
+                binding.sectionTitle.text = if (isGlobal) {
+                    getString(R.string.test_sentences_completed)
+                } else getString(R.string.lesson_completed, id)
+
                 binding.startButton.setOnClickListener {
                     navigateToNextLesson()
                 }
@@ -76,9 +81,11 @@ class SectionCompleteActivity : AppCompatActivity() {
 
     private fun navigateToNextSection(type: Section) {
         lifecycleScope.launch {
-            viewModel.saveSectionStatus(id, type)
+            if (isGlobal) {
+                navigateToLessonsList()
+            } else {
+                viewModel.saveSectionStatus(id, type)
 
-            runOnUiThread {
                 val intent = Intent(baseContext, SectionStartActivity::class.java)
                 intent.putExtra("id", id)
                 intent.putEnumExtra("type", type)
@@ -89,15 +96,23 @@ class SectionCompleteActivity : AppCompatActivity() {
 
     private fun navigateToNextLesson() {
         lifecycleScope.launch {
-            val next = viewModel.getNextLesson(id)
-            viewModel.saveSectionStatus(next, Section.LEARN_SYMBOLS)
+            if (isGlobal) {
+                navigateToLessonsList()
+            } else {
+                val next = viewModel.getNextLesson(id)
+                viewModel.saveSectionStatus(next, Section.LEARN_SYMBOLS)
 
-            runOnUiThread {
                 val intent = Intent(baseContext, SectionStartActivity::class.java)
                 intent.putExtra("id", next)
                 intent.putEnumExtra("type", Section.LEARN_SYMBOLS)
                 startActivity(intent)
             }
         }
+    }
+
+    private fun navigateToLessonsList() {
+        val intent = Intent(baseContext, LessonListActivity::class.java)
+        intent.putExtra("selected", id)
+        startActivity(intent)
     }
 }

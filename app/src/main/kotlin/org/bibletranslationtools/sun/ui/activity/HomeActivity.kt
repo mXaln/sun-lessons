@@ -23,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
-        binding.learnSymbols.setOnClickListener {
+        binding.learn.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.navigateToSection { lastSection, lastLesson, state ->
                     var section = lastSection
@@ -64,9 +64,16 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        binding.testSymbols.setOnClickListener {
-            val intent = Intent(baseContext, GlobalTestActivity::class.java)
-            startActivity(intent)
+        binding.test.setOnClickListener {
+            lifecycleScope.launch {
+                if (viewModel.testsAvailable()) {
+                    val lastLesson = viewModel.getLastLesson()
+                    val intent = Intent(baseContext, SectionStartActivity::class.java)
+                    intent.putExtra("id", lastLesson)
+                    intent.putEnumExtra("type", Section.TEST_ALL)
+                    startActivity(intent)
+                }
+            }
         }
 
         binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->

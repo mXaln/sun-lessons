@@ -23,7 +23,8 @@ data class Sentence (
     @Ignore
     val symbols: List<Symbol> = listOf()
     @Ignore
-    var answered = false
+    // To temporarily store learned/tested status of the sentence
+    var passed = false
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

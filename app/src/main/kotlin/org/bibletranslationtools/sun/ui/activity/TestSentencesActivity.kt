@@ -7,7 +7,6 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -126,22 +125,16 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                     answersContainer.visibility = View.GONE
                     showAnswer.text = getString(R.string.hide)
                     answerResult.state = SymbolState.CORRECT
-                    answerResult.icon = AppCompatResources.getDrawable(
-                        baseContext,
-                        R.drawable.ic_check_24
-                    )
                     answerResult.text = getString(R.string.correct)
+                    answerResult.refreshDrawableState()
                     binding.nextSentence.visibility = View.VISIBLE
                 } else {
                     correctContainer.visibility = View.GONE
                     answersContainer.visibility = View.VISIBLE
                     showAnswer.text = getString(R.string.show)
                     answerResult.state = SymbolState.INCORRECT
-                    answerResult.icon = AppCompatResources.getDrawable(
-                        baseContext,
-                        R.drawable.ic_close_24
-                    )
                     answerResult.text = getString(R.string.incorrect)
+                    answerResult.refreshDrawableState()
                 }
                 it.isActivated = !it.isActivated
             }
@@ -153,72 +146,8 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 }
             }
 
-            if (viewModel.isGlobal.value) {
-                viewModel.loadAllTestedSentences()
-            } else {
-                viewModel.loadSentences()
-            }
+            viewModel.loadSentences()
         }
-    }
-
-    override fun onSymbolSelected(symbol: Symbol, position: Int) {
-        if (!viewModel.sentenceDone.value) {
-            symbol.selected = true
-            optionsAdapter.refreshItem(position)
-
-            val answerSymbol = symbol.copy()
-            answerSymbol.type = AnswerType.ANSWER
-            answerSymbol.selected = true
-
-            lastAnswerPosition++
-            answerSymbols[lastAnswerPosition] = answerSymbol
-            answersAdapter.submitList(answerSymbols)
-            answersAdapter.refreshItem(lastAnswerPosition)
-
-            if (lastAnswerPosition >= answersAdapter.itemCount - 1) {
-                checkAnswer()
-                viewModel.sentenceDone.value = true
-                binding.nextSentence.isEnabled = true
-                lastAnswerPosition = -1
-            }
-        }
-    }
-
-    private fun checkAnswer() {
-        val correctSymbols = correctSentence.symbols
-
-        val isSentenceCorrect = correctSymbols.map { it.id } == answerSymbols.map { it.id }
-
-        if (isSentenceCorrect) {
-            isAnswerCorrect = true
-            lifecycleScope.launch(Dispatchers.IO) {
-                correctSentence.sentence.tested = true
-                correctSentence.sentence.answered = true
-                viewModel.updateSentence(correctSentence.sentence)
-            }
-            binding.answerResult.state = SymbolState.CORRECT
-            binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_check_24)
-            binding.answerResult.text = getString(R.string.correct)
-            binding.showAnswer.visibility = View.GONE
-            binding.nextSentence.visibility = View.VISIBLE
-        } else {
-            binding.answerResult.state = SymbolState.INCORRECT
-            binding.answerResult.icon = AppCompatResources.getDrawable(baseContext, R.drawable.ic_close_24)
-            binding.answerResult.text = getString(R.string.incorrect)
-            binding.showAnswer.visibility = View.VISIBLE
-        }
-
-        answerSymbols.zip(correctSymbols).withIndex().forEach { (index, pair) ->
-            pair.first.selected = false
-            pair.first.correct = pair.first.name == pair.second.name
-            answersAdapter.refreshItem(index)
-        }
-
-        setCorrectSymbols(correctSymbols)
-
-        binding.answerResult.visibility = View.VISIBLE
-        binding.correctContainer.visibility = View.GONE
-        binding.optionsContainer.visibility = View.GONE
     }
 
     private fun setNextSentence() {
@@ -232,7 +161,9 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         binding.nextSentence.visibility = View.GONE
 
         val allSentences = viewModel.sentences.value.toMutableList()
-        val inProgressSentences = allSentences.filter { !it.sentence.answered }
+        val inProgressSentences = allSentences.filter {
+            if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.tested
+        }
 
         if (inProgressSentences.isEmpty()) {
             finishTest()
@@ -279,6 +210,71 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         }
     }
 
+    override fun onSymbolSelected(symbol: Symbol, position: Int) {
+        if (!viewModel.sentenceDone.value) {
+            symbol.selected = true
+            optionsAdapter.refreshItem(position)
+
+            val answerSymbol = symbol.copy()
+            answerSymbol.type = AnswerType.ANSWER
+            answerSymbol.selected = true
+
+            lastAnswerPosition++
+            answerSymbols[lastAnswerPosition] = answerSymbol
+            answersAdapter.submitList(answerSymbols)
+            answersAdapter.refreshItem(lastAnswerPosition)
+
+            if (lastAnswerPosition >= answersAdapter.itemCount - 1) {
+                checkAnswer()
+                viewModel.sentenceDone.value = true
+                binding.nextSentence.isEnabled = true
+                lastAnswerPosition = -1
+            }
+        }
+    }
+
+    private fun checkAnswer() {
+        val correctSymbols = correctSentence.symbols
+
+        val isSentenceCorrect = correctSymbols.map { it.id } == answerSymbols.map { it.id }
+
+        with(binding) {
+            if (isSentenceCorrect) {
+                isAnswerCorrect = true
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (!viewModel.isGlobal.value) {
+                        correctSentence.sentence.tested = true
+                        viewModel.updateSentence(correctSentence.sentence)
+                    } else {
+                        correctSentence.sentence.passed = true
+                    }
+                }
+                answerResult.state = SymbolState.CORRECT
+                answerResult.text = getString(R.string.correct)
+                answerResult.refreshDrawableState()
+                showAnswer.visibility = View.GONE
+                nextSentence.visibility = View.VISIBLE
+            } else {
+                answerResult.state = SymbolState.INCORRECT
+                answerResult.text = getString(R.string.incorrect)
+                answerResult.refreshDrawableState()
+                showAnswer.visibility = View.VISIBLE
+            }
+
+            answerSymbols.zip(correctSymbols).withIndex().forEach { (index, pair) ->
+                pair.first.selected = false
+                pair.first.correct = pair.first.name == pair.second.name
+                answersAdapter.refreshItem(index)
+            }
+
+            setCorrectSymbols(correctSymbols)
+
+            answerResult.visibility = View.VISIBLE
+            correctContainer.visibility = View.GONE
+            optionsContainer.visibility = View.GONE
+        }
+    }
+
     private fun setRandomSentence(sentences: List<SentenceWithSymbols>) {
         // Try to select a sentence that has not been asked before
         if (this::correctSentence.isInitialized && sentences.size > 1) {
@@ -292,17 +288,13 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
     }
 
     private fun finishTest() {
-        if (viewModel.isGlobal.value) {
-            val intent = Intent(baseContext, GlobalTestActivity::class.java)
-            startActivity(intent)
-        } else {
-            lifecycleScope.launch {
-                runOnUiThread {
-                    val intent = Intent(baseContext, SectionCompleteActivity::class.java)
-                    intent.putExtra("id", viewModel.lessonId.value)
-                    intent.putEnumExtra("type", Section.TEST_SENTENCES)
-                    startActivity(intent)
-                }
+        lifecycleScope.launch {
+            runOnUiThread {
+                val intent = Intent(baseContext, SectionCompleteActivity::class.java)
+                intent.putExtra("id", viewModel.lessonId.value)
+                intent.putEnumExtra("type", Section.TEST_SENTENCES)
+                intent.putExtra("global", viewModel.isGlobal.value)
+                startActivity(intent)
             }
         }
     }
@@ -353,11 +345,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = if (viewModel.isGlobal.value) {
-                Intent(baseContext, GlobalTestActivity::class.java)
-            } else {
-                Intent(baseContext, HomeActivity::class.java)
-            }
+            val intent = Intent(baseContext, HomeActivity::class.java)
             startActivity(intent)
         }
     }

@@ -3,7 +3,6 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -49,13 +48,8 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            if (!viewModel.isGlobal.value) {
-                binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
-                binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
-            } else {
-                binding.topNavBar.pageTitle.visibility = View.GONE
-                binding.topNavBar.tallyNumber.visibility = View.GONE
-            }
+            binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
+            binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
 
             answersList.layoutManager = GridLayoutManager(
                 this@TestSymbolsActivity,
@@ -85,13 +79,38 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
                 }
             }
 
-            if (viewModel.isGlobal.value) {
-                viewModel.loadAllTestedCards()
-            } else {
-                viewModel.loadLessonCards()
-            }
-
+            viewModel.loadLessonCards()
         }
+    }
+
+    private fun setNextQuestion() {
+        binding.nextButton.isEnabled = false
+
+        val allCards = viewModel.cards.value.toMutableList()
+        allCards.forEach { it.correct = null }
+
+        val inProgressCards = allCards.filter {
+            if (viewModel.isGlobal.value) !it.passed else !it.tested
+        }
+
+        if (inProgressCards.isEmpty()) {
+            finishTest()
+            return
+        }
+
+        setRandomCard(inProgressCards)
+        allCards.remove(correctCard)
+
+        val incorrectCards = allCards.shuffled().take(3)
+
+        setAnswers((listOf(correctCard) + incorrectCards).shuffled())
+
+        gridAdapter.submitList(reviewCards as List<TestCard>)
+
+        Glide.with(baseContext)
+            .load(Uri.parse("file:///android_asset/images/symbols/${correctCard.secondary}"))
+            .fitCenter()
+            .into(binding.itemImage)
     }
 
     override fun onCardSelected(card: Card, position: Int) {
@@ -105,8 +124,12 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     private fun checkAnswer(selectedCard: Card, position: Int) {
         if (selectedCard.symbol == correctCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                correctCard.tested = true
-                viewModel.updateCard(correctCard)
+                if (!viewModel.isGlobal.value) {
+                    correctCard.tested = true
+                    viewModel.updateCard(correctCard)
+                } else {
+                    correctCard.passed = true
+                }
             }
             correctCard.correct = true
 
@@ -132,34 +155,6 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         }
     }
 
-    private fun setNextQuestion() {
-        binding.nextButton.isEnabled = false
-
-        val allCards = viewModel.cards.value.toMutableList()
-        allCards.forEach { it.correct = null }
-
-        val inProgressCards = allCards.filter { !it.tested }
-
-        if (inProgressCards.isEmpty()) {
-            finishReview()
-            return
-        }
-
-        setRandomCard(inProgressCards)
-        allCards.remove(correctCard)
-
-        val incorrectCards = allCards.shuffled().take(3)
-
-        setAnswers((listOf(correctCard) + incorrectCards).shuffled())
-
-        gridAdapter.submitList(reviewCards as List<TestCard>)
-
-        Glide.with(baseContext)
-            .load(Uri.parse("file:///android_asset/images/symbols/${correctCard.secondary}"))
-            .fitCenter()
-            .into(binding.itemImage)
-    }
-
     private fun setRandomCard(cards: List<Card>) {
         if (this::correctCard.isInitialized && cards.size > 1) {
             val oldCard = correctCard.copy()
@@ -171,14 +166,9 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         }
     }
 
-    private fun finishReview() {
-        if (viewModel.isGlobal.value) {
-            val intent = Intent(baseContext, GlobalTestActivity::class.java)
-            startActivity(intent)
-        } else {
-            lifecycleScope.launch {
-                navigateToNextSection()
-            }
+    private fun finishTest() {
+        lifecycleScope.launch {
+            navigateToNextSection()
         }
     }
 
@@ -190,6 +180,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
         intent.putEnumExtra("type", section)
+        intent.putExtra("global", viewModel.isGlobal.value)
         startActivity(intent)
     }
 
@@ -206,11 +197,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = if (viewModel.isGlobal.value) {
-                Intent(baseContext, GlobalTestActivity::class.java)
-            } else {
-                Intent(baseContext, HomeActivity::class.java)
-            }
+            val intent = Intent(baseContext, HomeActivity::class.java)
             startActivity(intent)
         }
     }

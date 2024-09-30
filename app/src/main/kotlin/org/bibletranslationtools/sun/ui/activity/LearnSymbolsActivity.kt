@@ -43,6 +43,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         }
 
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
+        viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
 
         binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
         binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
@@ -73,22 +74,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             }
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
-                val currentItem = viewPager.currentItem
-                val unlearnedCards = viewModel.cards.value.filter { !it.learned }.size
-                when {
-                    currentItem < viewModel.cards.value.size - 1 -> {
-                        viewPager.currentItem = currentItem + 1
-                        viewModel.flipState.value = FlipState.FRONT_SIDE
-                    }
-                    unlearnedCards > 0 -> {
-                        // User skipped some cards, so show the first unlearned card
-                        val unlearnedItem = viewModel.cards.value.indexOfFirst { !it.learned }
-                        viewPager.currentItem = unlearnedItem
-                        viewModel.flipState.value = FlipState.FRONT_SIDE
-
-                    }
-                    else -> finishLesson()
-                }
+                setNextSymbol()
             }
             showAnswer.setOnClickListener {
                 val currentState = viewModel.flipState.value
@@ -114,6 +100,32 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         }
     }
 
+    private fun setNextSymbol() {
+        val currentItem = binding.viewPager.currentItem
+        val unlearnedCards = viewModel.cards.value.filter {
+            if (viewModel.isGlobal.value) !it.passed else !it.learned
+        }.size
+        when {
+            currentItem < viewModel.cards.value.size - 1 -> {
+                binding.viewPager.currentItem = currentItem + 1
+                viewModel.flipState.value = FlipState.FRONT_SIDE
+            }
+            unlearnedCards > 0 -> {
+                // User skipped some cards, so show the first unlearned card
+                val unlearnedItem = viewModel.cards.value.indexOfFirst {
+                    if (viewModel.isGlobal.value) !it.passed else !it.learned
+                }
+                if (unlearnedItem == -1) {
+                    finishLesson()
+                    return
+                }
+                binding.viewPager.currentItem = unlearnedItem
+                viewModel.flipState.value = FlipState.FRONT_SIDE
+            }
+            else -> finishLesson()
+        }
+    }
+
     private fun setupCardsView() {
         with(binding) {
             viewPager.adapter = adapter
@@ -125,22 +137,20 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                 viewModel.cards.collect { cards ->
                     adapter.submitList(cards)
 
-                    launch(Dispatchers.Main) {
-                        delay(100)
-                        cards.firstOrNull { !it.learned }?.let {
-                            // Scroll to the last learned card
-                            viewPager.currentItem = cards.indexOf(it) - 1
+                    if (!viewModel.isGlobal.value) {
+                        launch(Dispatchers.Main) {
+                            delay(100)
+                            cards.firstOrNull { !it.learned }?.let {
+                                // Scroll to the last learned card
+                                viewPager.currentItem = cards.indexOf(it) - 1
+                            }
                         }
                     }
                 }
             }
 
-            loadCards()
+            viewModel.loadCards()
         }
-    }
-
-    private fun loadCards() {
-        viewModel.loadCards()
     }
 
     private val callback = object : ViewPager2.OnPageChangeCallback() {
@@ -149,7 +159,9 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             viewModel.flipState.value = FlipState.FRONT_SIDE
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
-                if (!card.learned) {
+                if (viewModel.isGlobal.value) {
+                    card.passed = true
+                } else if (!card.learned) {
                     card.learned = true
                     viewModel.saveCard(card)
                 }
@@ -173,6 +185,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
         intent.putExtra("type", Section.LEARN_SYMBOLS)
+        intent.putExtra("global", viewModel.isGlobal.value)
         startActivity(intent)
     }
 }

@@ -11,6 +11,7 @@
     <string name="learn_sentences">Learn Sentences</string>
     <string name="learn_sentences_completed">Learn Sentences Completed!</string>
     <string name="test_sentences">Test Sentences</string>
+    <string name="test_sentences_completed">Test Sentences Completed</string>
     <string name="lesson_completed">Lesson %1$d Completed!</string>
     <string name="lesson_name">Lesson %1$d</string>
     <string name="unknown" translatable="false">example</string>

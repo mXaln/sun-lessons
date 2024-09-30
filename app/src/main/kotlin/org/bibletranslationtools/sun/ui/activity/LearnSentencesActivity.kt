@@ -43,6 +43,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         }
 
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
+        viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
 
         binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
         binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
@@ -73,21 +74,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
             }
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
-                val currentItem = viewPager.currentItem
-                val unlearnedCards = viewModel.sentences.value.filter { !it.sentence.learned }.size
-                when {
-                    currentItem < viewModel.sentences.value.size - 1 -> {
-                        viewPager.currentItem = currentItem + 1
-                        viewModel.flipState.value = FlipState.FRONT_SIDE
-                    }
-                    unlearnedCards > 0 -> {
-                        // User skipped some cards, so show the first unlearned card
-                        val unlearnedItem = viewModel.sentences.value.indexOfFirst { !it.sentence.learned }
-                        viewPager.currentItem = unlearnedItem
-                        viewModel.flipState.value = FlipState.FRONT_SIDE
-                    }
-                    else -> finishLesson()
-                }
+                setNextSentence()
             }
             showAnswer.setOnClickListener {
                 val currentState = viewModel.flipState.value
@@ -142,13 +129,38 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         viewModel.loadSentences()
     }
 
+    private fun setNextSentence() {
+        val currentItem = binding.viewPager.currentItem
+        val unlearnedCards = viewModel.sentences.value.filter {
+            if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.learned
+        }.size
+
+        when {
+            currentItem < viewModel.sentences.value.size - 1 -> {
+                binding.viewPager.currentItem = currentItem + 1
+                viewModel.flipState.value = FlipState.FRONT_SIDE
+            }
+            unlearnedCards > 0 -> {
+                // User skipped some cards, so show the first unlearned card
+                val unlearnedItem = viewModel.sentences.value.indexOfFirst {
+                    if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.learned
+                }
+                binding.viewPager.currentItem = unlearnedItem
+                viewModel.flipState.value = FlipState.FRONT_SIDE
+            }
+            else -> finishLesson()
+        }
+    }
+
     private val callback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             viewModel.flipState.value = FlipState.FRONT_SIDE
             viewModel.sentences.value.let { sentences ->
                 val sentence = sentences[position]
-                if (!sentence.sentence.learned) {
+                if (viewModel.isGlobal.value) {
+                    sentence.sentence.passed = true
+                } else if (!sentence.sentence.learned) {
                     sentence.sentence.learned = true
                     viewModel.saveSentence(sentence)
                 }
@@ -172,6 +184,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
         intent.putEnumExtra("type", Section.LEARN_SENTENCES)
+        intent.putExtra("global", viewModel.isGlobal.value)
         startActivity(intent)
     }
 }

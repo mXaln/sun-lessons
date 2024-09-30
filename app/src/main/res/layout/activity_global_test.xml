@@ -7,52 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.activity.GlobalTestActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp">
-
-        <ImageView
-            android:layout_width="@dimen/_60dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_logo"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/_10dp"/>
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/_20dp">
-
-        <ImageView
-            android:layout_width="@dimen/_60dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_test" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/test_symbols"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:elevation="1dp"
-                android:textColor="@color/primary"
-                android:id="@+id/page_title" />
-        </LinearLayout>
-    </LinearLayout>
+    <include android:id="@+id/top_nav_bar" layout="@layout/top_navigation" />
 
     <LinearLayout
         android:layout_width="match_parent"

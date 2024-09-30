@@ -17,11 +17,11 @@ class GlobalTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.topNavBar.toolbar)
         supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.toolbar.setNavigationOnClickListener {
+        binding.topNavBar.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 

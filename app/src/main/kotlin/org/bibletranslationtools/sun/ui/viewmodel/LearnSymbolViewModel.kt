@@ -19,11 +19,14 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
 
     private val repository: CardRepository
     private val settingsRepository: SettingsRepository
-    private val mutableCards = MutableStateFlow<List<Card>>(listOf())
 
     val flipState = MutableStateFlow(EasyFlipView.FlipState.FRONT_SIDE)
-    val cards: StateFlow<List<Card>> = mutableCards
+
+    private val _cards = MutableStateFlow<List<Card>>(listOf())
+    val cards: StateFlow<List<Card>> = _cards
+
     val lessonId = MutableStateFlow(1)
+    val isGlobal = MutableStateFlow(false)
 
     init {
         val dao = AppDatabase.getDatabase(application).getCardDao()
@@ -34,14 +37,14 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadCards(): Job {
         return viewModelScope.launch {
-            mutableCards.value = repository.getByLesson(lessonId.value)
+            _cards.value = repository.getByLesson(lessonId.value)
         }
     }
 
     fun saveCard(card: Card): Job {
         return viewModelScope.launch {
             repository.update(card)
-            mutableCards.value = mutableCards.value
+            _cards.value = _cards.value
 
             val lastSection = Setting(Setting.LAST_SECTION, Section.LEARN_SYMBOLS.id)
             val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())

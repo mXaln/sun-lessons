@@ -21,6 +21,8 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
 
     private val _sentences = MutableStateFlow<List<SentenceWithSymbols>>(listOf())
     val sentences: StateFlow<List<SentenceWithSymbols>> = _sentences
+
+    val isGlobal = MutableStateFlow(false)
     val flipState = MutableStateFlow(EasyFlipView.FlipState.FRONT_SIDE)
     val lessonId = MutableStateFlow(1)
 

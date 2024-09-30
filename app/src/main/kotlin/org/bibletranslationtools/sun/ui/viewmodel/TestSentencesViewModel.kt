@@ -56,12 +56,6 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun loadAllTestedSentences() {
-        viewModelScope.launch {
-            mutableSentences.value = sentenceRepository.getAllTestedWithSymbols()
-        }
-    }
-
     suspend fun updateSentence(sentence: Sentence) {
         sentenceRepository.update(sentence)
 

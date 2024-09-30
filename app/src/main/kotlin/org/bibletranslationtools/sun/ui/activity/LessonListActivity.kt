@@ -93,6 +93,7 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         val intent = Intent(baseContext, SectionStartActivity::class.java)
         intent.putExtra("id", lessonId)
         intent.putEnumExtra("type", action)
+        intent.putExtra("global", true)
         startActivity(intent)
     }
 

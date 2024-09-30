@@ -25,6 +25,10 @@ data class Card(
     @Ignore
     override var correct: Boolean? = null
 
+    @Ignore
+    // To temporarily store learned/tested status of the card
+    var passed = false
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
