@@ -37,14 +37,15 @@
             android:id="@+id/item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/_400dp"
-            android:text="@string/sun_example"
+            android:text="@string/sun_example_sentence"
             android:textStyle="bold"
-            android:textSize="@dimen/_280sp"
             android:gravity="center"
             android:textColor="@android:color/black"
             app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="@dimen/_280sp"
+            android:maxLines="1"
             android:fontFamily="@font/sun"
+            android:padding="@dimen/_20dp"
             android:background="@drawable/flash_card_bg"/>
 
     </com.wajahatkarim3.easyflipview.EasyFlipView>

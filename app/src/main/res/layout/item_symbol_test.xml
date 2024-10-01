@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/sun_example"
+            android:text="@string/sun_example_symbol"
             app:autoSizeTextType="uniform"
             android:textColor="@android:color/black"
             android:textAlignment="center"

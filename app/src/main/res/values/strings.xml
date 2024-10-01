@@ -15,7 +15,8 @@
     <string name="lesson_completed">Lesson %1$d Completed!</string>
     <string name="lesson_name">Lesson %1$d</string>
     <string name="unknown" translatable="false">example</string>
-    <string name="sun_example" translatable="false">\uE000\uE000</string>
+    <string name="sun_example_sentence" translatable="false">\uE000\uE000\uE000\uE000</string>
+    <string name="sun_example_symbol" translatable="false">\uE000</string>
     <string name="tally_example" translatable="false">5</string>
     <string name="number_example" translatable="false">20</string>
     <string name="next">Next</string>

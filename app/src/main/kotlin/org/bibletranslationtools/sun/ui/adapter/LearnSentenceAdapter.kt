@@ -11,6 +11,7 @@ import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
+import kotlin.math.ceil
 
 
 class LearnSentenceAdapter(
@@ -49,7 +50,36 @@ class LearnSentenceAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sentence: SentenceWithSymbols) {
             binding.apply {
-                itemText.text = sentence.symbols.joinToString(" ") { it.name }
+                val symbolsCount = sentence.symbols.size
+                val maxSymbols = 5
+
+                val text = if (symbolsCount > maxSymbols) {
+                    val symbols = sentence.symbols.map { it.name }
+                    val builder = StringBuilder()
+                    var counter = 1
+                    for (symbol in symbols) {
+                        builder.append(symbol)
+                        if (counter == maxSymbols) {
+                            builder.append("\n")
+                            counter = 1
+                        } else {
+                            builder.append(" ")
+                        }
+                        counter += symbol.length
+                    }
+                    builder.toString()
+                } else {
+                    sentence.symbols.joinToString(" ") { it.name }
+                }
+
+                itemText.maxLines = ceil(symbolsCount / maxSymbols.toDouble()).toInt()
+                itemText.text = text
+
+                if (itemText.maxLines > 1) {
+                    itemText.gravity = android.view.Gravity.CENTER_VERTICAL
+                } else {
+                    itemText.gravity = android.view.Gravity.CENTER
+                }
 
                 Glide.with(itemImage.context)
                     .load(Uri.parse("file:///android_asset/images/sentences/${sentence.sentence.correct}"))
