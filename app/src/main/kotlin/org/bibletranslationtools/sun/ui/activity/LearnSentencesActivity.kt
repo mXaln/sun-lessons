@@ -6,9 +6,11 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
@@ -27,11 +29,9 @@ import org.bibletranslationtools.sun.utils.putEnumExtra
 
 class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSentencesBinding.inflate(layoutInflater) }
-    private val adapter by lazy {
-        LearnSentenceAdapter(viewModel.flipState)
-            .apply { setFlipListener(this@LearnSentencesActivity) }
-    }
+    private val adapter by lazy { LearnSentenceAdapter(this) }
     private val viewModel: LearnSentencesViewModel by viewModels()
+    private var pagerCurrentItem = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,52 +54,19 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         setupButtons()
     }
 
-    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
-        newCurrentSide?.let {
-            viewModel.flipState.value = it
-        }
-    }
-
     private fun setupButtons() {
         with(binding) {
             prevButton.visibility = View.INVISIBLE
             prevButton.setOnClickListener {
                 nextButton.visibility = View.VISIBLE
-                val currentItem = viewPager.currentItem
-                if (currentItem > 0) {
-                    viewModel.flipState.value = FlipState.FRONT_SIDE
-                    viewPager.currentItem = currentItem - 1
-                    if (viewPager.currentItem == 0) {
-                        prevButton.visibility = View.INVISIBLE
-                    }
-                }
+                setPreviousSentence()
             }
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
                 setNextSentence()
             }
             showAnswer.setOnClickListener {
-                val currentState = viewModel.flipState.value
-                viewModel.flipState.value = when (currentState) {
-                    FlipState.FRONT_SIDE -> FlipState.BACK_SIDE
-                    FlipState.BACK_SIDE -> FlipState.FRONT_SIDE
-                }
-            }
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.flipState.collect {
-                        when (it) {
-                            FlipState.FRONT_SIDE -> {
-                                binding.showAnswer.text = getString(R.string.see_answer)
-                                binding.showAnswer.isActivated = true
-                            }
-                            FlipState.BACK_SIDE -> {
-                                binding.showAnswer.text = getString(R.string.hide_answer)
-                                binding.showAnswer.isActivated = false
-                            }
-                        }
-                    }
-                }
+                flipCurrentCard()
             }
         }
     }
@@ -116,11 +83,13 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                     viewModel.sentences.collect { sentences ->
                         adapter.submitList(sentences)
 
-                        launch(Dispatchers.Main) {
-                            delay(100)
-                            sentences.firstOrNull { !it.sentence.learned }?.let {
-                                // Scroll to the last learned card
-                                viewPager.currentItem = sentences.indexOf(it) - 1
+                        if (!viewModel.isGlobal.value) {
+                            launch(Dispatchers.Main) {
+                                delay(100)
+                                sentences.firstOrNull { !it.sentence.learned }?.let {
+                                    // Scroll to the last learned sentence
+                                    viewPager.currentItem = sentences.indexOf(it) - 1
+                                }
                             }
                         }
                     }
@@ -135,6 +104,16 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         viewModel.loadSentences()
     }
 
+    private fun setPreviousSentence() {
+        val currentItem = binding.viewPager.currentItem
+        if (currentItem > 0) {
+            binding.viewPager.currentItem = currentItem - 1
+            if (binding.viewPager.currentItem == 0) {
+                binding.prevButton.visibility = View.INVISIBLE
+            }
+        }
+    }
+
     private fun setNextSentence() {
         val currentItem = binding.viewPager.currentItem
         val unlearnedCards = viewModel.sentences.value.filter {
@@ -144,7 +123,6 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         when {
             currentItem < viewModel.sentences.value.size - 1 -> {
                 binding.viewPager.currentItem = currentItem + 1
-                viewModel.flipState.value = FlipState.FRONT_SIDE
             }
             unlearnedCards > 0 -> {
                 // User skipped some cards, so show the first unlearned card
@@ -152,7 +130,6 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                     if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.learned
                 }
                 binding.viewPager.currentItem = unlearnedItem
-                viewModel.flipState.value = FlipState.FRONT_SIDE
             }
             else -> finishLesson()
         }
@@ -161,7 +138,10 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val callback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            viewModel.flipState.value = FlipState.FRONT_SIDE
+
+            adapter.notifyItemChanged(pagerCurrentItem)
+            pagerCurrentItem = position
+
             viewModel.sentences.value.let { sentences ->
                 val sentence = sentences[position]
                 if (viewModel.isGlobal.value) {
@@ -179,6 +159,21 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
+    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
+        newCurrentSide?.let {
+            when (it) {
+                FlipState.FRONT_SIDE -> {
+                    binding.showAnswer.text = getString(R.string.see_answer)
+                    binding.showAnswer.isActivated = true
+                }
+                FlipState.BACK_SIDE -> {
+                    binding.showAnswer.text = getString(R.string.hide_answer)
+                    binding.showAnswer.isActivated = false
+                }
+            }
+        }
+    }
+
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val intent = Intent(baseContext, HomeActivity::class.java)
@@ -192,5 +187,14 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         intent.putEnumExtra("type", Section.LEARN_SENTENCES)
         intent.putExtra("global", viewModel.isGlobal.value)
         startActivity(intent)
+    }
+
+    private fun flipCurrentCard() {
+        val currentItem = binding.viewPager.currentItem
+        val recyclerView = binding.viewPager[0] as RecyclerView
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(currentItem)
+        viewHolder?.let {
+            adapter.flipCard(it)
+        }
     }
 }

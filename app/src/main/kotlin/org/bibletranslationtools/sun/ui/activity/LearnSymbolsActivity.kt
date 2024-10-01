@@ -3,13 +3,14 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wajahatkarim3.easyflipview.EasyFlipView
@@ -27,11 +28,9 @@ import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSymbolsBinding.inflate(layoutInflater) }
-    private val adapter by lazy {
-        LearnSymbolAdapter(viewModel.flipState)
-            .apply { setFlipListener(this@LearnSymbolsActivity) }
-    }
+    private val adapter by lazy { LearnSymbolAdapter(this) }
     private val viewModel: LearnSymbolViewModel by viewModels()
+    private var pagerCurrentItem = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,53 +53,29 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         setupButtons()
     }
 
-    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
-        newCurrentSide?.let {
-            viewModel.flipState.value = it
-        }
-    }
-
     private fun setupButtons() {
         with(binding) {
             prevButton.visibility = View.INVISIBLE
             prevButton.setOnClickListener {
                 nextButton.visibility = View.VISIBLE
-                val currentItem = viewPager.currentItem
-                if (currentItem > 0) {
-                    viewModel.flipState.value = FlipState.FRONT_SIDE
-                    viewPager.currentItem = currentItem - 1
-                    if (viewPager.currentItem == 0) {
-                        prevButton.visibility = View.INVISIBLE
-                    }
-                }
+                setPreviousSymbol()
             }
             nextButton.setOnClickListener {
                 prevButton.visibility = View.VISIBLE
                 setNextSymbol()
             }
             showAnswer.setOnClickListener {
-                val currentState = viewModel.flipState.value
-                viewModel.flipState.value = when (currentState) {
-                    FlipState.FRONT_SIDE -> FlipState.BACK_SIDE
-                    FlipState.BACK_SIDE -> FlipState.FRONT_SIDE
-                }
+                flipCurrentCard()
             }
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.flipState.collect {
-                        when (it) {
-                            FlipState.FRONT_SIDE -> {
-                                binding.showAnswer.text = getString(R.string.see_answer)
-                                binding.showAnswer.isActivated = true
-                            }
+        }
+    }
 
-                            FlipState.BACK_SIDE -> {
-                                binding.showAnswer.text = getString(R.string.hide_answer)
-                                binding.showAnswer.isActivated = false
-                            }
-                        }
-                    }
-                }
+    private fun setPreviousSymbol() {
+        val currentItem = binding.viewPager.currentItem
+        if (currentItem > 0) {
+            binding.viewPager.currentItem = currentItem - 1
+            if (binding.viewPager.currentItem == 0) {
+                binding.prevButton.visibility = View.INVISIBLE
             }
         }
     }
@@ -110,10 +85,10 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         val unlearnedCards = viewModel.cards.value.filter {
             if (viewModel.isGlobal.value) !it.passed else !it.learned
         }.size
+
         when {
             currentItem < viewModel.cards.value.size - 1 -> {
                 binding.viewPager.currentItem = currentItem + 1
-                viewModel.flipState.value = FlipState.FRONT_SIDE
             }
             unlearnedCards > 0 -> {
                 // User skipped some cards, so show the first unlearned card
@@ -125,7 +100,6 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     return
                 }
                 binding.viewPager.currentItem = unlearnedItem
-                viewModel.flipState.value = FlipState.FRONT_SIDE
             }
             else -> finishLesson()
         }
@@ -163,7 +137,10 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val callback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            viewModel.flipState.value = FlipState.FRONT_SIDE
+
+            adapter.notifyItemChanged(pagerCurrentItem)
+            pagerCurrentItem = position
+
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
                 if (viewModel.isGlobal.value) {
@@ -181,6 +158,21 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
+    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
+        newCurrentSide?.let {
+            when (it) {
+                FlipState.FRONT_SIDE -> {
+                    binding.showAnswer.text = getString(R.string.see_answer)
+                    binding.showAnswer.isActivated = true
+                }
+                FlipState.BACK_SIDE -> {
+                    binding.showAnswer.text = getString(R.string.hide_answer)
+                    binding.showAnswer.isActivated = false
+                }
+            }
+        }
+    }
+
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val intent = Intent(baseContext, HomeActivity::class.java)
@@ -194,6 +186,15 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         intent.putExtra("type", Section.LEARN_SYMBOLS)
         intent.putExtra("global", viewModel.isGlobal.value)
         startActivity(intent)
+    }
+
+    private fun flipCurrentCard() {
+        val currentItem = binding.viewPager.currentItem
+        val recyclerView = binding.viewPager[0] as RecyclerView
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(currentItem)
+        viewHolder?.let {
+            adapter.flipCard(it)
+        }
     }
 }
 

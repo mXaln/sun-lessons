@@ -3,14 +3,12 @@ package org.bibletranslationtools.sun.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
-import org.bibletranslationtools.sun.data.model.Lesson
 import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
@@ -45,16 +43,11 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
     fun loadLessonCards() {
         viewModelScope.launch {
             _cards.value = repository.getByLesson(lessonId.value)
-                .filter { !it.tested }
         }
     }
 
     suspend fun getSentencesCount(): Int {
-        return viewModelScope
-            .async {
-                sentenceRepository.getByLessonCount(lessonId.value)
-            }
-            .await()
+        return sentenceRepository.getByLessonCount(lessonId.value)
     }
 
     suspend fun updateCard(card: Card) {
@@ -64,9 +57,5 @@ class TestSymbolsViewModel(application: Application) : AndroidViewModel(applicat
         val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
-    }
-
-    suspend fun getAllLessons(): List<Lesson> {
-        return lessonRepository.getAll()
     }
 }

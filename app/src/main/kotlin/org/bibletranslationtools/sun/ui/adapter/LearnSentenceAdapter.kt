@@ -7,22 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.wajahatkarim3.easyflipview.EasyFlipView
+import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import org.bibletranslationtools.sun.data.model.Sentence
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
 
 
 class LearnSentenceAdapter(
-    private val flipState: StateFlow<EasyFlipView.FlipState>
+    private val flipListener: OnFlipAnimationListener
 ) : ListAdapter<SentenceWithSymbols, LearnSentenceAdapter.ViewHolder>(callback) {
-
-    private var flipListener: OnFlipAnimationListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -47,8 +40,8 @@ class LearnSentenceAdapter(
         }
     }
 
-    fun setFlipListener(listener: OnFlipAnimationListener) {
-        flipListener = listener
+    fun flipCard(view: RecyclerView.ViewHolder) {
+        (view as ViewHolder).binding.cardViewFlip.flipTheView()
     }
 
     inner class ViewHolder(
@@ -65,13 +58,9 @@ class LearnSentenceAdapter(
 
                 cardViewFlip.onFlipListener = flipListener
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    flipState.collect {
-                        val currentState = cardViewFlip.currentFlipState
-                        if (it != currentState) {
-                            cardViewFlip.flipTheView()
-                        }
-                    }
+                val currentState = cardViewFlip.currentFlipState
+                if (currentState == FlipState.BACK_SIDE) {
+                    cardViewFlip.flipTheView()
                 }
             }
         }

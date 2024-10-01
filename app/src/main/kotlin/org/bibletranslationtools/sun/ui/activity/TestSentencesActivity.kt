@@ -174,7 +174,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             return
         }
 
-        setRandomSentence(inProgressSentences)
+        setRandomCorrectSentence(inProgressSentences)
 
         Glide.with(baseContext)
             .load(Uri.parse("file:///android_asset/images/sentences/${correctSentence.sentence.correct}"))
@@ -246,11 +246,11 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             if (isSentenceCorrect) {
                 isAnswerCorrect = true
                 lifecycleScope.launch(Dispatchers.IO) {
-                    if (!viewModel.isGlobal.value) {
+                    if (viewModel.isGlobal.value) {
+                        correctSentence.sentence.passed = true
+                    } else {
                         correctSentence.sentence.tested = true
                         viewModel.updateSentence(correctSentence.sentence)
-                    } else {
-                        correctSentence.sentence.passed = true
                     }
                 }
                 answerResult.state = SymbolState.CORRECT
@@ -279,7 +279,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         }
     }
 
-    private fun setRandomSentence(sentences: List<SentenceWithSymbols>) {
+    private fun setRandomCorrectSentence(sentences: List<SentenceWithSymbols>) {
         // Try to select a sentence that has not been asked before
         if (this::correctSentence.isInitialized && sentences.size > 1) {
             val oldSentence = correctSentence.copy()

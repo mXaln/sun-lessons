@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.model.Card
-import org.bibletranslationtools.sun.data.model.Lesson
 import org.bibletranslationtools.sun.data.model.Sentence
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.data.model.Setting
@@ -28,11 +27,11 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
     val sentenceDone = MutableStateFlow(false)
     val isGlobal = MutableStateFlow(false)
 
-    private val mutableSentences = MutableStateFlow<List<SentenceWithSymbols>>(listOf())
-    val sentences: StateFlow<List<SentenceWithSymbols>> = mutableSentences
+    private val _sentences = MutableStateFlow<List<SentenceWithSymbols>>(listOf())
+    val sentences: StateFlow<List<SentenceWithSymbols>> = _sentences
 
-    private val mutableCards = MutableStateFlow<List<Card>>(listOf())
-    val cards: StateFlow<List<Card>> = mutableCards
+    private val _cards = MutableStateFlow<List<Card>>(listOf())
+    val cards: StateFlow<List<Card>> = _cards
 
     init {
         val lessonDao = AppDatabase.getDatabase(application).getLessonDao()
@@ -51,8 +50,7 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
 
     fun loadSentences() {
         viewModelScope.launch {
-            mutableSentences.value = sentenceRepository.getAllWithSymbols(lessonId.value)
-                .filter { !it.sentence.tested }
+            _sentences.value = sentenceRepository.getAllWithSymbols(lessonId.value)
         }
     }
 
@@ -63,10 +61,6 @@ class TestSentencesViewModel(application: Application) : AndroidViewModel(applic
         val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
         settingsRepository.insertOrUpdate(lastSection)
         settingsRepository.insertOrUpdate(lastLesson)
-    }
-
-    suspend fun getAllLessons(): List<Lesson> {
-        return lessonRepository.getAll()
     }
 
     suspend fun getAllCards(): List<Card> {

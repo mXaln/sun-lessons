@@ -33,7 +33,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     }
 
     private lateinit var correctCard: Card
-    private val reviewCards = arrayListOf<Card>()
+    private val testCards = arrayListOf<Card>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,14 +102,14 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
             return
         }
 
-        setRandomCard(inProgressCards)
+        setRandomCorrectCard(inProgressCards)
         allCards.remove(correctCard)
 
         val incorrectCards = allCards.shuffled().take(3)
 
         setAnswers((listOf(correctCard) + incorrectCards).shuffled())
 
-        gridAdapter.submitList(reviewCards as List<TestCard>)
+        gridAdapter.submitList(testCards as List<TestCard>)
 
         Glide.with(baseContext)
             .load(Uri.parse("file:///android_asset/images/symbols/${correctCard.secondary}"))
@@ -119,7 +119,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
 
     override fun onCardSelected(card: Card, position: Int) {
         if (!viewModel.questionDone.value) {
-            checkAnswer(reviewCards[position], position)
+            checkAnswer(testCards[position], position)
             viewModel.questionDone.value = true
             binding.nextButton.isEnabled = true
         }
@@ -128,11 +128,11 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     private fun checkAnswer(selectedCard: Card, position: Int) {
         if (selectedCard.symbol == correctCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                if (!viewModel.isGlobal.value) {
+                if (viewModel.isGlobal.value) {
+                    correctCard.passed = true
+                } else {
                     correctCard.tested = true
                     viewModel.updateCard(correctCard)
-                } else {
-                    correctCard.passed = true
                 }
             }
             correctCard.correct = true
@@ -159,7 +159,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         }
     }
 
-    private fun setRandomCard(cards: List<Card>) {
+    private fun setRandomCorrectCard(cards: List<Card>) {
         if (this::correctCard.isInitialized && cards.size > 1) {
             val oldCard = correctCard.copy()
             while (oldCard == correctCard) {
@@ -189,8 +189,8 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     }
 
     private fun setAnswers(cards: List<Card>) {
-        reviewCards.clear()
-        reviewCards.addAll(cards)
+        testCards.clear()
+        testCards.addAll(cards)
         gridAdapter.refresh()
     }
 

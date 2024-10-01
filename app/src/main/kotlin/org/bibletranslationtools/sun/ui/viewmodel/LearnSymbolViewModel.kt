@@ -3,7 +3,6 @@ package org.bibletranslationtools.sun.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +18,6 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
 
     private val repository: CardRepository
     private val settingsRepository: SettingsRepository
-
-    val flipState = MutableStateFlow(EasyFlipView.FlipState.FRONT_SIDE)
 
     private val _cards = MutableStateFlow<List<Card>>(listOf())
     val cards: StateFlow<List<Card>> = _cards

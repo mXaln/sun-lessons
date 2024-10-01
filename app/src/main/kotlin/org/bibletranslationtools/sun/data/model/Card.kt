@@ -22,12 +22,13 @@ data class Card(
     @ColumnInfo(name = "lesson_id")
     var lessonId: Int? = null,
 ) : TestCard {
-    @Ignore
-    override var correct: Boolean? = null
 
     @Ignore
     // To temporarily store learned/tested status of the card
     var passed = false
+
+    @Ignore
+    override var correct: Boolean? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
