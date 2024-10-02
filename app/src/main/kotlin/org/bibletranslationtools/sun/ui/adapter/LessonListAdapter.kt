@@ -1,7 +1,6 @@
 package org.bibletranslationtools.sun.ui.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +10,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ItemLessonBinding
-import org.bibletranslationtools.sun.ui.activity.SymbolLearnActivity
-import org.bibletranslationtools.sun.ui.activity.SymbolReviewActivity
-import org.bibletranslationtools.sun.ui.activity.BuildSentencesActivity
 import org.bibletranslationtools.sun.ui.model.LessonModel
-import org.bibletranslationtools.sun.utils.Constants
+import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 
 class LessonListAdapter(
@@ -25,6 +21,7 @@ class LessonListAdapter(
 
     interface OnLessonSelectedListener {
         fun onLessonSelected(lesson: LessonModel, position: Int)
+        fun onLessonAction(lessonId: Int, action: Section)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,16 +40,19 @@ class LessonListAdapter(
 
             val cardsLearnedProgress = lesson.cardsLearnedProgress
             val testSymbolsAvailable = cardsLearnedProgress == 100.0
-            val cardsPassedProgress = lesson.cardsPassedProgress
-            val sentencesAvailable = cardsPassedProgress == 100.0
-            val sentencesPassedProgress = lesson.sentencesPassedProgress
+            val cardsTestedProgress = lesson.cardsTestedProgress
+            val learnSentencesAvailable = cardsTestedProgress == 100.0
+            val sentencesLearnedProgress = lesson.sentencesLearnedProgress
+            val sentencesTestedProgress = lesson.sentencesTestedProgress
+            val testSentencesAvailable = sentencesLearnedProgress == 100.0
             val hasSentences = lesson.sentences.isNotEmpty()
 
             setLessonStatus(lesson, holder)
 
             setLearnSymbols(cardsLearnedProgress, holder)
-            setTestSymbols(testSymbolsAvailable, cardsPassedProgress, holder)
-            setBuildSentences(sentencesAvailable, sentencesPassedProgress, hasSentences, holder)
+            setTestSymbols(testSymbolsAvailable, cardsTestedProgress, holder)
+            setLearnSentences(learnSentencesAvailable, sentencesLearnedProgress, hasSentences, holder)
+            setTestSentences(testSentencesAvailable, sentencesTestedProgress, hasSentences, holder)
         }
     }
 
@@ -127,20 +127,17 @@ class LessonListAdapter(
             learnSymbols.isActivated = true
 
             if (progress == 100.0) {
-                learnStatus.visibility = View.VISIBLE
-                learnProgress.visibility = View.GONE
+                learnSymbolsStatus.visibility = View.VISIBLE
+                learnSymbolsProgress.visibility = View.GONE
             } else {
-                learnStatus.visibility = View.GONE
-                learnProgress.visibility = View.VISIBLE
-                learnProgress.progress = progress.toInt()
+                learnSymbolsStatus.visibility = View.GONE
+                learnSymbolsProgress.visibility = View.VISIBLE
+                learnSymbolsProgress.progress = progress.toInt()
             }
 
             learnSymbols.setOnClickListener {
                 val selectedLesson = getItem(holder.bindingAdapterPosition)
-                val intent = Intent(context, SymbolLearnActivity::class.java)
-                intent.putExtra("id", selectedLesson.lesson.id)
-                intent.putExtra("part", Constants.PART_ONE)
-                context.startActivity(intent)
+                listener?.onLessonAction(selectedLesson.lesson.id, Section.LEARN_SYMBOLS)
             }
         }
     }
@@ -155,34 +152,33 @@ class LessonListAdapter(
 
             when {
                 available && progress == 100.0 -> {
-                    testStatus.visibility = View.VISIBLE
-                    testProgress.visibility = View.GONE
+                    testSymbolsStatus.visibility = View.VISIBLE
+                    testSymbolsProgress.visibility = View.GONE
                 }
                 available && progress < 100.0 -> {
-                    testStatus.visibility = View.GONE
-                    testProgress.visibility = View.VISIBLE
-                    testProgress.progress = progress.toInt()
+                    testSymbolsStatus.visibility = View.GONE
+                    testSymbolsProgress.visibility = View.VISIBLE
+                    testSymbolsProgress.progress = progress.toInt()
                 }
                 else -> {
-                    testStatus.visibility = View.VISIBLE
-                    testProgress.visibility = View.GONE
+                    testSymbolsStatus.visibility = View.VISIBLE
+                    testSymbolsProgress.visibility = View.GONE
                 }
             }
 
             if (available) {
                 testSymbols.setOnClickListener {
                     val selectedLesson = getItem(holder.bindingAdapterPosition)
-                    val intent = Intent(context, SymbolReviewActivity::class.java)
-                    intent.putExtra("id", selectedLesson.lesson.id)
-                    intent.putExtra("part", 1)
-                    context.startActivity(intent)
+                    listener?.onLessonAction(
+                        selectedLesson.lesson.id,
+                        Section.TEST_SYMBOLS
+                    )
                 }
             }
-
         }
     }
 
-    private fun setBuildSentences(
+    private fun setLearnSentences(
         available: Boolean,
         progress: Double,
         hasSentences: Boolean,
@@ -190,35 +186,78 @@ class LessonListAdapter(
     ) {
         with(holder.binding) {
             if (hasSentences) {
-                buildSentences.visibility = View.VISIBLE
-                buildSentences.isActivated = available
+                learnSentences.visibility = View.VISIBLE
+                learnSentences.isActivated = available
 
                 when {
                     available && progress == 100.0 -> {
-                        sentencesStatus.visibility = View.VISIBLE
-                        sentencesProgress.visibility = View.GONE
+                        learnSentencesStatus.visibility = View.VISIBLE
+                        learnSentencesProgress.visibility = View.GONE
                     }
                     available && progress < 100.0 -> {
-                        sentencesStatus.visibility = View.GONE
-                        sentencesProgress.visibility = View.VISIBLE
-                        sentencesProgress.progress = progress.toInt()
+                        learnSentencesStatus.visibility = View.GONE
+                        learnSentencesProgress.visibility = View.VISIBLE
+                        learnSentencesProgress.progress = progress.toInt()
                     }
                     else -> {
-                        sentencesStatus.visibility = View.VISIBLE
-                        sentencesProgress.visibility = View.GONE
+                        learnSentencesStatus.visibility = View.VISIBLE
+                        learnSentencesProgress.visibility = View.GONE
                     }
                 }
 
                 if (available) {
-                    buildSentences.setOnClickListener {
+                    learnSentences.setOnClickListener {
                         val selectedLesson = getItem(holder.bindingAdapterPosition)
-                        val intent = Intent(context, BuildSentencesActivity::class.java)
-                        intent.putExtra("id", selectedLesson.lesson.id)
-                        context.startActivity(intent)
+                        listener?.onLessonAction(
+                            selectedLesson.lesson.id,
+                            Section.LEARN_SENTENCES
+                        )
                     }
                 }
             } else {
-                buildSentences.visibility = View.GONE
+                learnSentences.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setTestSentences(
+        available: Boolean,
+        progress: Double,
+        hasSentences: Boolean,
+        holder: ViewHolder
+    ) {
+        with(holder.binding) {
+            if (hasSentences) {
+                testSentences.visibility = View.VISIBLE
+                testSentences.isActivated = available
+
+                when {
+                    available && progress == 100.0 -> {
+                        testSentencesStatus.visibility = View.VISIBLE
+                        testSentencesProgress.visibility = View.GONE
+                    }
+                    available && progress < 100.0 -> {
+                        testSentencesStatus.visibility = View.GONE
+                        testSentencesProgress.visibility = View.VISIBLE
+                        testSentencesProgress.progress = progress.toInt()
+                    }
+                    else -> {
+                        testSentencesStatus.visibility = View.VISIBLE
+                        testSentencesProgress.visibility = View.GONE
+                    }
+                }
+
+                if (available) {
+                    testSentences.setOnClickListener {
+                        val selectedLesson = getItem(holder.bindingAdapterPosition)
+                        listener?.onLessonAction(
+                            selectedLesson.lesson.id,
+                            Section.TEST_SENTENCES
+                        )
+                    }
+                }
+            } else {
+                testSentences.visibility = View.GONE
             }
         }
     }

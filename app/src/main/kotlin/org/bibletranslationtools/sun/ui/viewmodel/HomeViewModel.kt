@@ -19,7 +19,9 @@ import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.repositories.LessonRepository
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.ui.mapper.LessonMapper
 import org.bibletranslationtools.sun.utils.AssetsProvider
+import org.bibletranslationtools.sun.utils.Section
 
 class HomeViewModel(private val application: Application) : AndroidViewModel(application) {
     private val cardRepository: CardRepository
@@ -37,6 +39,21 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
         sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
         val settingsDao = AppDatabase.getDatabase(application).getSettingDao()
         settingsRepository = SettingsRepository(settingsDao)
+
+        // TODO Remove debug code
+        viewModelScope.launch {
+            val lessonID = "1"
+            /*settingsRepository.update(Setting(Setting.LAST_SECTION, Section.TEST_SYMBOLS.id))
+            settingsRepository.update(Setting(Setting.LAST_LESSON, lessonID))
+            val lastCard = cardRepository.getByLesson(lessonID.toInt()).last()
+            lastCard.tested = false
+            cardRepository.update(lastCard)*/
+            /*val sentences = sentenceRepository.getByLesson(1)
+            for (sentence in sentences) {
+                sentence.tested = false
+                sentenceRepository.update(sentence)
+            }*/
+        }
     }
 
     fun importLessons(): Job {
@@ -70,7 +87,7 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
                     }
 
                     insertSetting(
-                        Setting("version", lessonSuite.version.toString())
+                        Setting(Setting.VERSION, lessonSuite.version.toString())
                     )
                 }
             }
@@ -103,5 +120,70 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
 
     private suspend fun insertSetting(setting: Setting) {
         settingsRepository.insert(setting)
+    }
+
+    suspend fun getLastLesson(): Int {
+        return settingsRepository.get("last_lesson")?.value?.toInt() ?: 1
+    }
+
+    suspend fun testsAvailable(): Boolean {
+        val lastLesson = settingsRepository.get("last_lesson")?.value?.toInt() ?: 1
+        val lesson = lessonRepository.getWithData(lastLesson)
+        val lessonData = lesson?.let(LessonMapper::map) ?: return false
+        val hasSentences = lessonData.sentences.isNotEmpty()
+        val cardsLearned = lessonData.cardsLearnedProgress == 100.0
+        val cardsTested = lessonData.cardsTestedProgress == 100.0
+        val sentencesLearned = lessonData.sentencesLearnedProgress == 100.0
+        val sentencesTested = lessonData.sentencesTestedProgress == 100.0
+
+        return when {
+            hasSentences && sentencesLearned && !sentencesTested -> true
+            cardsLearned && !cardsTested -> true
+            else -> false
+        }
+    }
+
+    suspend fun navigateToSection(callback: (Section, Int, SectionState) -> Unit) {
+        val lastSection = settingsRepository
+            .get("last_section")
+            ?.value
+            ?.let { Section.of(it) } ?: Section.LEARN_SYMBOLS
+        val lastLesson = settingsRepository.get("last_lesson")?.value?.toInt() ?: 1
+
+        val all: Int
+        val done: Int
+
+        when (lastSection) {
+            Section.LEARN_SYMBOLS -> {
+                all = cardRepository.getByLessonCount(lastLesson)
+                done = cardRepository.getLearnedByLessonCount(lastLesson)
+            }
+            Section.TEST_SYMBOLS -> {
+                all = cardRepository.getByLessonCount(lastLesson)
+                done = cardRepository.getTestedByLessonCount(lastLesson)
+            }
+            Section.LEARN_SENTENCES -> {
+                all = sentenceRepository.getByLessonCount(lastLesson)
+                done = sentenceRepository.getLearnedByLessonCount(lastLesson)
+            }
+            else -> {
+                all = sentenceRepository.getByLessonCount(lastLesson)
+                done = sentenceRepository.getTestedByLessonCount(lastLesson)
+            }
+        }
+
+        val sectionState = when {
+            done == all -> SectionState.COMPLETED
+            done > 0 -> SectionState.IN_PROGRESS
+            else -> SectionState.NOT_STARTED
+        }
+
+        return callback(lastSection, lastLesson, sectionState)
+    }
+
+    enum class SectionState {
+        NOT_STARTED,
+        IN_PROGRESS,
+        COMPLETED
     }
 }

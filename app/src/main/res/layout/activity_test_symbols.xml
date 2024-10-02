@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".ui.activity.TestSymbolsActivity">
+
+    <include android:id="@+id/top_nav_bar"
+        layout="@layout/top_navigation" />
+
+    <LinearLayout
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20dp"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/_44dp">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_260dp"
+            android:src="@drawable/ic_write"/>
+
+        <TextView
+            android:id="@+id/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18sp"
+            android:text="@string/test_symbols_hint"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/answers_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:clipToPadding="false"
+            android:padding="@dimen/_20dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50dp"
+            app:icon="@drawable/ic_arrow_right"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            android:layout_marginHorizontal="@dimen/_40dp"
+            android:layout_marginBottom="@dimen/_20dp"/>
+    </LinearLayout>
+
+</LinearLayout>

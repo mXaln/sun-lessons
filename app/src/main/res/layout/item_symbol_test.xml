@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="156dp"
+    android:layout_height="108dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/transparent">
+
+    <org.bibletranslationtools.sun.ui.control.SymbolFrameLayout
+        android:id="@+id/card_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/symbol_background_selector"
+        android:padding="@dimen/_10dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/card_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/sun_example_symbol"
+            app:autoSizeTextType="uniform"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            android:fontFamily="@font/sun" />
+    </org.bibletranslationtools.sun.ui.control.SymbolFrameLayout>
+
+</androidx.cardview.widget.CardView>

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GridItemOffsetDecoration(
     private val spanCount: Int,
-    private val spacing: Int,
-    private val includeEdge: Boolean
+    private val spacing: Int = 0,
+    private val includeEdge: Boolean = false
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(

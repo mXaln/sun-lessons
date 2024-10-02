@@ -32,4 +32,8 @@ interface LessonDao {
     @Transaction
     @Query("SELECT * FROM lessons WHERE id = :id")
     suspend fun get(id: Int): Lesson?
+
+    @Transaction
+    @Query("SELECT * FROM lessons WHERE id = :id")
+    suspend fun getWithData(id: Int): LessonWithData?
 }

@@ -13,15 +13,18 @@ data class Sentence (
     val correct: String,
     @ColumnInfo(name = "incorrect")
     val incorrect: String,
-    @ColumnInfo(name = "passed")
-    var passed: Boolean = false,
+    @ColumnInfo(name = "learned")
+    var learned: Boolean = false,
+    @ColumnInfo(name = "tested")
+    var tested: Boolean = false,
     @ColumnInfo(name = "lesson_id")
     var lessonId: Int? = null
 ) {
     @Ignore
     val symbols: List<Symbol> = listOf()
     @Ignore
-    var answered = false
+    // To temporarily store learned/tested status of the sentence
+    var passed = false
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,11 +33,11 @@ data class Sentence (
         return id == sentence.id &&
                 correct == sentence.correct &&
                 incorrect == sentence.incorrect &&
-                passed == sentence.passed &&
+                tested == sentence.tested &&
                 lessonId == sentence.lessonId
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(id, correct, incorrect, passed, lessonId)
+        return Objects.hash(id, correct, incorrect, tested, lessonId)
     }
 }

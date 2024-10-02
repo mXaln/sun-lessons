@@ -25,6 +25,10 @@ class LessonRepository(private val lessonDao: LessonDao) {
         return lessonDao.getAllWithData()
     }
 
+    suspend fun getWithData(id: Int): LessonWithData? {
+        return lessonDao.getWithData(id)
+    }
+
     suspend fun get(id: Int): Lesson? {
         return lessonDao.get(id)
     }

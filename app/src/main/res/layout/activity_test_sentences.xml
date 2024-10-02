@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".ui.activity.TestSentencesActivity">
+
+    <include android:id="@+id/top_nav_bar" layout="@layout/top_navigation" />
+
+    <FrameLayout
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/_50dp">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_write"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/answers_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/_20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/answers_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center_horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/options_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/options_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="4"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/correct_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/correct"
+            android:textColor="#1DB586"
+            app:icon="@drawable/ic_check_24"
+            app:iconTint="#1DB586"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/correct_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/incorrect_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/incorrect"
+            android:textColor="@color/red"
+            app:icon="@drawable/ic_close_24"
+            app:iconTint="@color/red"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/incorrect_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:layout_marginVertical="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/show_answer"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50dp"
+            android:layout_weight="1"
+            android:text="@string/hide"
+            app:icon="@drawable/selector_show_answer"
+            app:iconSize="@dimen/_25dp"
+            app:iconPadding="10dp"
+            app:iconGravity="textStart"/>
+
+        <View
+            android:layout_width="@dimen/_20dp"
+            android:layout_height="1dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_sentence"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50dp"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_arrow_right"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"/>
+    </LinearLayout>
+
+</LinearLayout>

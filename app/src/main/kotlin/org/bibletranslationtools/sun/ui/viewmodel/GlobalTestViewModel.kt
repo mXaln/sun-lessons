@@ -28,15 +28,15 @@ class GlobalTestViewModel(application: Application) : AndroidViewModel(applicati
         sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
     }
 
-    fun loadAllPassedCardsCount() {
+    fun loadAllTestedCardsCount() {
         viewModelScope.launch {
-            mutableCardsCount.value = cardRepository.getAllPassedCount()
+            mutableCardsCount.value = cardRepository.countAllTested()
         }
     }
 
-    fun loadAllPassedSentencesCount() {
+    fun loadAllTestedSentencesCount() {
         viewModelScope.launch {
-            mutableSentencesCount.value = sentenceRepository.getAllPassedCount()
+            mutableSentencesCount.value = sentenceRepository.allTestedCount()
         }
     }
 }

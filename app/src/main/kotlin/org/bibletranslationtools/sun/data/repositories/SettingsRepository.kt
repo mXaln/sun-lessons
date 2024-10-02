@@ -16,6 +16,14 @@ class SettingsRepository(private val settingDao: SettingsDao) {
         settingDao.update(setting)
     }
 
+    suspend fun insertOrUpdate(setting: Setting) {
+        settingDao.get(setting.name)?.let {
+            settingDao.update(setting)
+        } ?: run {
+            settingDao.insert(setting)
+        }
+    }
+
     suspend fun get(name: String): Setting? {
         return settingDao.get(name)
     }

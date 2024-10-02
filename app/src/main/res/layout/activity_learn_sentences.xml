@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".ui.activity.LearnSentencesActivity">
+
+    <include android:id="@+id/top_nav_bar" layout="@layout/top_navigation" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/_20dp"
+        android:clipToPadding="false">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/prev_button"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_260dp"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            android:backgroundTint="@color/gray"
+            app:iconTint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/view_pager"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="@dimen/_280dp"
+            android:layout_height="@dimen/_400dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layout_constraintStart_toEndOf="@id/prev_button"
+            app:layout_constraintEnd_toStartOf="@id/next_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_260dp"
+            app:icon="@drawable/ic_arrow_right"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            android:backgroundTint="@color/gray"
+            app:iconTint="@color/black"
+            app:layout_constraintStart_toEndOf="@id/view_pager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_20dp"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabs"
+        app:tabBackground="@drawable/selector_dot"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabTextColor="@color/transparent"
+        app:tabPaddingStart="@dimen/_16dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/show_answer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50dp"
+        android:text="@string/see_answer"
+        app:icon="@drawable/selector_show_answer"
+        app:iconPadding="@dimen/_12dp"
+        app:iconGravity="textStart"
+        app:iconSize="@dimen/_30dp"
+        android:layout_marginHorizontal="@dimen/_40dp"
+        android:layout_marginBottom="@dimen/_40dp"/>
+
+</LinearLayout>

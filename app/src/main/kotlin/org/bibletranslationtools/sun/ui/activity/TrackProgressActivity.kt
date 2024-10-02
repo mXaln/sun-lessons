@@ -3,18 +3,22 @@ package org.bibletranslationtools.sun.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.launch
+import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityTrackProgressBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LessonGridAdapter
 import org.bibletranslationtools.sun.ui.viewmodel.TrackProgressViewModel
 
-class TrackProgressActivity : AppCompatActivity() {
+class  TrackProgressActivity : AppCompatActivity() {
     private val binding by lazy { ActivityTrackProgressBinding.inflate(layoutInflater) }
     private val lessonsAdapter by lazy { LessonGridAdapter(this) }
     private val viewModel: TrackProgressViewModel by viewModels()
@@ -23,11 +27,11 @@ class TrackProgressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.topNavBar.toolbar)
         supportActionBar?.title = null
 
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        binding.toolbar.setNavigationOnClickListener {
+        binding.topNavBar.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -37,21 +41,36 @@ class TrackProgressActivity : AppCompatActivity() {
             GridItemOffsetDecoration(5, 30, false)
         )
 
-        lifecycleScope.launch {
-            viewModel.lessons.collect {
-                lessonsAdapter.submitList(it)
-                lessonsAdapter.notifyDataSetChanged()
+        binding.topNavBar.pageTitle.text = getString(R.string.track_progress)
+        binding.topNavBar.tallyNumber.visibility = View.GONE
 
-                if (it.isNotEmpty()) {
-                    setLearnProgress()
-                    setTestScore()
+        binding.bottomNavBar.bottomNavigation.selectedItemId = R.id.progress
+        binding.bottomNavBar.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    val intent = Intent(baseContext, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.lessons -> {
+                    val intent = Intent(baseContext, LessonListActivity::class.java)
+                    startActivity(intent)
                 }
             }
+            true
         }
 
-        binding.toolbar.setNavigationOnClickListener {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            startActivity(intent)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.lessons.collect {
+                    lessonsAdapter.submitList(it)
+                    lessonsAdapter.notifyDataSetChanged()
+
+                    if (it.isNotEmpty()) {
+                        setLearnProgress()
+                        setTestScore()
+                    }
+                }
+            }
         }
 
         viewModel.loadLessons()
@@ -61,8 +80,9 @@ class TrackProgressActivity : AppCompatActivity() {
         val lessons = viewModel.lessons.value
 
         binding.learnCount.text = lessons.sumOf { it.cardsLearned }.toString()
-        binding.learnProgress.progress =
-            lessons.sumOf { it.cardsLearnedProgress }.toInt() / lessons.size
+        binding.learnProgress.progress = lessons.sumOf {
+            it.cardsLearnedProgress
+        }.toInt() / lessons.size
     }
 
     @SuppressLint("DefaultLocale")

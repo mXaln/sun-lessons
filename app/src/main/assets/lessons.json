@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "lessons": [
     {
       "id": 1,
@@ -8,71 +8,61 @@
           "id": "1a",
           "symbol": "\uE29C",
           "primary": "1.jpg",
-          "secondary": "21.jpg",
-          "part": 1
+          "secondary": "21.jpg"
         },
         {
           "id": "1b",
           "symbol": "\uE22A",
           "primary": "2.jpg",
-          "secondary": "22.jpg",
-          "part": 1
+          "secondary": "22.jpg"
         },
         {
           "id": "1c",
           "symbol": "\uE247",
           "primary": "3.jpg",
-          "secondary": "23.jpg",
-          "part": 1
+          "secondary": "23.jpg"
         },
         {
           "id": "1d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 1
+          "secondary": "24.jpg"
         },
         {
           "id": "1e",
           "symbol": "\uE298",
           "primary": "5.jpg",
-          "secondary": "25.jpg",
-          "part": 1
+          "secondary": "25.jpg"
         },
         {
           "id": "1f",
           "symbol": "\uE23E",
           "primary": "6.jpg",
-          "secondary": "26.jpg",
-          "part": 2
+          "secondary": "26.jpg"
         },
         {
           "id": "1g",
           "symbol": "\uE311",
           "primary": "7.jpg",
-          "secondary": "27.jpg",
-          "part": 2
+          "secondary": "27.jpg"
         },
         {
           "id": "1h",
           "symbol": "\uE11F",
           "primary": "8.jpg",
-          "secondary": "28.jpg",
-          "part": 2
+          "secondary": "28.jpg"
         },
         {
           "id": "1i",
           "symbol": "\uE071",
           "primary": "9.jpg",
-          "secondary": "29.jpg",
-          "part": 2
+          "secondary": "29.jpg"
         },
         {
           "id": "1j",
           "symbol": "\uE263",
           "primary": "10.jpg",
-          "secondary": "30.jpg",
-          "part": 2
+          "secondary": "30.jpg"
         }
       ],
       "sentences": [
@@ -145,71 +135,61 @@
           "id": "2a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "53.jpg",
-          "part": 1
+          "secondary": "53.jpg"
         },
         {
           "id": "2b",
           "symbol": "\uE309",
           "primary": "12.jpg",
-          "secondary": "54.jpg",
-          "part": 1
+          "secondary": "54.jpg"
         },
         {
           "id": "2c",
           "symbol": "\uE238",
           "primary": "13.jpg",
-          "secondary": "55.jpg",
-          "part": 1
+          "secondary": "55.jpg"
         },
         {
           "id": "2d",
           "symbol": "\uE03F",
           "primary": "14.jpg",
-          "secondary": "56.jpg",
-          "part": 1
+          "secondary": "56.jpg"
         },
         {
           "id": "2e",
           "symbol": "\uE000",
           "primary": "15.jpg",
-          "secondary": "57.jpg",
-          "part": 1
+          "secondary": "57.jpg"
         },
         {
           "id": "2f",
           "symbol": "\uE272",
           "primary": "16.jpg",
-          "secondary": "58.jpg",
-          "part": 2
+          "secondary": "58.jpg"
         },
         {
           "id": "2g",
           "symbol": "\uE15F",
           "primary": "17.jpg",
-          "secondary": "59.jpg",
-          "part": 2
+          "secondary": "59.jpg"
         },
         {
           "id": "2h",
           "symbol": "\uE384",
           "primary": "18.jpg",
-          "secondary": "60.jpg",
-          "part": 2
+          "secondary": "60.jpg"
         },
         {
           "id": "2i",
           "symbol": "\uE23C",
           "primary": "19.jpg",
-          "secondary": "61.jpg",
-          "part": 2
+          "secondary": "61.jpg"
         },
         {
           "id": "2j",
           "symbol": "\uE315",
           "primary": "20.jpg",
-          "secondary": "62.jpg",
-          "part": 2
+          "secondary": "62.jpg"
         }
       ],
       "sentences": [
@@ -340,78 +320,67 @@
           "id": "3a",
           "symbol": "\uE28B",
           "primary": "31.jpg",
-          "secondary": "32.jpg",
-          "part": 1
+          "secondary": "32.jpg"
         },
         {
           "id": "3b",
           "symbol": "\uE28C",
           "primary": "33.jpg",
-          "secondary": "34.jpg",
-          "part": 1
+          "secondary": "34.jpg"
         },
         {
           "id": "3c",
           "symbol": "\uE28D",
           "primary": "35.jpg",
-          "secondary": "36.jpg",
-          "part": 1
+          "secondary": "36.jpg"
         },
         {
           "id": "3d",
           "symbol": "\uE28E",
           "primary": "37.jpg",
-          "secondary": "38.jpg",
-          "part": 1
+          "secondary": "38.jpg"
         },
         {
           "id": "3e",
           "symbol": "\uE28F",
           "primary": "39.jpg",
-          "secondary": "40.jpg",
-          "part": 1
+          "secondary": "40.jpg"
         },
         {
           "id": "3f",
           "symbol": "\uE290",
           "primary": "41.jpg",
-          "secondary": "42.jpg",
-          "part": 1
+          "secondary": "42.jpg"
         },
         {
           "id": "3g",
           "symbol": "\uE291",
           "primary": "43.jpg",
-          "secondary": "44.jpg",
-          "part": 2
+          "secondary": "44.jpg"
         },
         {
           "id": "3h",
           "symbol": "\uE292",
           "primary": "45.jpg",
-          "secondary": "46.jpg",
-          "part": 2
+          "secondary": "46.jpg"
         },
         {
           "id": "3i",
           "symbol": "\uE293",
           "primary": "47.jpg",
-          "secondary": "48.jpg",
-          "part": 2
+          "secondary": "48.jpg"
         },
         {
           "id": "3j",
           "symbol": "\uE294",
           "primary": "49.jpg",
-          "secondary": "50.jpg",
-          "part": 2
+          "secondary": "50.jpg"
         },
         {
           "id": "3k",
           "symbol": "\uE295",
           "primary": "51.jpg",
-          "secondary": "52.jpg",
-          "part": 2
+          "secondary": "52.jpg"
         }
       ],
       "sentences": []
@@ -423,57 +392,49 @@
           "id": "4a",
           "symbol": "\uE37E",
           "primary": "63.png",
-          "secondary": "63.png",
-          "part": 1
+          "secondary": "63.png"
         },
         {
           "id": "4b",
           "symbol": ",",
           "primary": "64.png",
-          "secondary": "64.png",
-          "part": 1
+          "secondary": "64.png"
         },
         {
           "id": "4c",
           "symbol": "\uEE02",
           "primary": "65.png",
-          "secondary": "65.png",
-          "part": 1
+          "secondary": "65.png"
         },
         {
           "id": "4d",
           "symbol": "\uE316",
           "primary": "66.png",
-          "secondary": "66.png",
-          "part": 1
+          "secondary": "66.png"
         },
         {
           "id": "4e",
           "symbol": "“",
           "primary": "67.png",
-          "secondary": "67.png",
-          "part": 2
+          "secondary": "67.png"
         },
         {
           "id": "4f",
           "symbol": "'",
           "primary": "68.png",
-          "secondary": "68.png",
-          "part": 2
+          "secondary": "68.png"
         },
         {
           "id": "4g",
           "symbol": "\uE390",
           "primary": "69.png",
-          "secondary": "69.png",
-          "part": 2
+          "secondary": "69.png"
         },
         {
           "id": "4h",
           "symbol": "\uEA47",
           "primary": "70.png",
-          "secondary": "70.png",
-          "part": 2
+          "secondary": "70.png"
         }
       ],
       "sentences": [
@@ -774,15 +735,13 @@
           "id": "5a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "5d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -814,15 +773,13 @@
           "id": "6a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "6d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -854,15 +811,13 @@
           "id": "7a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "7d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -894,15 +849,13 @@
           "id": "8a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "8d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -934,15 +887,13 @@
           "id": "9a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "9d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [
@@ -974,15 +925,13 @@
           "id": "10a",
           "symbol": "\uE299",
           "primary": "11.jpg",
-          "secondary": "11.jpg",
-          "part": 1
+          "secondary": "11.jpg"
         },
         {
           "id": "10d",
           "symbol": "\uE274",
           "primary": "4.jpg",
-          "secondary": "24.jpg",
-          "part": 2
+          "secondary": "24.jpg"
         }
       ],
       "sentences": [

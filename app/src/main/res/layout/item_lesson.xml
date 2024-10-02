@@ -9,6 +9,7 @@
     android:padding="@dimen/_16dp">
 
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -16,57 +17,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/lesson_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:maxLines="1"
-            android:text="@string/lesson_name"
-            android:textColor="@color/selector_lesson_text"
-            android:textSize="@dimen/_24sp"
-            android:textStyle="normal"
-            />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/lesson_tally"
+            <TextView
+                android:id="@+id/lesson_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@string/lesson_name"
+                android:textColor="@color/selector_lesson_text"
+                android:textSize="@dimen/_24sp"
+                android:textStyle="normal"
+                />
+
+            <TextView
+                android:id="@+id/lesson_tally"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:layout_marginStart="@dimen/_10dp"
+                android:text="@string/tally_example"
+                android:textColor="@color/selector_lesson_text"
+                android:textSize="@dimen/_20sp"
+                android:textStyle="normal"
+                android:fontFamily="@font/tally"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lesson_status_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:maxLines="1"
-            android:layout_marginStart="@dimen/_10dp"
-            android:text="@string/tally_example"
-            android:textColor="@color/selector_lesson_text"
-            android:textSize="@dimen/_20sp"
-            android:textStyle="normal"
-            android:fontFamily="@font/tally"
-            />
-    </LinearLayout>
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/lesson_status_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rooms">
+            <ImageView
+                android:id="@+id/lesson_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_lesson"
+                android:layout_marginEnd="@dimen/_5dp" />
 
-        <ImageView
-            android:id="@+id/lesson_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/selector_lesson"
-            android:layout_marginEnd="@dimen/_5dp" />
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/lesson_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:indicatorSize="@dimen/_25dp"
-            app:indicatorColor="@color/primary"
-            app:trackColor="@color/primary_light"
-            app:trackThickness="@dimen/_2dp"
-            android:visibility="gone" />
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/lesson_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorSize="@dimen/_25dp"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/primary_light"
+                app:trackThickness="@dimen/_2dp"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -74,12 +79,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/_20dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/lesson_status_container"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/_20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/learn_symbols"
@@ -87,17 +92,17 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/learn_image"
+                android:id="@+id/learn_symbols_image"
                 android:layout_width="@dimen/_60dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_learn"
+                android:src="@drawable/selector_learn_symbols"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
-                android:id="@+id/learn_text"
+                android:id="@+id/learn_symbols_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/learn_symbols"
@@ -105,12 +110,12 @@
                 android:textColor="@color/dark_gray"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_20dp"
-                app:layout_constraintStart_toEndOf="@id/learn_image"
+                app:layout_constraintStart_toEndOf="@id/learn_symbols_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:id="@+id/learn_status"
+                android:id="@+id/learn_symbols_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_lesson"
@@ -120,7 +125,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/learn_progress"
+                android:id="@+id/learn_symbols_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:indicatorSize="@dimen/_25dp"
@@ -140,17 +145,17 @@
             android:layout_marginTop="@dimen/_10dp">
 
             <ImageView
-                android:id="@+id/test_image"
+                android:id="@+id/test_symbols_image"
                 android:layout_width="@dimen/_60dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_test"
+                android:src="@drawable/selector_symbols_test"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
-                android:id="@+id/test_text"
+                android:id="@+id/test_symbols_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/test_symbols"
@@ -158,12 +163,12 @@
                 android:textColor="@color/selector_lesson_text"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_20dp"
-                app:layout_constraintStart_toEndOf="@id/test_image"
+                app:layout_constraintStart_toEndOf="@id/test_symbols_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:id="@+id/test_status"
+                android:id="@+id/test_symbols_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_lesson"
@@ -173,7 +178,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/test_progress"
+                android:id="@+id/test_symbols_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:indicatorSize="@dimen/_25dp"
@@ -187,36 +192,36 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/build_sentences"
+            android:id="@+id/learn_sentences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10dp">
 
             <ImageView
-                android:id="@+id/sentences_image"
+                android:id="@+id/learn_sentences_image"
                 android:layout_width="@dimen/_60dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_sentences"
+                android:src="@drawable/selector_learn_sentences"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
-                android:id="@+id/sentences_text"
+                android:id="@+id/learn_sentences_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/build_sentences"
+                android:text="@string/learn_sentences"
                 android:textSize="@dimen/_16sp"
                 android:textColor="@color/selector_lesson_text"
                 android:textStyle="bold"
                 android:layout_marginStart="@dimen/_20dp"
-                app:layout_constraintStart_toEndOf="@id/sentences_image"
+                app:layout_constraintStart_toEndOf="@id/learn_sentences_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:id="@+id/sentences_status"
+                android:id="@+id/learn_sentences_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/selector_lesson"
@@ -226,7 +231,60 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/sentences_progress"
+                android:id="@+id/learn_sentences_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorSize="@dimen/_25dp"
+                app:indicatorColor="@color/primary"
+                app:trackColor="@color/primary_light"
+                app:trackThickness="@dimen/_2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/test_sentences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10dp">
+
+            <ImageView
+                android:id="@+id/test_sentences_image"
+                android:layout_width="@dimen/_60dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/selector_test_sentences"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/test_sentences_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/test_sentences"
+                android:textSize="@dimen/_16sp"
+                android:textColor="@color/selector_lesson_text"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_20dp"
+                app:layout_constraintStart_toEndOf="@id/test_sentences_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/test_sentences_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_lesson"
+                android:layout_marginEnd="@dimen/_5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/test_sentences_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:indicatorSize="@dimen/_25dp"

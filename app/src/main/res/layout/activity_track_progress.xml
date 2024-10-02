@@ -7,20 +7,8 @@
     android:orientation="vertical"
     tools:context=".ui.activity.TrackProgressActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp">
-
-        <ImageView
-            android:layout_width="@dimen/_60dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_logo"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/_10dp"/>
-    </androidx.appcompat.widget.Toolbar>
+    <include android:id="@+id/top_nav_bar"
+        layout="@layout/top_navigation" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,7 +44,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_20dp"
         android:paddingHorizontal="@dimen/_20dp" >
@@ -213,8 +202,20 @@
             android:id="@+id/lessons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sp"/>
+            android:layout_marginTop="@dimen/_20sp"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/_10dp"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+
+        <include
+            android:id="@+id/bottom_nav_bar"
+            layout="@layout/bottom_navigation"/>
     </LinearLayout>
 
 </LinearLayout>
