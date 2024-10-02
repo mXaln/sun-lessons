@@ -14,7 +14,8 @@
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/_50dp">
 
         <ImageView
             android:id="@+id/item_image"
@@ -22,21 +23,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_write"
-            android:layout_margin="@dimen/_50dp"/>
+            android:src="@drawable/ic_write"/>
     </FrameLayout>
-
-    <org.bibletranslationtools.sun.ui.control.SymbolButton
-        android:id="@+id/answer_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/incorrect"
-        android:textColor="@drawable/selector_answer"
-        app:icon="@drawable/ic_close_24"
-        app:iconTint="@drawable/selector_answer"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/answers_container"
@@ -51,44 +39,83 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_20dp"
             android:layout_gravity="center_horizontal"
-            />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/options_container_parent"
+        android:id="@+id/options_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="@dimen/_20dp"
         android:layout_marginHorizontal="@dimen/_20dp">
 
-        <LinearLayout
-            android:id="@+id/correct_container"
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/options_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="4"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/correct_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_gravity="center"
+            android:text="@string/correct"
+            android:textColor="#1DB586"
+            app:icon="@drawable/ic_check_24"
+            app:iconTint="#1DB586"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/correct_list"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_20dp"
-                android:layout_gravity="center_horizontal"/>
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/correct_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/options_container"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/incorrect_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_20dp"
+        android:layout_marginHorizontal="@dimen/_20dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:text="@string/incorrect"
+            android:textColor="@color/red"
+            app:icon="@drawable/ic_close_24"
+            app:iconTint="@color/red"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/options_list"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"/>
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/incorrect_list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_gravity="center"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
     </LinearLayout>
 
     <LinearLayout

@@ -28,10 +28,13 @@ import org.bibletranslationtools.sun.utils.AnswerType
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
+import kotlin.math.max
+import kotlin.math.min
 
 class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolSelectedListener {
     private val binding by lazy { ActivityTestSentencesBinding.inflate(layoutInflater) }
     private val viewModel: TestSentencesViewModel by viewModels()
+
     private val optionsAdapter: TestSentenceAdapter by lazy {
         TestSentenceAdapter(listener = this)
     }
@@ -39,6 +42,9 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         TestSentenceAdapter()
     }
     private val correctAdapter: TestSentenceAdapter by lazy {
+        TestSentenceAdapter()
+    }
+    private val incorrectAdapter: TestSentenceAdapter by lazy {
         TestSentenceAdapter()
     }
 
@@ -78,36 +84,16 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 binding.topNavBar.tallyNumber.visibility = View.GONE
             }
 
-            answersList.layoutManager = LinearLayoutManager(
-                this@TestSentencesActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            correctList.adapter = correctAdapter
+            incorrectList.adapter = incorrectAdapter
+
             answersList.adapter = answersAdapter
             answersList.addItemDecoration(
                 LinearItemOffsetDecoration(10)
             )
 
-            optionsList.layoutManager = GridLayoutManager(
-                this@TestSentencesActivity,
-                4
-            )
             optionsList.adapter = optionsAdapter
-            optionsList.addItemDecoration(GridItemOffsetDecoration(
-                spanCount = 4,
-                spacing = 20,
-                includeEdge = false
-            ))
-
-            correctList.layoutManager = LinearLayoutManager(
-                this@TestSentencesActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            correctList.adapter = correctAdapter
-            correctList.addItemDecoration(
-                LinearItemOffsetDecoration(10)
-            )
+            optionsList.addItemDecoration(GridItemOffsetDecoration(4, 20))
 
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -126,19 +112,13 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 if (it.isActivated) {
                     correctAnswerShown = true
                     correctContainer.visibility = View.VISIBLE
-                    answersContainer.visibility = View.GONE
+                    incorrectContainer.visibility = View.GONE
                     showAnswer.text = getString(R.string.hide)
-                    answerResult.state = SymbolState.CORRECT
-                    answerResult.text = getString(R.string.correct)
-                    answerResult.refreshDrawableState()
                     binding.nextSentence.visibility = View.VISIBLE
                 } else {
                     correctContainer.visibility = View.GONE
-                    answersContainer.visibility = View.VISIBLE
+                    incorrectContainer.visibility = View.VISIBLE
                     showAnswer.text = getString(R.string.show)
-                    answerResult.state = SymbolState.INCORRECT
-                    answerResult.text = getString(R.string.incorrect)
-                    answerResult.refreshDrawableState()
                 }
                 it.isActivated = !it.isActivated
             }
@@ -157,12 +137,18 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
     private fun setNextSentence() {
         isAnswerCorrect = false
         correctAnswerShown = false
+
         binding.nextSentence.isEnabled = false
+        binding.nextSentence.visibility = View.GONE
+
         binding.showAnswer.isActivated = true
         binding.showAnswer.text = getString(R.string.show)
         binding.showAnswer.visibility = View.GONE
+
+        binding.correctContainer.visibility = View.GONE
+        binding.incorrectContainer.visibility = View.GONE
+        binding.optionsContainer.visibility = View.VISIBLE
         binding.answersContainer.visibility = View.VISIBLE
-        binding.nextSentence.visibility = View.GONE
 
         val allSentences = viewModel.sentences.value.toMutableList()
         val inProgressSentences = allSentences.filter {
@@ -205,12 +191,6 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
             val answers = correctSentence.symbols.map { it.copy(name = "") }
             setAnswers(answers)
-
-            setCorrectSymbols(listOf())
-
-            binding.answerResult.visibility = View.GONE
-            binding.correctContainer.visibility = View.GONE
-            binding.optionsContainer.visibility = View.VISIBLE
         }
     }
 
@@ -239,10 +219,15 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private fun checkAnswer() {
         val correctSymbols = correctSentence.symbols
-
         val isSentenceCorrect = correctSymbols.map { it.id } == answerSymbols.map { it.id }
 
         with(binding) {
+            setIncorrectSymbols(correctSymbols)
+            setCorrectSymbols(correctSymbols)
+
+            optionsContainer.visibility = View.GONE
+            answersContainer.visibility = View.GONE
+
             if (isSentenceCorrect) {
                 isAnswerCorrect = true
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -253,29 +238,15 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                         viewModel.updateSentence(correctSentence.sentence)
                     }
                 }
-                answerResult.state = SymbolState.CORRECT
-                answerResult.text = getString(R.string.correct)
-                answerResult.refreshDrawableState()
+                correctContainer.visibility = View.VISIBLE
+                incorrectContainer.visibility = View.GONE
                 showAnswer.visibility = View.GONE
                 nextSentence.visibility = View.VISIBLE
             } else {
-                answerResult.state = SymbolState.INCORRECT
-                answerResult.text = getString(R.string.incorrect)
-                answerResult.refreshDrawableState()
                 showAnswer.visibility = View.VISIBLE
+                incorrectContainer.visibility = View.VISIBLE
+                correctContainer.visibility = View.GONE
             }
-
-            answerSymbols.zip(correctSymbols).withIndex().forEach { (index, pair) ->
-                pair.first.selected = false
-                pair.first.correct = pair.first.name == pair.second.name
-                answersAdapter.refreshItem(index)
-            }
-
-            setCorrectSymbols(correctSymbols)
-
-            answerResult.visibility = View.VISIBLE
-            correctContainer.visibility = View.GONE
-            optionsContainer.visibility = View.GONE
         }
     }
 
@@ -330,17 +301,32 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
         answersAdapter.refresh()
     }
 
+    private fun setIncorrectSymbols(correctSymbols: List<Symbol>) {
+        answerSymbols.zip(correctSymbols).forEach { pair ->
+            pair.first.selected = false
+            pair.first.correct = pair.first.name == pair.second.name
+            pair.first.type = AnswerType.RESULT
+        }
+        val spanCount = min(answerSymbols.size, 5)
+        incorrectAdapter.submitList(answerSymbols)
+        incorrectAdapter.refresh()
+        (binding.incorrectList.layoutManager as GridLayoutManager).spanCount = spanCount
+    }
+
     private fun setCorrectSymbols(symbols: List<Symbol>) {
         symbols.forEach {
             it.selected = false
             it.correct = true
-            it.type = AnswerType.ANSWER
+            it.type = AnswerType.RESULT
         }
 
         correctSymbols.clear()
         correctSymbols.addAll(symbols)
         correctAdapter.submitList(symbols)
         correctAdapter.refresh()
+
+        val spanCount = min(symbols.size, 5)
+        (binding.correctList.layoutManager as GridLayoutManager).spanCount = spanCount
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

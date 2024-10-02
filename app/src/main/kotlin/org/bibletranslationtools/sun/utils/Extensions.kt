@@ -18,7 +18,8 @@ enum class Section(val id: String) {
 
 enum class AnswerType {
     OPTION,
-    ANSWER
+    ANSWER,
+    RESULT
 }
 
 inline fun <reified T : Enum<T>> Bundle.getEnum(key: String, default: T) =

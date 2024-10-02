@@ -12,19 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/sentence_background_selector"
-        android:padding="@dimen/_10dp"
-        android:layout_gravity="center">
+        android:padding="@dimen/_10dp">
 
         <TextView
             android:id="@+id/card_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/sun_example_symbol"
             app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="@dimen/_80sp"
             android:textColor="@android:color/black"
-            android:textAlignment="center"
             android:fontFamily="@font/sun"/>
     </org.bibletranslationtools.sun.ui.control.SymbolFrameLayout>
 </androidx.cardview.widget.CardView>
