@@ -13,7 +13,6 @@ import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
 import kotlin.math.ceil
 
-
 class LearnSentenceAdapter(
     private val flipListener: OnFlipAnimationListener
 ) : ListAdapter<SentenceWithSymbols, LearnSentenceAdapter.ViewHolder>(callback) {

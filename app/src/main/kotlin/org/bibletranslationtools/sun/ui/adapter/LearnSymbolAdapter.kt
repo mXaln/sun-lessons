@@ -12,7 +12,6 @@ import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.databinding.ItemSymbolLearnBinding
 
-
 class LearnSymbolAdapter(
     private val onFlipListener: OnFlipAnimationListener
 ) : ListAdapter<Card, LearnSymbolAdapter.ViewHolder>(callback) {

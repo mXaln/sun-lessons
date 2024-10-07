@@ -32,6 +32,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val adapter by lazy { LearnSentenceAdapter(this) }
     private val viewModel: LearnSentencesViewModel by viewModels()
     private var pagerCurrentItem = 1
+    private var cardChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,6 +153,11 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                 }
             }
         }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            cardChanging = true
+            super.onPageScrollStateChanged(state)
+        }
     }
 
     override fun onDestroy() {
@@ -160,6 +166,10 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     }
 
     override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
+        if (cardChanging) {
+            cardChanging = false
+            return
+        }
         newCurrentSide?.let {
             when (it) {
                 FlipState.FRONT_SIDE -> {

@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -31,6 +32,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val adapter by lazy { LearnSymbolAdapter(this) }
     private val viewModel: LearnSymbolViewModel by viewModels()
     private var pagerCurrentItem = 1
+    private var cardChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,6 +140,8 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
+            Log.e("MAXXX", "callback")
+
             adapter.notifyItemChanged(pagerCurrentItem)
             pagerCurrentItem = position
 
@@ -151,6 +155,11 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                 }
             }
         }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            cardChanging = true
+            super.onPageScrollStateChanged(state)
+        }
     }
 
     override fun onDestroy() {
@@ -159,6 +168,10 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     }
 
     override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
+        if (cardChanging) {
+            cardChanging = false
+            return
+        }
         newCurrentSide?.let {
             when (it) {
                 FlipState.FRONT_SIDE -> {
@@ -188,11 +201,14 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         startActivity(intent)
     }
 
-    private fun flipCurrentCard() {
+    private fun getCurrentViewHolder(): RecyclerView.ViewHolder? {
         val currentItem = binding.viewPager.currentItem
         val recyclerView = binding.viewPager[0] as RecyclerView
-        val viewHolder = recyclerView.findViewHolderForAdapterPosition(currentItem)
-        viewHolder?.let {
+        return recyclerView.findViewHolderForAdapterPosition(currentItem)
+    }
+
+    private fun flipCurrentCard() {
+        getCurrentViewHolder()?.let {
             adapter.flipCard(it)
         }
     }
