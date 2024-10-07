@@ -41,10 +41,12 @@
             android:text="@string/tally_example"
             android:textSize="@dimen/_20sp"
             android:textColor="@color/black"
+            android:textScaleX="1.5"
             android:elevation="1dp"
             android:layout_marginStart="@dimen/_10dp"
             android:fontFamily="@font/tally"
             android:id="@+id/tally_number"
+            android:textStyle="bold"
             android:padding="@dimen/_4dp"
             android:gravity="center"
             android:background="@drawable/background_tally"/>

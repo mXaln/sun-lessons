@@ -92,7 +92,7 @@ class SectionStartActivity : AppCompatActivity() {
         }
 
         binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, id)
-        binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(10)
+        binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(id)
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

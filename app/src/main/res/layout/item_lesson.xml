@@ -45,9 +45,9 @@
                 android:text="@string/tally_example"
                 android:textColor="@color/selector_lesson_text"
                 android:textSize="@dimen/_20sp"
-                android:textStyle="normal"
-                android:fontFamily="@font/tally"
-                />
+                android:textStyle="bold"
+                android:textScaleX="1.5"
+                android:fontFamily="@font/tally"/>
         </LinearLayout>
 
         <LinearLayout

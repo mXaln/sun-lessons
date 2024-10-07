@@ -28,6 +28,8 @@
         android:fontFamily="@font/tally"
         android:textColor="@color/dark_gray"
         android:textSize="@dimen/_12sp"
+        android:textStyle="bold"
+        android:textScaleX="1.5"
         app:layout_constraintTop_toBottomOf="@id/lesson_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
