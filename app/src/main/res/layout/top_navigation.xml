@@ -15,6 +15,16 @@
         android:layout_gravity="end"
         android:layout_marginEnd="@dimen/_10dp">
 
+        <ImageView
+            android:id="@+id/icon_image"
+            android:layout_width="@dimen/_20dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_book"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:visibility="gone"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

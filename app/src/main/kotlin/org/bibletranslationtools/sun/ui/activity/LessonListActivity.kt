@@ -48,6 +48,7 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
         binding.lessonsList.adapter = lessonsAdapter
 
         binding.topNavBar.pageTitle.text = getString(R.string.lessons)
+        binding.topNavBar.iconImage.visibility = View.VISIBLE
         binding.topNavBar.tallyNumber.visibility = View.GONE
 
         binding.bottomNavBar.bottomNavigation.selectedItemId = R.id.lessons
