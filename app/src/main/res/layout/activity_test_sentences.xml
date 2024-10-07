@@ -76,8 +76,10 @@
             android:layout_gravity="center"
             android:text="@string/correct"
             android:textColor="#1DB586"
+            android:textSize="@dimen/_20sp"
             app:icon="@drawable/ic_check_24"
             app:iconTint="#1DB586"
+            app:iconSize="@dimen/_30dp"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -105,8 +107,10 @@
             android:layout_gravity="center"
             android:text="@string/incorrect"
             android:textColor="@color/red"
+            android:textSize="@dimen/_20sp"
             app:icon="@drawable/ic_close_24"
             app:iconTint="@color/red"
+            app:iconSize="@dimen/_30dp"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
         <androidx.recyclerview.widget.RecyclerView
