@@ -23,7 +23,9 @@
             android:text="@string/incorrect"
             android:textColor="@drawable/selector_answer"
             android:textStyle="bold"
+            android:textSize="@dimen/_20sp"
             app:icon="@drawable/selector_answer"
+            app:iconSize="@dimen/_30dp"
             app:iconTint="@drawable/selector_answer"
             android:layout_gravity="center"
             />
