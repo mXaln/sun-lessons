@@ -188,8 +188,14 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            val intent = Intent(baseContext, HomeActivity::class.java)
-            startActivity(intent)
+            if (viewModel.isGlobal.value) {
+                val intent = Intent(baseContext, LessonListActivity::class.java)
+                intent.putExtra("selected", viewModel.lessonId.value)
+                startActivity(intent)
+            } else {
+                val intent = Intent(baseContext, HomeActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
