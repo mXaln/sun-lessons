@@ -140,10 +140,11 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
-            Log.e("MAXXX", "callback")
-
             adapter.notifyItemChanged(pagerCurrentItem)
             pagerCurrentItem = position
+
+            binding.showAnswer.text = getString(R.string.see_answer)
+            binding.showAnswer.isActivated = true
 
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
