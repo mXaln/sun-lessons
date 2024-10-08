@@ -39,21 +39,6 @@ class HomeViewModel(private val application: Application) : AndroidViewModel(app
         sentenceRepository = SentenceRepository(sentenceDao, symbolDao)
         val settingsDao = AppDatabase.getDatabase(application).getSettingDao()
         settingsRepository = SettingsRepository(settingsDao)
-
-        // TODO Remove debug code
-        viewModelScope.launch {
-            val lessonID = "1"
-            /*settingsRepository.update(Setting(Setting.LAST_SECTION, Section.TEST_SYMBOLS.id))
-            settingsRepository.update(Setting(Setting.LAST_LESSON, lessonID))
-            val lastCard = cardRepository.getByLesson(lessonID.toInt()).last()
-            lastCard.tested = false
-            cardRepository.update(lastCard)*/
-            /*val sentences = sentenceRepository.getByLesson(1)
-            for (sentence in sentences) {
-                sentence.tested = false
-                sentenceRepository.update(sentence)
-            }*/
-        }
     }
 
     fun importLessons(): Job {

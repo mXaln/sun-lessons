@@ -88,8 +88,11 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 R.id.lessons -> {
-                    val intent = Intent(baseContext, LessonListActivity::class.java)
-                    startActivity(intent)
+                    lifecycleScope.launch {
+                        val intent = Intent(baseContext, LessonListActivity::class.java)
+                        intent.putExtra("selected", viewModel.getLastLesson())
+                        startActivity(intent)
+                    }
                 }
             }
             true
