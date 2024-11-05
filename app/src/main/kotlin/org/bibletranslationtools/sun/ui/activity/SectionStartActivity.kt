@@ -5,12 +5,11 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionStartedBinding
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.SectionStatusViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
@@ -23,8 +22,8 @@ class SectionStartActivity : AppCompatActivity() {
     private val viewModel: SectionStatusViewModel by viewModels()
 
     private var id: Int = 1
-    private var type: Section = Section.LEARN_SYMBOLS
-    private var global: Boolean = false
+    private var section: Section = Section.LEARN_SYMBOLS
+    private var mode = LessonMode.NORMAL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,25 +37,20 @@ class SectionStartActivity : AppCompatActivity() {
         }
 
         id = intent.getIntExtra("id", 1)
-        type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
-        global = intent.getBooleanExtra("global", false)
+        section = intent.getEnumExtra("section", Section.LEARN_SYMBOLS)
+        mode = intent.getEnumExtra("mode", LessonMode.NORMAL)
 
         // Finish lesson if there are no sentences
         lifecycleScope.launch {
-            if (type == Section.LEARN_SENTENCES || type == Section.TEST_SENTENCES) {
+            if ((section == Section.LEARN_SENTENCES || section == Section.TEST_SENTENCES) &&
+                viewModel.sentencesByLessonCount(id) == 0
+            ) {
                 finishLesson()
+                return@launch
             }
         }
 
-        when (type) {
-            Section.LEARN_SYMBOLS -> {
-                binding.sectionTitle.text = getString(R.string.learn_symbols)
-                binding.lessonTitle.text = getString(R.string.lesson_name, id)
-                binding.image.setImageResource(R.drawable.ic_learn_large)
-                binding.startButton.setOnClickListener {
-                    startNextSection<LearnSymbolsActivity>()
-                }
-            }
+        when (section) {
             Section.TEST_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.test_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
@@ -68,7 +62,7 @@ class SectionStartActivity : AppCompatActivity() {
             Section.LEARN_SENTENCES -> {
                 binding.sectionTitle.text = getString(R.string.learn_sentences)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
-                binding.image.setImageResource(R.drawable.ic_learn_sentences_large)
+                binding.image.setImageResource(R.drawable.ic_learn_large)
                 binding.startButton.setOnClickListener {
                     startNextSection<LearnSentencesActivity>()
                 }
@@ -76,17 +70,17 @@ class SectionStartActivity : AppCompatActivity() {
             Section.TEST_SENTENCES -> {
                 binding.sectionTitle.text = getString(R.string.test_sentences)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
-                binding.image.setImageResource(R.drawable.ic_test_sentences_large)
+                binding.image.setImageResource(R.drawable.ic_test_large)
                 binding.startButton.setOnClickListener {
                     startNextSection<TestSentencesActivity>()
                 }
             }
             else -> {
-                binding.sectionTitle.text = getString(R.string.test_knowledge)
+                binding.sectionTitle.text = getString(R.string.learn_symbols)
                 binding.lessonTitle.text = getString(R.string.lesson_name, id)
-                binding.image.setImageResource(R.drawable.ic_test_menu)
+                binding.image.setImageResource(R.drawable.ic_learn_large)
                 binding.startButton.setOnClickListener {
-                    startTestSection()
+                    startNextSection<LearnSymbolsActivity>()
                 }
             }
         }
@@ -97,7 +91,7 @@ class SectionStartActivity : AppCompatActivity() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (global) {
+            if (mode == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", id)
                 startActivity(intent)
@@ -111,7 +105,6 @@ class SectionStartActivity : AppCompatActivity() {
     private inline fun <reified T : AppCompatActivity> startNextSection() {
         val intent = Intent(baseContext, T::class.java)
         intent.putExtra("id", id)
-        intent.putExtra("global", global)
         startActivity(intent)
     }
 
@@ -119,19 +112,8 @@ class SectionStartActivity : AppCompatActivity() {
         if (viewModel.sentencesByLessonCount(id) == 0) {
             val intent = Intent(baseContext, SectionCompleteActivity::class.java)
             intent.putExtra("id", id)
-            intent.putEnumExtra("type", Section.TEST_SENTENCES)
+            intent.putEnumExtra("section", Section.TEST_SENTENCES)
             startActivity(intent)
-        }
-    }
-
-    private fun startTestSection() {
-        lifecycleScope.launch {
-            viewModel.getLastTestSession()?.let { section ->
-                when (section) {
-                    Section.TEST_SYMBOLS -> startNextSection<TestSymbolsActivity>()
-                    else -> startNextSection<TestSentencesActivity>()
-                }
-            }
         }
     }
 }

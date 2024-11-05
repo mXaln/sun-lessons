@@ -8,14 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
-import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
 import kotlin.math.ceil
 
-class LearnSentenceAdapter(
-    private val flipListener: OnFlipAnimationListener
-) : ListAdapter<SentenceWithSymbols, LearnSentenceAdapter.ViewHolder>(callback) {
+class LearnSentenceAdapter : ListAdapter<SentenceWithSymbols, LearnSentenceAdapter.ViewHolder>(callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -30,18 +27,19 @@ class LearnSentenceAdapter(
 
     companion object {
         val callback = object : DiffUtil.ItemCallback<SentenceWithSymbols>() {
-            override fun areItemsTheSame(oldItem: SentenceWithSymbols, newItem: SentenceWithSymbols): Boolean {
+            override fun areItemsTheSame(
+                oldItem: SentenceWithSymbols,
+                newItem: SentenceWithSymbols
+            ): Boolean {
                 return oldItem.sentence.id == newItem.sentence.id
             }
-
-            override fun areContentsTheSame(oldItem: SentenceWithSymbols, newItem: SentenceWithSymbols): Boolean {
+            override fun areContentsTheSame(
+                oldItem: SentenceWithSymbols,
+                newItem: SentenceWithSymbols
+            ): Boolean {
                 return oldItem == newItem
             }
         }
-    }
-
-    fun flipCard(view: RecyclerView.ViewHolder) {
-        (view as ViewHolder).binding.cardViewFlip.flipTheView()
     }
 
     inner class ViewHolder(
@@ -84,8 +82,6 @@ class LearnSentenceAdapter(
                     .load(Uri.parse("file:///android_asset/images/sentences/${sentence.sentence.correct}"))
                     .fitCenter()
                     .into(itemImage)
-
-                cardViewFlip.onFlipListener = flipListener
 
                 val currentState = cardViewFlip.currentFlipState
                 if (currentState == FlipState.BACK_SIDE) {

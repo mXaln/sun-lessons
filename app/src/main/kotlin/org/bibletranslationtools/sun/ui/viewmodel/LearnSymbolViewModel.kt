@@ -7,11 +7,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.repositories.CardRepository
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.utils.Section
 
 class LearnSymbolViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,7 +25,7 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
     val cards: StateFlow<List<Card>> = _cards
 
     val lessonId = MutableStateFlow(1)
-    val isGlobal = MutableStateFlow(false)
+    val mode = MutableStateFlow(LessonMode.NORMAL)
 
     init {
         val dao = AppDatabase.getDatabase(application).getCardDao()
@@ -50,4 +52,16 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun initializeLessonMode() {
+        runBlocking {
+            val all = repository.getByLessonCount(lessonId.value)
+            val done = repository.getLearnedByLessonCount(lessonId.value)
+
+            if (all == done) {
+                mode.value = LessonMode.REPEAT
+            } else {
+                mode.value = LessonMode.NORMAL
+            }
+        }
+    }
 }

@@ -3,36 +3,31 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.wajahatkarim3.easyflipview.EasyFlipView
-import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
-import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSymbolsBinding
 import org.bibletranslationtools.sun.ui.adapter.LearnSymbolAdapter
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.LearnSymbolViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
+import org.bibletranslationtools.sun.utils.putEnumExtra
 
-class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
+class LearnSymbolsActivity : AppCompatActivity() {
     private val binding by lazy { ActivityLearnSymbolsBinding.inflate(layoutInflater) }
-    private val adapter by lazy { LearnSymbolAdapter(this) }
+    private val adapter by lazy { LearnSymbolAdapter() }
     private val viewModel: LearnSymbolViewModel by viewModels()
     private var pagerCurrentItem = 1
-    private var cardChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +41,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         }
 
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
-        viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
+        viewModel.initializeLessonMode()
 
         binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
         binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
@@ -66,9 +61,6 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                 prevButton.visibility = View.VISIBLE
                 setNextSymbol()
             }
-            showAnswer.setOnClickListener {
-                flipCurrentCard()
-            }
         }
     }
 
@@ -85,7 +77,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private fun setNextSymbol() {
         val currentItem = binding.viewPager.currentItem
         val unlearnedCards = viewModel.cards.value.filter {
-            if (viewModel.isGlobal.value) !it.passed else !it.learned
+            if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.learned
         }.size
 
         when {
@@ -95,7 +87,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             unlearnedCards > 0 -> {
                 // User skipped some cards, so show the first unlearned card
                 val unlearnedItem = viewModel.cards.value.indexOfFirst {
-                    if (viewModel.isGlobal.value) !it.passed else !it.learned
+                    if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.learned
                 }
                 if (unlearnedItem == -1) {
                     finishLesson()
@@ -119,7 +111,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
                     viewModel.cards.collect { cards ->
                         adapter.submitList(cards)
 
-                        if (!viewModel.isGlobal.value) {
+                        if (viewModel.mode.value == LessonMode.NORMAL) {
                             launch(Dispatchers.Main) {
                                 delay(100)
                                 cards.firstOrNull { !it.learned }?.let {
@@ -143,23 +135,15 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
             adapter.notifyItemChanged(pagerCurrentItem)
             pagerCurrentItem = position
 
-            binding.showAnswer.text = getString(R.string.see_answer)
-            binding.showAnswer.isActivated = true
-
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
-                if (viewModel.isGlobal.value) {
+                if (viewModel.mode.value == LessonMode.REPEAT) {
                     card.passed = true
                 } else if (!card.learned) {
                     card.learned = true
                     viewModel.saveCard(card)
                 }
             }
-        }
-
-        override fun onPageScrollStateChanged(state: Int) {
-            cardChanging = true
-            super.onPageScrollStateChanged(state)
         }
     }
 
@@ -168,28 +152,9 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
         binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
-    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
-        if (cardChanging) {
-            cardChanging = false
-            return
-        }
-        newCurrentSide?.let {
-            when (it) {
-                FlipState.FRONT_SIDE -> {
-                    binding.showAnswer.text = getString(R.string.see_answer)
-                    binding.showAnswer.isActivated = true
-                }
-                FlipState.BACK_SIDE -> {
-                    binding.showAnswer.text = getString(R.string.hide_answer)
-                    binding.showAnswer.isActivated = false
-                }
-            }
-        }
-    }
-
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.isGlobal.value) {
+            if (viewModel.mode.value == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", viewModel.lessonId.value)
                 startActivity(intent)
@@ -203,21 +168,9 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private fun finishLesson() {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putExtra("type", Section.LEARN_SYMBOLS)
-        intent.putExtra("global", viewModel.isGlobal.value)
+        intent.putExtra("section", Section.LEARN_SYMBOLS)
+        intent.putEnumExtra("mode", viewModel.mode.value)
         startActivity(intent)
-    }
-
-    private fun getCurrentViewHolder(): RecyclerView.ViewHolder? {
-        val currentItem = binding.viewPager.currentItem
-        val recyclerView = binding.viewPager[0] as RecyclerView
-        return recyclerView.findViewHolderForAdapterPosition(currentItem)
-    }
-
-    private fun flipCurrentCard() {
-        getCurrentViewHolder()?.let {
-            adapter.flipCard(it)
-        }
     }
 }
 

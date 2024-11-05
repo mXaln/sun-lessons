@@ -202,7 +202,7 @@
                 android:layout_width="@dimen/_60dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_learn_sentences"
+                android:src="@drawable/selector_learn_symbols"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
@@ -255,7 +255,7 @@
                 android:layout_width="@dimen/_60dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/selector_test_sentences"
+                android:src="@drawable/selector_symbols_test"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

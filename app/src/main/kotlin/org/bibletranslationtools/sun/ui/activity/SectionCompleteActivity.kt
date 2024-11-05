@@ -5,12 +5,11 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivitySectionCompletedBinding
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.SectionStatusViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
@@ -22,8 +21,8 @@ class SectionCompleteActivity : AppCompatActivity() {
     private val viewModel: SectionStatusViewModel by viewModels()
 
     private var id: Int = 1
-    private var type: Section = Section.LEARN_SYMBOLS
-    private var isGlobal = false
+    private var section: Section = Section.LEARN_SYMBOLS
+    private var mode = LessonMode.NORMAL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +36,10 @@ class SectionCompleteActivity : AppCompatActivity() {
         }
 
         id = intent.getIntExtra("id", 1)
-        type = intent.getEnumExtra("type", Section.LEARN_SYMBOLS)
-        isGlobal = intent.getBooleanExtra("global", false)
+        section = intent.getEnumExtra("section", Section.LEARN_SYMBOLS)
+        mode = intent.getEnumExtra("mode", LessonMode.NORMAL)
 
-        when (type) {
+        when (section) {
             Section.LEARN_SYMBOLS -> {
                 binding.sectionTitle.text = getString(R.string.learn_symbols_completed)
                 binding.startButton.setOnClickListener {
@@ -60,10 +59,7 @@ class SectionCompleteActivity : AppCompatActivity() {
                 }
             }
             else -> {
-                binding.sectionTitle.text = if (isGlobal) {
-                    getString(R.string.test_sentences_completed)
-                } else getString(R.string.lesson_completed, id)
-
+                binding.sectionTitle.text = getString(R.string.lesson_completed, id)
                 binding.startButton.setOnClickListener {
                     navigateToNextLesson()
                 }
@@ -76,7 +72,7 @@ class SectionCompleteActivity : AppCompatActivity() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (isGlobal) {
+            if (mode == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", id)
                 startActivity(intent)
@@ -87,40 +83,26 @@ class SectionCompleteActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToNextSection(type: Section) {
+    private fun navigateToNextSection(section: Section) {
         lifecycleScope.launch {
-            if (isGlobal) {
-                navigateToLessonsList()
-            } else {
-                viewModel.saveSectionStatus(id, type)
+            viewModel.saveSectionStatus(id, section)
 
-                val intent = Intent(baseContext, SectionStartActivity::class.java)
-                intent.putExtra("id", id)
-                intent.putEnumExtra("type", type)
-                startActivity(intent)
-            }
+            val intent = Intent(baseContext, SectionStartActivity::class.java)
+            intent.putExtra("id", id)
+            intent.putEnumExtra("section", section)
+            startActivity(intent)
         }
     }
 
     private fun navigateToNextLesson() {
         lifecycleScope.launch {
-            if (isGlobal) {
-                navigateToLessonsList()
-            } else {
-                val next = viewModel.getNextLesson(id)
-                viewModel.saveSectionStatus(next, Section.LEARN_SYMBOLS)
+            val next = viewModel.getNextLesson(id)
+            viewModel.saveSectionStatus(next, Section.LEARN_SYMBOLS)
 
-                val intent = Intent(baseContext, SectionStartActivity::class.java)
-                intent.putExtra("id", next)
-                intent.putEnumExtra("type", Section.LEARN_SYMBOLS)
-                startActivity(intent)
-            }
+            val intent = Intent(baseContext, SectionStartActivity::class.java)
+            intent.putExtra("id", next)
+            intent.putEnumExtra("section", Section.LEARN_SYMBOLS)
+            startActivity(intent)
         }
-    }
-
-    private fun navigateToLessonsList() {
-        val intent = Intent(baseContext, LessonListActivity::class.java)
-        intent.putExtra("selected", id)
-        startActivity(intent)
     }
 }

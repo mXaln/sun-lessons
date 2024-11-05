@@ -138,9 +138,12 @@
             android:layout_weight="1"
             android:text="@string/hide"
             app:icon="@drawable/selector_show_answer"
+            app:strokeColor="@color/primary"
             app:iconSize="@dimen/_25dp"
             app:iconPadding="10dp"
-            app:iconGravity="textStart"/>
+            app:iconGravity="textStart"
+            app:cornerRadius="@dimen/_8dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
         <View
             android:layout_width="@dimen/_20dp"
@@ -153,7 +156,8 @@
             android:layout_weight="1"
             app:icon="@drawable/ic_arrow_right"
             app:iconPadding="0dp"
-            app:iconGravity="textStart"/>
+            app:iconGravity="textStart"
+            app:cornerRadius="@dimen/_8dp"/>
     </LinearLayout>
 
 </LinearLayout>

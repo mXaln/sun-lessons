@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityListLessonsBinding
 import org.bibletranslationtools.sun.ui.adapter.LessonListAdapter
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.model.LessonModel
 import org.bibletranslationtools.sun.ui.viewmodel.LessonListViewModel
 import org.bibletranslationtools.sun.utils.Section
@@ -97,8 +98,8 @@ class LessonListActivity : AppCompatActivity(), LessonListAdapter.OnLessonSelect
     override fun onLessonAction(lessonId: Int, action: Section) {
         val intent = Intent(baseContext, SectionStartActivity::class.java)
         intent.putExtra("id", lessonId)
-        intent.putEnumExtra("type", action)
-        intent.putExtra("global", true)
+        intent.putEnumExtra("section", action)
+        intent.putExtra("mode", LessonMode.REPEAT)
         startActivity(intent)
     }
 

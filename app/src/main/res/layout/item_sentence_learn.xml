@@ -17,36 +17,77 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:cardCornerRadius="8dp">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/flash_card_bg"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_write"
                 android:id="@+id/item_image"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:padding="@dimen/_4dp"/>
-        </FrameLayout>
 
-        <TextView
-            android:id="@+id/item_text"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/hide_answer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50dp"
+                android:text="@string/hide_answer"
+                app:icon="@drawable/ic_eye_closed"
+                app:iconPadding="@dimen/_12dp"
+                app:iconGravity="textStart"
+                app:iconSize="@dimen/_30dp"
+                app:strokeColor="@color/primary"
+                app:cornerRadius="@dimen/_8dp"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/_40dp"
+                android:layout_marginVertical="@dimen/_10dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/sun_example_sentence"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            app:autoSizeTextType="uniform"
-            app:autoSizeMaxTextSize="@dimen/_280sp"
-            android:maxLines="1"
-            android:fontFamily="@font/sun"
-            android:padding="@dimen/_20dp"
-            android:background="@drawable/flash_card_bg"/>
+            android:orientation="vertical"
+            android:background="@drawable/flash_card_bg">
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/sun_example_sentence"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMaxTextSize="@dimen/_280sp"
+                android:maxLines="1"
+                android:fontFamily="@font/sun"
+                android:padding="@dimen/_20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/show_answer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50dp"
+                android:text="@string/see_answer"
+                app:icon="@drawable/ic_eye_open"
+                app:iconPadding="@dimen/_12dp"
+                app:iconGravity="textStart"
+                app:iconSize="@dimen/_30dp"
+                app:strokeColor="@color/primary"
+                app:cornerRadius="@dimen/_8dp"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/_40dp"
+                android:layout_marginVertical="@dimen/_10dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        </LinearLayout>
 
     </com.wajahatkarim3.easyflipview.EasyFlipView>
 </FrameLayout>

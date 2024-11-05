@@ -7,11 +7,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.bibletranslationtools.sun.data.AppDatabase
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.utils.Section
 
 class LearnSentencesViewModel(application: Application) : AndroidViewModel(application) {
@@ -21,8 +23,8 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
     private val _sentences = MutableStateFlow<List<SentenceWithSymbols>>(listOf())
     val sentences: StateFlow<List<SentenceWithSymbols>> = _sentences
 
-    val isGlobal = MutableStateFlow(false)
     val lessonId = MutableStateFlow(1)
+    val mode = MutableStateFlow(LessonMode.NORMAL)
 
     init {
         val sentenceDao = AppDatabase.getDatabase(application).getSentenceDao()
@@ -47,6 +49,19 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
             val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
             settingsRepository.insertOrUpdate(lastSection)
             settingsRepository.insertOrUpdate(lastLesson)
+        }
+    }
+
+    fun initializeLessonMode() {
+        runBlocking {
+            val all = repository.getByLessonCount(lessonId.value)
+            val done = repository.getLearnedByLessonCount(lessonId.value)
+
+            if (all == done) {
+                mode.value = LessonMode.REPEAT
+            } else {
+                mode.value = LessonMode.NORMAL
+            }
         }
     }
 }

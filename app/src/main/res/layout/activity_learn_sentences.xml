@@ -72,16 +72,4 @@
         app:tabTextColor="@color/transparent"
         app:tabPaddingStart="@dimen/_16dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/show_answer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_50dp"
-        android:text="@string/see_answer"
-        app:icon="@drawable/selector_show_answer"
-        app:iconPadding="@dimen/_12dp"
-        app:iconGravity="textStart"
-        app:iconSize="@dimen/_30dp"
-        android:layout_marginHorizontal="@dimen/_40dp"
-        android:layout_marginBottom="@dimen/_40dp"/>
-
 </LinearLayout>

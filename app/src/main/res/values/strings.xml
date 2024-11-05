@@ -11,7 +11,6 @@
     <string name="learn_sentences">Learn Sentences</string>
     <string name="learn_sentences_completed">Learn Sentences Completed!</string>
     <string name="test_sentences">Test Sentences</string>
-    <string name="test_sentences_completed">Test Sentences Completed</string>
     <string name="lesson_completed">Lesson %1$d Completed!</string>
     <string name="lesson_name">Lesson %1$d</string>
     <string name="unknown" translatable="false">example</string>
@@ -23,7 +22,6 @@
     <string name="back">Back</string>
     <string name="progress">Progress</string>
     <string name="track_progress">Track Progress</string>
-    <string name="test_knowledge">Test Knowledge</string>
     <string name="symbols_learned">Symbols Learned</string>
     <string name="lessons_learned">Lessons Learned</string>
     <string name="test_score">Test Score</string>

@@ -60,9 +60,11 @@
                 android:id="@+id/start_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50dp"
+                android:text="@string/next"
                 app:icon="@drawable/ic_arrow_right"
-                app:iconPadding="@dimen/_16dp"
-                app:iconGravity="textEnd" />
+                app:iconPadding="@dimen/_10dp"
+                app:iconGravity="textEnd"
+                app:cornerRadius="@dimen/_8dp"/>
         </LinearLayout>
 
     </LinearLayout>

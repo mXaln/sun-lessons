@@ -23,6 +23,7 @@ import org.bibletranslationtools.sun.databinding.ActivityTestSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.adapter.LinearItemOffsetDecoration
 import org.bibletranslationtools.sun.ui.control.SymbolState
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.TestSentencesViewModel
 import org.bibletranslationtools.sun.utils.AnswerType
 import org.bibletranslationtools.sun.utils.Section
@@ -68,7 +69,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
         with(binding) {
             viewModel.lessonId.value = intent.getIntExtra("id", 1)
-            viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
+            viewModel.initializeLessonMode()
 
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
@@ -76,7 +77,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
                 onBackPressedDispatcher.onBackPressed()
             }
 
-            if (!viewModel.isGlobal.value) {
+            if (viewModel.mode.value == LessonMode.NORMAL) {
                 binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
                 binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
             } else {
@@ -152,7 +153,9 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
         val allSentences = viewModel.sentences.value.toMutableList()
         val inProgressSentences = allSentences.filter {
-            if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.tested
+            if (viewModel.mode.value == LessonMode.REPEAT) {
+                !it.sentence.passed
+            } else !it.sentence.tested
         }
 
         if (inProgressSentences.isEmpty()) {
@@ -231,7 +234,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
             if (isSentenceCorrect) {
                 isAnswerCorrect = true
                 lifecycleScope.launch(Dispatchers.IO) {
-                    if (viewModel.isGlobal.value) {
+                    if (viewModel.mode.value == LessonMode.REPEAT) {
                         correctSentence.sentence.passed = true
                     } else {
                         correctSentence.sentence.tested = true
@@ -265,8 +268,8 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
     private fun finishTest() {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putEnumExtra("type", Section.TEST_SENTENCES)
-        intent.putExtra("global", viewModel.isGlobal.value)
+        intent.putEnumExtra("section", Section.TEST_SENTENCES)
+        intent.putEnumExtra("mode", viewModel.mode.value)
         startActivity(intent)
     }
 
@@ -331,7 +334,7 @@ class TestSentencesActivity : AppCompatActivity(), TestSentenceAdapter.OnSymbolS
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.isGlobal.value) {
+            if (viewModel.mode.value == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", viewModel.lessonId.value)
                 startActivity(intent)

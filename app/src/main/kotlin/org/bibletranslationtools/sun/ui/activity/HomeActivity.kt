@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityHomeBinding
@@ -62,19 +60,7 @@ class HomeActivity : AppCompatActivity() {
 
                     val intent = Intent(baseContext, cls)
                     intent.putExtra("id", lastLesson)
-                    intent.putEnumExtra("type", section)
-                    startActivity(intent)
-                }
-            }
-        }
-
-        binding.test.setOnClickListener {
-            lifecycleScope.launch {
-                if (viewModel.testsAvailable()) {
-                    val lastLesson = viewModel.getLastLesson()
-                    val intent = Intent(baseContext, SectionStartActivity::class.java)
-                    intent.putExtra("id", lastLesson)
-                    intent.putEnumExtra("type", Section.TEST_ALL)
+                    intent.putEnumExtra("section", section)
                     startActivity(intent)
                 }
             }

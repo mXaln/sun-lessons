@@ -41,9 +41,6 @@
             android:name=".ui.activity.TrackProgressActivity"
             android:exported="false"/>
         <activity
-            android:name=".ui.activity.GlobalTestActivity"
-            android:exported="false"/>
-        <activity
                 android:name=".ui.activity.HomeActivity"
                 android:exported="true">
             <intent-filter>

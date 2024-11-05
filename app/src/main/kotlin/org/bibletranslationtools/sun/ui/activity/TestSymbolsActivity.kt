@@ -3,6 +3,7 @@ package org.bibletranslationtools.sun.ui.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import org.bibletranslationtools.sun.data.model.TestCard
 import org.bibletranslationtools.sun.databinding.ActivityTestSymbolsBinding
 import org.bibletranslationtools.sun.ui.adapter.TestSymbolAdapter
 import org.bibletranslationtools.sun.ui.adapter.GridItemOffsetDecoration
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.TestSymbolsViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
@@ -41,7 +43,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
 
         with(binding) {
             viewModel.lessonId.value = intent.getIntExtra("id", 1)
-            viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
+            viewModel.initializeLessonMode()
 
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -88,13 +90,13 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
     }
 
     private fun setNextQuestion() {
-        binding.nextButton.isEnabled = false
+        binding.nextButton.visibility = View.INVISIBLE
 
         val allCards = viewModel.cards.value.toMutableList()
         allCards.forEach { it.correct = null }
 
         val inProgressCards = allCards.filter {
-            if (viewModel.isGlobal.value) !it.passed else !it.tested
+            if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.tested
         }
 
         if (inProgressCards.isEmpty()) {
@@ -121,14 +123,14 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
         if (!viewModel.questionDone.value) {
             checkAnswer(testCards[position], position)
             viewModel.questionDone.value = true
-            binding.nextButton.isEnabled = true
+            binding.nextButton.visibility = View.VISIBLE
         }
     }
 
     private fun checkAnswer(selectedCard: Card, position: Int) {
         if (selectedCard.symbol == correctCard.symbol) {
             lifecycleScope.launch(Dispatchers.IO) {
-                if (viewModel.isGlobal.value) {
+                if (viewModel.mode.value == LessonMode.REPEAT) {
                     correctCard.passed = true
                 } else {
                     correctCard.tested = true
@@ -182,8 +184,8 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
 
             val intent = Intent(baseContext, SectionCompleteActivity::class.java)
             intent.putExtra("id", viewModel.lessonId.value)
-            intent.putEnumExtra("type", section)
-            intent.putExtra("global", viewModel.isGlobal.value)
+            intent.putEnumExtra("section", section)
+            intent.putEnumExtra("mode", viewModel.mode.value)
             startActivity(intent)
         }
     }
@@ -201,7 +203,7 @@ class TestSymbolsActivity : AppCompatActivity(), TestSymbolAdapter.OnCardSelecte
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.isGlobal.value) {
+            if (viewModel.mode.value == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", viewModel.lessonId.value)
                 startActivity(intent)

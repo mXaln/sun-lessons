@@ -6,33 +6,28 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.wajahatkarim3.easyflipview.EasyFlipView
-import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
-import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bibletranslationtools.sun.R
 import org.bibletranslationtools.sun.databinding.ActivityLearnSentencesBinding
 import org.bibletranslationtools.sun.ui.adapter.LearnSentenceAdapter
+import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.ui.viewmodel.LearnSentencesViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
 
-class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
+class LearnSentencesActivity : AppCompatActivity() {
     private val binding by lazy { ActivityLearnSentencesBinding.inflate(layoutInflater) }
-    private val adapter by lazy { LearnSentenceAdapter(this) }
+    private val adapter by lazy { LearnSentenceAdapter() }
     private val viewModel: LearnSentencesViewModel by viewModels()
     private var pagerCurrentItem = 1
-    private var cardChanging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +41,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         }
 
         viewModel.lessonId.value = intent.getIntExtra("id", 1)
-        viewModel.isGlobal.value = intent.getBooleanExtra("global", false)
+        viewModel.initializeLessonMode()
 
         binding.topNavBar.pageTitle.text = getString(R.string.lesson_name, viewModel.lessonId.value)
         binding.topNavBar.tallyNumber.text = TallyMarkConverter.toText(viewModel.lessonId.value)
@@ -66,9 +61,6 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                 prevButton.visibility = View.VISIBLE
                 setNextSentence()
             }
-            showAnswer.setOnClickListener {
-                flipCurrentCard()
-            }
         }
     }
 
@@ -84,7 +76,7 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
                     viewModel.sentences.collect { sentences ->
                         adapter.submitList(sentences)
 
-                        if (!viewModel.isGlobal.value) {
+                        if (viewModel.mode.value == LessonMode.NORMAL) {
                             launch(Dispatchers.Main) {
                                 delay(100)
                                 sentences.firstOrNull { !it.sentence.learned }?.let {
@@ -118,7 +110,9 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private fun setNextSentence() {
         val currentItem = binding.viewPager.currentItem
         val unlearnedCards = viewModel.sentences.value.filter {
-            if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.learned
+            if (viewModel.mode.value == LessonMode.REPEAT) {
+                !it.sentence.passed
+            } else !it.sentence.learned
         }.size
 
         when {
@@ -128,7 +122,9 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
             unlearnedCards > 0 -> {
                 // User skipped some cards, so show the first unlearned card
                 val unlearnedItem = viewModel.sentences.value.indexOfFirst {
-                    if (viewModel.isGlobal.value) !it.sentence.passed else !it.sentence.learned
+                    if (viewModel.mode.value == LessonMode.REPEAT) {
+                        !it.sentence.passed
+                    } else !it.sentence.learned
                 }
                 binding.viewPager.currentItem = unlearnedItem
             }
@@ -145,18 +141,13 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
 
             viewModel.sentences.value.let { sentences ->
                 val sentence = sentences[position]
-                if (viewModel.isGlobal.value) {
+                if (viewModel.mode.value == LessonMode.REPEAT) {
                     sentence.sentence.passed = true
                 } else if (!sentence.sentence.learned) {
                     sentence.sentence.learned = true
                     viewModel.saveSentence(sentence)
                 }
             }
-        }
-
-        override fun onPageScrollStateChanged(state: Int) {
-            cardChanging = true
-            super.onPageScrollStateChanged(state)
         }
     }
 
@@ -165,28 +156,9 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
         binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
-    override fun onViewFlipCompleted(easyFlipView: EasyFlipView?, newCurrentSide: FlipState?) {
-        if (cardChanging) {
-            cardChanging = false
-            return
-        }
-        newCurrentSide?.let {
-            when (it) {
-                FlipState.FRONT_SIDE -> {
-                    binding.showAnswer.text = getString(R.string.see_answer)
-                    binding.showAnswer.isActivated = true
-                }
-                FlipState.BACK_SIDE -> {
-                    binding.showAnswer.text = getString(R.string.hide_answer)
-                    binding.showAnswer.isActivated = false
-                }
-            }
-        }
-    }
-
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.isGlobal.value) {
+            if (viewModel.mode.value == LessonMode.REPEAT) {
                 val intent = Intent(baseContext, LessonListActivity::class.java)
                 intent.putExtra("selected", viewModel.lessonId.value)
                 startActivity(intent)
@@ -200,17 +172,8 @@ class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private fun finishLesson() {
         val intent = Intent(baseContext, SectionCompleteActivity::class.java)
         intent.putExtra("id", viewModel.lessonId.value)
-        intent.putEnumExtra("type", Section.LEARN_SENTENCES)
-        intent.putExtra("global", viewModel.isGlobal.value)
+        intent.putEnumExtra("section", Section.LEARN_SENTENCES)
+        intent.putEnumExtra("mode", viewModel.mode.value)
         startActivity(intent)
-    }
-
-    private fun flipCurrentCard() {
-        val currentItem = binding.viewPager.currentItem
-        val recyclerView = binding.viewPager[0] as RecyclerView
-        val viewHolder = recyclerView.findViewHolderForAdapterPosition(currentItem)
-        viewHolder?.let {
-            adapter.flipCard(it)
-        }
     }
 }

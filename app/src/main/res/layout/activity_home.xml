@@ -46,7 +46,8 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_40dp"
         android:paddingHorizontal="@dimen/_20dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
         <LinearLayout
             android:id="@+id/learn"
@@ -82,43 +83,6 @@
                     android:gravity="center"
                     android:layout_marginTop="@dimen/_10dp"/>
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_30dp"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <LinearLayout
-                android:layout_width="@dimen/_220dp"
-                android:layout_height="@dimen/_220dp"
-                android:orientation="vertical"
-                android:background="@drawable/background_idle"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="@dimen/_20dp">
-
-                <ImageView
-                    android:layout_width="@dimen/_140dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_test_menu"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/test"
-                    android:textSize="@dimen/_24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_gray"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_10dp"/>
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>
