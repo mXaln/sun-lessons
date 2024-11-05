@@ -7,62 +7,62 @@
         {
           "id": "1a",
           "symbol": "\uE29C",
-          "primary": "1.jpg",
-          "secondary": "21.jpg"
+          "primary": "1.1a.jpg",
+          "secondary": "1.1b.jpg"
         },
         {
           "id": "1b",
           "symbol": "\uE22A",
-          "primary": "2.jpg",
-          "secondary": "22.jpg"
+          "primary": "1.2a.jpg",
+          "secondary": "1.2b.jpg"
         },
         {
           "id": "1c",
           "symbol": "\uE247",
-          "primary": "3.jpg",
-          "secondary": "23.jpg"
+          "primary": "1.3a.jpg",
+          "secondary": "1.3b.jpg"
         },
         {
           "id": "1d",
           "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
+          "primary": "1.4a.jpg",
+          "secondary": "1.4b.jpg"
         },
         {
           "id": "1e",
           "symbol": "\uE298",
-          "primary": "5.jpg",
-          "secondary": "25.jpg"
+          "primary": "1.5a.jpg",
+          "secondary": "1.5b.jpg"
         },
         {
           "id": "1f",
           "symbol": "\uE23E",
-          "primary": "6.jpg",
-          "secondary": "26.jpg"
+          "primary": "1.6a.jpg",
+          "secondary": "1.6b.jpg"
         },
         {
           "id": "1g",
           "symbol": "\uE311",
-          "primary": "7.jpg",
-          "secondary": "27.jpg"
+          "primary": "1.7a.jpg",
+          "secondary": "1.7b.jpg"
         },
         {
           "id": "1h",
           "symbol": "\uE11F",
-          "primary": "8.jpg",
-          "secondary": "28.jpg"
+          "primary": "1.8a.jpg",
+          "secondary": "1.8b.jpg"
         },
         {
           "id": "1i",
           "symbol": "\uE071",
-          "primary": "9.jpg",
-          "secondary": "29.jpg"
+          "primary": "1.9a.jpg",
+          "secondary": "1.9b.jpg"
         },
         {
           "id": "1j",
           "symbol": "\uE263",
-          "primary": "10.jpg",
-          "secondary": "30.jpg"
+          "primary": "1.10a.jpg",
+          "secondary": "1.10b.jpg"
         }
       ],
       "sentences": [
@@ -78,8 +78,8 @@
               "name": "\uE274"
             }
           ],
-          "correct": "1.jpg",
-          "incorrect": "2.jpg"
+          "correct": "1.1a.jpg",
+          "incorrect": "1.1b.jpg"
         },
         {
           "id": "1b",
@@ -93,8 +93,8 @@
               "name": "\uE29C"
             }
           ],
-          "correct": "3.jpg",
-          "incorrect": "4.jpg"
+          "correct": "1.2a.jpg",
+          "incorrect": "1.2b.jpg"
         },
         {
           "id": "1c",
@@ -108,8 +108,8 @@
               "name": "\uE22A"
             }
           ],
-          "correct": "4.jpg",
-          "incorrect": "3.jpg"
+          "correct": "1.3a.jpg",
+          "incorrect": "1.3b.jpg"
         },
         {
           "id": "1d",
@@ -123,8 +123,8 @@
               "name": "\uE298"
             }
           ],
-          "correct": "5.jpg",
-          "incorrect": "6.jpg"
+          "correct": "1.4a.jpg",
+          "incorrect": "1.4b.jpg"
         }
       ]
     },
@@ -134,62 +134,62 @@
         {
           "id": "2a",
           "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "53.jpg"
+          "primary": "2.1a.jpg",
+          "secondary": "2.1b.jpg"
         },
         {
           "id": "2b",
           "symbol": "\uE309",
-          "primary": "12.jpg",
-          "secondary": "54.jpg"
+          "primary": "2.2a.jpg",
+          "secondary": "2.2b.jpg"
         },
         {
           "id": "2c",
           "symbol": "\uE238",
-          "primary": "13.jpg",
-          "secondary": "55.jpg"
+          "primary": "2.3a.jpg",
+          "secondary": "2.3b.jpg"
         },
         {
           "id": "2d",
           "symbol": "\uE03F",
-          "primary": "14.jpg",
-          "secondary": "56.jpg"
+          "primary": "2.4a.jpg",
+          "secondary": "2.4b.jpg"
         },
         {
           "id": "2e",
           "symbol": "\uE000",
-          "primary": "15.jpg",
-          "secondary": "57.jpg"
+          "primary": "2.5a.jpg",
+          "secondary": "2.5b.jpg"
         },
         {
           "id": "2f",
           "symbol": "\uE272",
-          "primary": "16.jpg",
-          "secondary": "58.jpg"
+          "primary": "2.6a.jpg",
+          "secondary": "2.6b.jpg"
         },
         {
           "id": "2g",
           "symbol": "\uE15F",
-          "primary": "17.jpg",
-          "secondary": "59.jpg"
+          "primary": "2.7a.jpg",
+          "secondary": "2.7b.jpg"
         },
         {
           "id": "2h",
           "symbol": "\uE384",
-          "primary": "18.jpg",
-          "secondary": "60.jpg"
+          "primary": "2.8a.jpg",
+          "secondary": "2.8b.jpg"
         },
         {
           "id": "2i",
           "symbol": "\uE23C",
-          "primary": "19.jpg",
-          "secondary": "61.jpg"
+          "primary": "2.9a.jpg",
+          "secondary": "2.9b.jpg"
         },
         {
           "id": "2j",
           "symbol": "\uE315",
-          "primary": "20.jpg",
-          "secondary": "62.jpg"
+          "primary": "2.10a.jpg",
+          "secondary": "2.10b.jpg"
         }
       ],
       "sentences": [
@@ -209,8 +209,8 @@
               "name": "\uE263"
             }
           ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
+          "correct": "2.1a.jpg",
+          "incorrect": "2.1b.jpg"
         },
         {
           "id": "2b",
@@ -228,8 +228,8 @@
               "name": "\uE272"
             }
           ],
-          "correct": "9.jpg",
-          "incorrect": "10.jpg"
+          "correct": "2.2a.jpg",
+          "incorrect": "2.2b.jpg"
         },
         {
           "id": "2c",
@@ -243,8 +243,8 @@
               "name": "\uE315"
             }
           ],
-          "correct": "11.jpg",
-          "incorrect": "12.png"
+          "correct": "2.3a.jpg",
+          "incorrect": "2.3b.png"
         },
         {
           "id": "2d",
@@ -262,8 +262,8 @@
               "name": "\uE23C"
             }
           ],
-          "correct": "13.jpg",
-          "incorrect": "14.jpg"
+          "correct": "2.4a.jpg",
+          "incorrect": "2.4b.jpg"
         },
         {
           "id": "2f",
@@ -285,8 +285,8 @@
               "name": "\uE315"
             }
           ],
-          "correct": "15.jpg",
-          "incorrect": "16.jpg"
+          "correct": "2.5a.jpg",
+          "incorrect": "2.5b.jpg"
         },
         {
           "id": "2g",
@@ -308,8 +308,8 @@
               "name": "\uE03F"
             }
           ],
-          "correct": "17.jpg",
-          "incorrect": "18.png"
+          "correct": "2.6a.jpg",
+          "incorrect": "2.6b.png"
         }
       ]
     },
@@ -318,123 +318,252 @@
       "cards": [
         {
           "id": "3a",
-          "symbol": "\uE28B",
-          "primary": "31.jpg",
-          "secondary": "32.jpg"
+          "symbol": "\uE166",
+          "primary": "3.1a.jpg",
+          "secondary": "3.1a.jpg"
         },
         {
           "id": "3b",
-          "symbol": "\uE28C",
-          "primary": "33.jpg",
-          "secondary": "34.jpg"
+          "symbol": "\uE203",
+          "primary": "3.2a.jpg",
+          "secondary": "3.2a.jpg"
         },
         {
           "id": "3c",
-          "symbol": "\uE28D",
-          "primary": "35.jpg",
-          "secondary": "36.jpg"
+          "symbol": "\uE280",
+          "primary": "3.3a.jpg",
+          "secondary": "3.3a.jpg"
         },
         {
           "id": "3d",
-          "symbol": "\uE28E",
-          "primary": "37.jpg",
-          "secondary": "38.jpg"
+          "symbol": "\uE171",
+          "primary": "3.4a.jpg",
+          "secondary": "3.4a.jpg"
         },
         {
           "id": "3e",
-          "symbol": "\uE28F",
-          "primary": "39.jpg",
-          "secondary": "40.jpg"
+          "symbol": "\uE244",
+          "primary": "3.5a.jpg",
+          "secondary": "3.5a.jpg"
         },
         {
           "id": "3f",
-          "symbol": "\uE290",
-          "primary": "41.jpg",
-          "secondary": "42.jpg"
+          "symbol": "\uE27E",
+          "primary": "3.6a.jpg",
+          "secondary": "3.6a.jpg"
         },
         {
           "id": "3g",
-          "symbol": "\uE291",
-          "primary": "43.jpg",
-          "secondary": "44.jpg"
+          "symbol": "\uE29E",
+          "primary": "3.7a.jpg",
+          "secondary": "3.7a.jpg"
         },
         {
           "id": "3h",
-          "symbol": "\uE292",
-          "primary": "45.jpg",
-          "secondary": "46.jpg"
+          "symbol": "\uE25F",
+          "primary": "3.8a.jpg",
+          "secondary": "3.8a.jpg"
         },
         {
           "id": "3i",
-          "symbol": "\uE293",
-          "primary": "47.jpg",
-          "secondary": "48.jpg"
+          "symbol": "\uE17C",
+          "primary": "3.9a.jpg",
+          "secondary": "3.9a.jpg"
         },
         {
           "id": "3j",
-          "symbol": "\uE294",
-          "primary": "49.jpg",
-          "secondary": "50.jpg"
-        },
-        {
-          "id": "3k",
-          "symbol": "\uE295",
-          "primary": "51.jpg",
-          "secondary": "52.jpg"
+          "symbol": "\uE028",
+          "primary": "3.10a.jpg",
+          "secondary": "3.10a.jpg"
         }
       ],
-      "sentences": []
+      "sentences": [
+        {
+          "id": "3a",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE028"
+            },
+            {
+              "sort": 2,
+              "name": "\uE03F"
+            },
+            {
+              "sort": 3,
+              "name": "\uE166"
+            }
+          ],
+          "correct": "3.1a.jpg",
+          "incorrect": "3.1b.jpg"
+        },
+        {
+          "id": "3b",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE166"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE238"
+            },
+            {
+              "sort": 4,
+              "name": "\uE171"
+            }
+          ],
+          "correct": "3.2a.jpg",
+          "incorrect": "3.2b.jpg"
+        },
+        {
+          "id": "3c",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE11F"
+            },
+            {
+              "sort": 2,
+              "name": "\uE25F"
+            },
+            {
+              "sort": 3,
+              "name": "\uE244"
+            }
+          ],
+          "correct": "3.3a.jpg",
+          "incorrect": "3.3b.jpg"
+        },
+        {
+          "id": "3d",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE280"
+            },
+            {
+              "sort": 2,
+              "name": "\uE29E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE27E"
+            }
+          ],
+          "correct": "3.4a.jpg",
+          "incorrect": "3.4b.jpg"
+        },
+        {
+          "id": "3e",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE166"
+            },
+            {
+              "sort": 2,
+              "name": "\uE238"
+            },
+            {
+              "sort": 3,
+              "name": "\uE244"
+            },
+            {
+              "sort": 4,
+              "name": "\uE23C"
+            }
+          ],
+          "correct": "3.5a.jpg",
+          "incorrect": "3.5b.jpg"
+        },
+        {
+          "id": "3f",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE171"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE311"
+            }
+          ],
+          "correct": "3.6a.jpg",
+          "incorrect": "3.6b.jpg"
+        }
+      ]
     },
     {
       "id": 4,
       "cards": [
         {
           "id": "4a",
-          "symbol": "\uE37E",
-          "primary": "63.png",
-          "secondary": "63.png"
+          "symbol": "\uE30B",
+          "primary": "4.1a.jpg",
+          "secondary": "4.1a.jpg"
         },
         {
           "id": "4b",
-          "symbol": ",",
-          "primary": "64.png",
-          "secondary": "64.png"
+          "symbol": "\uE265",
+          "primary": "4.2a.jpg",
+          "secondary": "4.2a.jpg"
         },
         {
           "id": "4c",
-          "symbol": "\uEE02",
-          "primary": "65.png",
-          "secondary": "65.png"
+          "symbol": "\uE27C",
+          "primary": "4.3a.jpg",
+          "secondary": "4.3a.jpg"
         },
         {
           "id": "4d",
-          "symbol": "\uE316",
-          "primary": "66.png",
-          "secondary": "66.png"
+          "symbol": "\uE256",
+          "primary": "4.4a.gif",
+          "secondary": "4.4a.gif"
         },
         {
           "id": "4e",
-          "symbol": "“",
-          "primary": "67.png",
-          "secondary": "67.png"
+          "symbol": "\uE24E",
+          "primary": "4.5a.jpg",
+          "secondary": "4.5a.jpg"
         },
         {
           "id": "4f",
-          "symbol": "'",
-          "primary": "68.png",
-          "secondary": "68.png"
+          "symbol": "\uE282",
+          "primary": "4.6a.jpg",
+          "secondary": "4.6a.jpg"
         },
         {
           "id": "4g",
-          "symbol": "\uE390",
-          "primary": "69.png",
-          "secondary": "69.png"
+          "symbol": "\uE29D",
+          "primary": "4.7a.jpg",
+          "secondary": "4.7a.jpg"
         },
         {
           "id": "4h",
-          "symbol": "\uEA47",
-          "primary": "70.png",
-          "secondary": "70.png"
+          "symbol": "\uE398",
+          "primary": "4.8a.jpg",
+          "secondary": "4.8a.jpg"
+        },
+        {
+          "id": "4i",
+          "symbol": "\uE279",
+          "primary": "4.9a.jpg",
+          "secondary": "4.9a.jpg"
+        },
+        {
+          "id": "4j",
+          "symbol": "\uE0D9",
+          "primary": "4.10a.jpg",
+          "secondary": "4.10a.jpg"
         }
       ],
       "sentences": [
@@ -443,177 +572,53 @@
           "symbols": [
             {
               "sort": 1,
-              "name": "\uE11F\uE11F"
+              "name": "\uE166"
             },
             {
               "sort": 2,
-              "name": "\uE088"
+              "name": "\uE256"
             },
             {
               "sort": 3,
-              "name": "\uE191"
+              "name": "\uE23C"
             },
             {
               "sort": 4,
-              "name": "\uE050"
-            },
-            {
-              "sort": 5,
-              "name": "\uE000"
-            },
-            {
-              "sort": 6,
-              "name": "\uE037\uE37E"
+              "name": "\uE171"
             }
           ],
-          "correct": "19.jpg",
-          "incorrect": "19.jpg"
+          "correct": "4.1a.jpg",
+          "incorrect": "4.1b.jpg"
         },
         {
           "id": "4b",
           "symbols": [
             {
               "sort": 1,
-              "name": "\uE11F\uE11F"
+              "name": "\uE17C"
             },
             {
               "sort": 2,
-              "name": "\uE21E"
+              "name": "\uE265"
             },
             {
               "sort": 3,
-              "name": "\uE037"
-            },
-            {
-              "sort": 4,
-              "name": "\uE07E"
-            },
-            {
-              "sort": 5,
-              "name": "\uE071"
-            },
-            {
-              "sort": 6,
-              "name": "\uE113"
-            },
-            {
-              "sort": 7,
-              "name": "\uE000\uE37E"
+              "name": "\uE27C"
             }
           ],
-          "correct": "20.jpg",
-          "incorrect": "20.jpg"
+          "correct": "4.2a.jpg",
+          "incorrect": "4.2b.jpg"
         },
         {
           "id": "4c",
           "symbols": [
             {
               "sort": 1,
-              "name": "\uE037"
+              "name": "\uE11F"
             },
             {
               "sort": 2,
-              "name": "\uE088"
-            },
-            {
-              "sort": 3,
-              "name": "\uE000"
-            },
-            {
-              "sort": 4,
-              "name": "\uE11E"
-            },
-            {
-              "sort": 5,
-              "name": "\uE128\uE37E"
-            }
-          ],
-          "correct": "21.jpg",
-          "incorrect": "21.jpg"
-        },
-        {
-          "id": "4d",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE07E"
-            },
-            {
-              "sort": 3,
-              "name": "\uE071\uE071"
-            },
-            {
-              "sort": 4,
-              "name": "\uE240"
-            },
-            {
-              "sort": 5,
-              "name": "\uE000\uE390"
-            },
-            {
-              "sort": 6,
-              "name": "\uE299\uE299"
-            },
-            {
-              "sort": 7,
-              "name": "\uE37E"
-            }
-          ],
-          "correct": "22.jpg",
-          "incorrect": "22.jpg"
-        },
-        {
-          "id": "4e",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE048\uE37E"
-            }
-          ],
-          "correct": "23.jpg",
-          "incorrect": "23.jpg"
-        },
-        {
-          "id": "4f",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE10C"
-            },
-            {
-              "sort": 3,
-              "name": "\uE000\uE390"
-            },
-            {
-              "sort": 4,
-              "name": "\uE045\uE37E"
-            }
-          ],
-          "correct": "24.jpg",
-          "incorrect": "24.jpg"
-        },
-        {
-          "id": "4g",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE238"
+              "name": "\uE256"
             },
             {
               "sort": 3,
@@ -621,94 +626,14 @@
             },
             {
               "sort": 4,
-              "name": "\uE380\uE37E"
+              "name": "\uE0D9"
             }
           ],
-          "correct": "25.jpg",
-          "incorrect": "25.jpg"
+          "correct": "4.3a.jpg",
+          "incorrect": "4.3b.jpg"
         },
         {
-          "id": "4h",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE047\uE37E"
-            }
-          ],
-          "correct": "26.jpg",
-          "incorrect": "26.jpg"
-        },
-        {
-          "id": "4i",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE037"
-            },
-            {
-              "sort": 2,
-              "name": "\uE03F,"
-            },
-            {
-              "sort": 3,
-              "name": "“\uE18A"
-            },
-            {
-              "sort": 4,
-              "name": "\uEE02“"
-            },
-            {
-              "sort": 5,
-              "name": "\uE37E"
-            }
-          ],
-          "correct": "27.jpg",
-          "incorrect": "27.jpg"
-        },
-        {
-          "id": "4j",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000\uE390"
-            },
-            {
-              "sort": 2,
-              "name": "\uE299\uE299"
-            },
-            {
-              "sort": 3,
-              "name": "\uE18A\uE37E"
-            }
-          ],
-          "correct": "28.jpg",
-          "incorrect": "28.jpg"
-        },
-        {
-          "id": "4k",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000\uE390"
-            },
-            {
-              "sort": 2,
-              "name": "\uE045"
-            },
-            {
-              "sort": 3,
-              "name": "\uE260\uE37E"
-            }
-          ],
-          "correct": "29.jpg",
-          "incorrect": "29.jpg"
-        },
-        {
-          "id": "4l",
+          "id": "4d",
           "symbols": [
             {
               "sort": 1,
@@ -716,15 +641,57 @@
             },
             {
               "sort": 2,
-              "name": "\uE03F"
+              "name": "\uE24E"
             },
             {
               "sort": 3,
-              "name": "\uE096\uE37E"
+              "name": "\uE27E"
+            },
+            {
+              "sort": 4,
+              "name": "\uE280"
             }
           ],
-          "correct": "30.jpg",
-          "incorrect": "30.jpg"
+          "correct": "4.4a.jpg",
+          "incorrect": "4.4b.jpg"
+        },
+        {
+          "id": "4e",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE028"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE29D"
+            }
+          ],
+          "correct": "4.5a.jpg",
+          "incorrect": "4.5b.jpg"
+        },
+        {
+          "id": "4f",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE000"
+            },
+            {
+              "sort": 2,
+              "name": "\uE24E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE279"
+            }
+          ],
+          "correct": "4.6a.jpg",
+          "incorrect": "4.6b.jpg"
         }
       ]
     },
@@ -733,15 +700,63 @@
       "cards": [
         {
           "id": "5a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
+          "symbol": "\uE102",
+          "primary": "5.1a.jpg",
+          "secondary": "5.1a.jpg"
+        },
+        {
+          "id": "5b",
+          "symbol": "\uE30A",
+          "primary": "5.2a.jpg",
+          "secondary": "5.2a.jpg"
+        },
+        {
+          "id": "5c",
+          "symbol": "\uE30C",
+          "primary": "5.3a.jpg",
+          "secondary": "5.3a.jpg"
         },
         {
           "id": "5d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
+          "symbol": "\uE29F",
+          "primary": "5.4a.jpg",
+          "secondary": "5.4a.jpg"
+        },
+        {
+          "id": "5e",
+          "symbol": "\uE303",
+          "primary": "5.5a.jpg",
+          "secondary": "5.5a.jpg"
+        },
+        {
+          "id": "5f",
+          "symbol": "\uE304",
+          "primary": "5.6a.jpg",
+          "secondary": "5.6a.jpg"
+        },
+        {
+          "id": "5g",
+          "symbol": "\uE302",
+          "primary": "5.7a.jpg",
+          "secondary": "5.7a.jpg"
+        },
+        {
+          "id": "5h",
+          "symbol": "\uE30E",
+          "primary": "5.8a.jpg",
+          "secondary": "5.8a.jpg"
+        },
+        {
+          "id": "5i",
+          "symbol": "\uE31C",
+          "primary": "5.9a.png",
+          "secondary": "5.9a.png"
+        },
+        {
+          "id": "5j",
+          "symbol": "\uE24B",
+          "primary": "5.10a.gif",
+          "secondary": "5.10a.gif"
         }
       ],
       "sentences": [
@@ -754,15 +769,114 @@
             },
             {
               "sort": 2,
-              "name": "\uE309"
+              "name": "\uE31C"
             },
             {
               "sort": 3,
-              "name": "\uE263"
+              "name": "\uE29D"
             }
           ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
+          "correct": "5.1a.jpg",
+          "incorrect": "5.1b.jpg"
+        },
+        {
+          "id": "5b",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE303"
+            },
+            {
+              "sort": 2,
+              "name": "\uE30E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE244"
+            }
+          ],
+          "correct": "5.2a.jpg",
+          "incorrect": "5.2b.jpg"
+        },
+        {
+          "id": "5c",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE30A"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE256"
+            }
+          ],
+          "correct": "5.3a.jpg",
+          "incorrect": "5.3b.jpg"
+        },
+        {
+          "id": "5d",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE303"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE24B"
+            },
+            {
+              "sort": 4,
+              "name": "\uE29F"
+            }
+          ],
+          "correct": "5.4a.jpg",
+          "incorrect": "5.4b.jpg"
+        },
+        {
+          "id": "5e",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE11F"
+            },
+            {
+              "sort": 2,
+              "name": "\uE30E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE29D"
+            }
+          ],
+          "correct": "5.5a.jpg",
+          "incorrect": "5.5b.jpg"
+        },
+        {
+          "id": "5f",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE171"
+            },
+            {
+              "sort": 2,
+              "name": "\uE17C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE102"
+            }
+          ],
+          "correct": "5.6a.jpg",
+          "incorrect": "5.6b.jpg"
         }
       ]
     },
@@ -885,38 +999,72 @@
       "cards": [
         {
           "id": "9a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
+          "symbol": "\uE28B",
+          "primary": "9.1a.jpg",
+          "secondary": "9.1b.jpg"
+        },
+        {
+          "id": "9b",
+          "symbol": "\uE28C",
+          "primary": "9.2a.jpg",
+          "secondary": "9.2b.jpg"
+        },
+        {
+          "id": "9c",
+          "symbol": "\uE28D",
+          "primary": "9.3a.jpg",
+          "secondary": "9.3b.jpg"
         },
         {
           "id": "9d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
+          "symbol": "\uE28E",
+          "primary": "9.4a.jpg",
+          "secondary": "9.4b.jpg"
+        },
+        {
+          "id": "9e",
+          "symbol": "\uE28F",
+          "primary": "9.5a.jpg",
+          "secondary": "9.5b.jpg"
+        },
+        {
+          "id": "9f",
+          "symbol": "\uE290",
+          "primary": "9.6a.jpg",
+          "secondary": "9.6b.jpg"
+        },
+        {
+          "id": "9g",
+          "symbol": "\uE291",
+          "primary": "9.7a.jpg",
+          "secondary": "9.7b.jpg"
+        },
+        {
+          "id": "9h",
+          "symbol": "\uE292",
+          "primary": "9.8a.jpg",
+          "secondary": "9.8b.jpg"
+        },
+        {
+          "id": "9i",
+          "symbol": "\uE293",
+          "primary": "9.9a.jpg",
+          "secondary": "9.9b.jpg"
+        },
+        {
+          "id": "9j",
+          "symbol": "\uE294",
+          "primary": "9.10a.jpg",
+          "secondary": "9.10b.jpg"
+        },
+        {
+          "id": "9k",
+          "symbol": "\uE295",
+          "primary": "9.11a.jpg",
+          "secondary": "9.11b.jpg"
         }
       ],
-      "sentences": [
-        {
-          "id": "9a",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000"
-            },
-            {
-              "sort": 2,
-              "name": "\uE309"
-            },
-            {
-              "sort": 3,
-              "name": "\uE263"
-            }
-          ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
-        }
-      ]
+      "sentences": []
     },
     {
       "id": 10,
@@ -953,6 +1101,349 @@
           ],
           "correct": "7.jpg",
           "incorrect": "8.jpg"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "cards": [
+        {
+          "id": "13a",
+          "symbol": "\uE37E",
+          "primary": "13.1a.png",
+          "secondary": "13.1a.png"
+        },
+        {
+          "id": "13b",
+          "symbol": ",",
+          "primary": "13.2a.png",
+          "secondary": "13.2a.png"
+        },
+        {
+          "id": "13c",
+          "symbol": "\uEE02",
+          "primary": "13.3a.png",
+          "secondary": "13.3a.png"
+        },
+        {
+          "id": "13d",
+          "symbol": "\uE316",
+          "primary": "13.4a.png",
+          "secondary": "13.4a.png"
+        },
+        {
+          "id": "13e",
+          "symbol": "“",
+          "primary": "13.5a.png",
+          "secondary": "13.5a.png"
+        },
+        {
+          "id": "13f",
+          "symbol": "'",
+          "primary": "13.6a.png",
+          "secondary": "13.6a.png"
+        },
+        {
+          "id": "13g",
+          "symbol": "\uE390",
+          "primary": "13.7a.png",
+          "secondary": "13.7a.png"
+        },
+        {
+          "id": "13h",
+          "symbol": "\uEA47",
+          "primary": "13.8a.png",
+          "secondary": "13.8a.png"
+        }
+      ],
+      "sentences": [
+        {
+          "id": "13a",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE11F\uE11F"
+            },
+            {
+              "sort": 2,
+              "name": "\uE088"
+            },
+            {
+              "sort": 3,
+              "name": "\uE191"
+            },
+            {
+              "sort": 4,
+              "name": "\uE050"
+            },
+            {
+              "sort": 5,
+              "name": "\uE000"
+            },
+            {
+              "sort": 6,
+              "name": "\uE037\uE37E"
+            }
+          ],
+          "correct": "13.1a.jpg",
+          "incorrect": "13.1a.jpg"
+        },
+        {
+          "id": "13b",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE11F\uE11F"
+            },
+            {
+              "sort": 2,
+              "name": "\uE21E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE037"
+            },
+            {
+              "sort": 4,
+              "name": "\uE07E"
+            },
+            {
+              "sort": 5,
+              "name": "\uE071"
+            },
+            {
+              "sort": 6,
+              "name": "\uE113"
+            },
+            {
+              "sort": 7,
+              "name": "\uE000\uE37E"
+            }
+          ],
+          "correct": "13.2a.jpg",
+          "incorrect": "13.2a.jpg"
+        },
+        {
+          "id": "13c",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE088"
+            },
+            {
+              "sort": 3,
+              "name": "\uE000"
+            },
+            {
+              "sort": 4,
+              "name": "\uE11E"
+            },
+            {
+              "sort": 5,
+              "name": "\uE128\uE37E"
+            }
+          ],
+          "correct": "13.3a.jpg",
+          "incorrect": "13.3a.jpg"
+        },
+        {
+          "id": "13d",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE07E"
+            },
+            {
+              "sort": 3,
+              "name": "\uE071\uE071"
+            },
+            {
+              "sort": 4,
+              "name": "\uE240"
+            },
+            {
+              "sort": 5,
+              "name": "\uE000\uE390"
+            },
+            {
+              "sort": 6,
+              "name": "\uE299\uE299"
+            },
+            {
+              "sort": 7,
+              "name": "\uE37E"
+            }
+          ],
+          "correct": "13.4a.jpg",
+          "incorrect": "13.4a.jpg"
+        },
+        {
+          "id": "13e",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE048\uE37E"
+            }
+          ],
+          "correct": "13.5a.jpg",
+          "incorrect": "13.5a.jpg"
+        },
+        {
+          "id": "13f",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE10C"
+            },
+            {
+              "sort": 3,
+              "name": "\uE000\uE390"
+            },
+            {
+              "sort": 4,
+              "name": "\uE045\uE37E"
+            }
+          ],
+          "correct": "13.6a.jpg",
+          "incorrect": "13.6a.jpg"
+        },
+        {
+          "id": "13g",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE238"
+            },
+            {
+              "sort": 3,
+              "name": "\uE315"
+            },
+            {
+              "sort": 4,
+              "name": "\uE380\uE37E"
+            }
+          ],
+          "correct": "13.7a.jpg",
+          "incorrect": "13.7a.jpg"
+        },
+        {
+          "id": "13h",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE047\uE37E"
+            }
+          ],
+          "correct": "13.8a.jpg",
+          "incorrect": "13.8a.jpg"
+        },
+        {
+          "id": "13i",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE037"
+            },
+            {
+              "sort": 2,
+              "name": "\uE03F,"
+            },
+            {
+              "sort": 3,
+              "name": "“\uE18A"
+            },
+            {
+              "sort": 4,
+              "name": "\uEE02“"
+            },
+            {
+              "sort": 5,
+              "name": "\uE37E"
+            }
+          ],
+          "correct": "13.9a.jpg",
+          "incorrect": "13.9a.jpg"
+        },
+        {
+          "id": "13j",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE000\uE390"
+            },
+            {
+              "sort": 2,
+              "name": "\uE299\uE299"
+            },
+            {
+              "sort": 3,
+              "name": "\uE18A\uE37E"
+            }
+          ],
+          "correct": "13.10a.jpg",
+          "incorrect": "13.10a.jpg"
+        },
+        {
+          "id": "13k",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE000\uE390"
+            },
+            {
+              "sort": 2,
+              "name": "\uE045"
+            },
+            {
+              "sort": 3,
+              "name": "\uE260\uE37E"
+            }
+          ],
+          "correct": "13.11a.jpg",
+          "incorrect": "13.11a.jpg"
+        },
+        {
+          "id": "13l",
+          "symbols": [
+            {
+              "sort": 1,
+              "name": "\uE000"
+            },
+            {
+              "sort": 2,
+              "name": "\uE03F"
+            },
+            {
+              "sort": 3,
+              "name": "\uE096\uE37E"
+            }
+          ],
+          "correct": "13.12a.jpg",
+          "incorrect": "13.12a.jpg"
         }
       ]
     }
