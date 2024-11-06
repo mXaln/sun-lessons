@@ -29,6 +29,7 @@
     <string name="see_answer">See Answer</string>
     <string name="hide_answer">Hide Answer</string>
     <string name="test_symbols_hint">Choose the symbol that reflects the image</string>
+    <string name="test_sentences_hint">Choose the symbols that build the sentence</string>
     <string name="correct">Correct</string>
     <string name="incorrect">Incorrect</string>
     <string name="show">Show</string>

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 5,
   "lessons": [
     {
       "id": 1,
@@ -881,120 +881,6 @@
       ]
     },
     {
-      "id": 6,
-      "cards": [
-        {
-          "id": "6a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
-        },
-        {
-          "id": "6d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
-        }
-      ],
-      "sentences": [
-        {
-          "id": "6a",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000"
-            },
-            {
-              "sort": 2,
-              "name": "\uE309"
-            },
-            {
-              "sort": 3,
-              "name": "\uE263"
-            }
-          ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "cards": [
-        {
-          "id": "7a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
-        },
-        {
-          "id": "7d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
-        }
-      ],
-      "sentences": [
-        {
-          "id": "7a",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000"
-            },
-            {
-              "sort": 2,
-              "name": "\uE309"
-            },
-            {
-              "sort": 3,
-              "name": "\uE263"
-            }
-          ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "cards": [
-        {
-          "id": "8a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
-        },
-        {
-          "id": "8d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
-        }
-      ],
-      "sentences": [
-        {
-          "id": "8a",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000"
-            },
-            {
-              "sort": 2,
-              "name": "\uE309"
-            },
-            {
-              "sort": 3,
-              "name": "\uE263"
-            }
-          ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
-        }
-      ]
-    },
-    {
       "id": 9,
       "cards": [
         {
@@ -1065,44 +951,6 @@
         }
       ],
       "sentences": []
-    },
-    {
-      "id": 10,
-      "cards": [
-        {
-          "id": "10a",
-          "symbol": "\uE299",
-          "primary": "11.jpg",
-          "secondary": "11.jpg"
-        },
-        {
-          "id": "10d",
-          "symbol": "\uE274",
-          "primary": "4.jpg",
-          "secondary": "24.jpg"
-        }
-      ],
-      "sentences": [
-        {
-          "id": "10a",
-          "symbols": [
-            {
-              "sort": 1,
-              "name": "\uE000"
-            },
-            {
-              "sort": 2,
-              "name": "\uE309"
-            },
-            {
-              "sort": 3,
-              "name": "\uE263"
-            }
-          ],
-          "correct": "7.jpg",
-          "incorrect": "8.jpg"
-        }
-      ]
     },
     {
       "id": 13,

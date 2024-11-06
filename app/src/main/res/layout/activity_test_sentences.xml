@@ -10,21 +10,35 @@
 
     <include android:id="@+id/top_nav_bar" layout="@layout/top_navigation" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:layout_marginHorizontal="@dimen/_50dp">
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/hint_text"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_write"/>
-    </FrameLayout>
+
+        <TextView
+            android:id="@+id/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/_10dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18sp"
+            android:text="@string/test_sentences_hint"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/answers_container"
