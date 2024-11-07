@@ -15,6 +15,7 @@ import org.bibletranslationtools.sun.data.model.Setting
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
 import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.utils.Section
+import kotlin.math.min
 
 class LearnSymbolViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -49,6 +50,20 @@ class LearnSymbolViewModel(application: Application) : AndroidViewModel(applicat
             val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
             settingsRepository.insertOrUpdate(lastSection)
             settingsRepository.insertOrUpdate(lastLesson)
+        }
+    }
+
+    fun saveLastPosition(position: Int) {
+        runBlocking {
+            val lastSymbol = Setting(Setting.LAST_SYMBOL, position.toString())
+            settingsRepository.insertOrUpdate(lastSymbol)
+        }
+    }
+
+    fun getLastPosition(): Int {
+        return runBlocking {
+            val pos = settingsRepository.get(Setting.LAST_SYMBOL)?.value?.toInt() ?: 0
+            min(pos, _cards.value.size - 1)
         }
     }
 

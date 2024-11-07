@@ -22,12 +22,13 @@ import org.bibletranslationtools.sun.ui.viewmodel.LearnSentencesViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
+import kotlin.math.max
 
 class LearnSentencesActivity : AppCompatActivity() {
     private val binding by lazy { ActivityLearnSentencesBinding.inflate(layoutInflater) }
     private val adapter by lazy { LearnSentenceAdapter() }
     private val viewModel: LearnSentencesViewModel by viewModels()
-    private var pagerCurrentItem = 1
+    private var pagerCurrentItem = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +53,10 @@ class LearnSentencesActivity : AppCompatActivity() {
 
     private fun setupButtons() {
         with(binding) {
-            prevButton.visibility = View.INVISIBLE
             prevButton.setOnClickListener {
-                nextButton.visibility = View.VISIBLE
                 setPreviousSentence()
             }
             nextButton.setOnClickListener {
-                prevButton.visibility = View.VISIBLE
                 setNextSentence()
             }
         }
@@ -79,56 +77,43 @@ class LearnSentencesActivity : AppCompatActivity() {
                         if (viewModel.mode.value == LessonMode.NORMAL) {
                             launch(Dispatchers.Main) {
                                 delay(100)
-                                sentences.firstOrNull { !it.sentence.learned }?.let {
-                                    // Scroll to the last learned sentence
-                                    viewPager.currentItem = sentences.indexOf(it) - 1
-                                }
+                                val lastPosition = viewModel.getLastPosition()
+                                viewPager.currentItem = lastPosition
                             }
                         }
                     }
                 }
             }
 
-            loadCards()
+            viewModel.loadSentences()
         }
-    }
-
-    private fun loadCards() {
-        viewModel.loadSentences()
     }
 
     private fun setPreviousSentence() {
-        val currentItem = binding.viewPager.currentItem
-        if (currentItem > 0) {
-            binding.viewPager.currentItem = currentItem - 1
-            if (binding.viewPager.currentItem == 0) {
-                binding.prevButton.visibility = View.INVISIBLE
-            }
-        }
+        val previousItem = max(0, binding.viewPager.currentItem - 1)
+        binding.viewPager.currentItem = previousItem
     }
 
     private fun setNextSentence() {
         val currentItem = binding.viewPager.currentItem
-        val unlearnedCards = viewModel.sentences.value.filter {
+        val unlearnedItem = viewModel.sentences.value.indexOfFirst {
             if (viewModel.mode.value == LessonMode.REPEAT) {
                 !it.sentence.passed
             } else !it.sentence.learned
-        }.size
+        }
 
         when {
             currentItem < viewModel.sentences.value.size - 1 -> {
                 binding.viewPager.currentItem = currentItem + 1
             }
-            unlearnedCards > 0 -> {
-                // User skipped some cards, so show the first unlearned card
-                val unlearnedItem = viewModel.sentences.value.indexOfFirst {
-                    if (viewModel.mode.value == LessonMode.REPEAT) {
-                        !it.sentence.passed
-                    } else !it.sentence.learned
-                }
+            unlearnedItem > -1 && unlearnedItem < viewModel.sentences.value.size - 1 -> {
                 binding.viewPager.currentItem = unlearnedItem
             }
-            else -> finishLesson()
+            else -> {
+                saveCard(pagerCurrentItem)
+                viewModel.saveLastPosition(0)
+                finishLesson()
+            }
         }
     }
 
@@ -137,17 +122,21 @@ class LearnSentencesActivity : AppCompatActivity() {
             super.onPageSelected(position)
 
             adapter.notifyItemChanged(pagerCurrentItem)
-            pagerCurrentItem = position
-
             viewModel.sentences.value.let { sentences ->
                 val sentence = sentences[position]
                 if (viewModel.mode.value == LessonMode.REPEAT) {
                     sentence.sentence.passed = true
-                } else if (!sentence.sentence.learned) {
-                    sentence.sentence.learned = true
-                    viewModel.saveSentence(sentence)
+                } else {
+                    saveCard(pagerCurrentItem)
                 }
             }
+            if (position > 0) {
+                viewModel.saveLastPosition(position)
+                binding.prevButton.visibility = View.VISIBLE
+            } else {
+                binding.prevButton.visibility = View.INVISIBLE
+            }
+            pagerCurrentItem = position
         }
     }
 
@@ -175,5 +164,15 @@ class LearnSentencesActivity : AppCompatActivity() {
         intent.putEnumExtra("section", Section.LEARN_SENTENCES)
         intent.putEnumExtra("mode", viewModel.mode.value)
         startActivity(intent)
+    }
+
+    private fun saveCard(position: Int) {
+        if (position >= 0) {
+            val sentence = viewModel.sentences.value[position]
+            if (!sentence.sentence.learned) {
+                sentence.sentence.learned = true
+                viewModel.saveSentence(sentence)
+            }
+        }
     }
 }

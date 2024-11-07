@@ -15,6 +15,7 @@ import org.bibletranslationtools.sun.data.repositories.SentenceRepository
 import org.bibletranslationtools.sun.data.repositories.SettingsRepository
 import org.bibletranslationtools.sun.ui.model.LessonMode
 import org.bibletranslationtools.sun.utils.Section
+import kotlin.math.min
 
 class LearnSentencesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: SentenceRepository
@@ -49,6 +50,20 @@ class LearnSentencesViewModel(application: Application) : AndroidViewModel(appli
             val lastLesson = Setting(Setting.LAST_LESSON, lessonId.value.toString())
             settingsRepository.insertOrUpdate(lastSection)
             settingsRepository.insertOrUpdate(lastLesson)
+        }
+    }
+
+    fun saveLastPosition(position: Int) {
+        runBlocking {
+            val lastSentence = Setting(Setting.LAST_SENTENCE, position.toString())
+            settingsRepository.insertOrUpdate(lastSentence)
+        }
+    }
+
+    fun getLastPosition(): Int {
+        return runBlocking {
+            val pos = settingsRepository.get(Setting.LAST_SENTENCE)?.value?.toInt() ?: 0
+            min(pos, _sentences.value.size - 1)
         }
     }
 

@@ -1,11 +1,11 @@
 package org.bibletranslationtools.sun.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -22,12 +22,13 @@ import org.bibletranslationtools.sun.ui.viewmodel.LearnSymbolViewModel
 import org.bibletranslationtools.sun.utils.Section
 import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
+import kotlin.math.max
 
 class LearnSymbolsActivity : AppCompatActivity() {
     private val binding by lazy { ActivityLearnSymbolsBinding.inflate(layoutInflater) }
     private val adapter by lazy { LearnSymbolAdapter() }
     private val viewModel: LearnSymbolViewModel by viewModels()
-    private var pagerCurrentItem = 1
+    private var pagerCurrentItem = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,50 +53,12 @@ class LearnSymbolsActivity : AppCompatActivity() {
 
     private fun setupButtons() {
         with(binding) {
-            prevButton.visibility = View.INVISIBLE
             prevButton.setOnClickListener {
-                nextButton.visibility = View.VISIBLE
                 setPreviousSymbol()
             }
             nextButton.setOnClickListener {
-                prevButton.visibility = View.VISIBLE
                 setNextSymbol()
             }
-        }
-    }
-
-    private fun setPreviousSymbol() {
-        val currentItem = binding.viewPager.currentItem
-        if (currentItem > 0) {
-            binding.viewPager.currentItem = currentItem - 1
-            if (binding.viewPager.currentItem == 0) {
-                binding.prevButton.visibility = View.INVISIBLE
-            }
-        }
-    }
-
-    private fun setNextSymbol() {
-        val currentItem = binding.viewPager.currentItem
-        val unlearnedCards = viewModel.cards.value.filter {
-            if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.learned
-        }.size
-
-        when {
-            currentItem < viewModel.cards.value.size - 1 -> {
-                binding.viewPager.currentItem = currentItem + 1
-            }
-            unlearnedCards > 0 -> {
-                // User skipped some cards, so show the first unlearned card
-                val unlearnedItem = viewModel.cards.value.indexOfFirst {
-                    if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.learned
-                }
-                if (unlearnedItem == -1) {
-                    finishLesson()
-                    return
-                }
-                binding.viewPager.currentItem = unlearnedItem
-            }
-            else -> finishLesson()
         }
     }
 
@@ -114,10 +77,8 @@ class LearnSymbolsActivity : AppCompatActivity() {
                         if (viewModel.mode.value == LessonMode.NORMAL) {
                             launch(Dispatchers.Main) {
                                 delay(100)
-                                cards.firstOrNull { !it.learned }?.let {
-                                    // Scroll to the last learned card
-                                    viewPager.currentItem = cards.indexOf(it) - 1
-                                }
+                                val lastPosition = viewModel.getLastPosition()
+                                viewPager.currentItem = lastPosition
                             }
                         }
                     }
@@ -128,22 +89,52 @@ class LearnSymbolsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setPreviousSymbol() {
+        val previousItem = max(0, binding.viewPager.currentItem - 1)
+        binding.viewPager.currentItem = previousItem
+    }
+
+    private fun setNextSymbol() {
+        val currentItem = binding.viewPager.currentItem
+        val unlearnedItem = viewModel.cards.value.indexOfFirst {
+            if (viewModel.mode.value == LessonMode.REPEAT) !it.passed else !it.learned
+        }
+
+        when {
+            currentItem < viewModel.cards.value.size - 1 -> {
+                binding.viewPager.currentItem = currentItem + 1
+            }
+            unlearnedItem > -1 && unlearnedItem < viewModel.cards.value.size - 1 -> {
+                binding.viewPager.currentItem = unlearnedItem
+            }
+            else -> {
+                saveCard(pagerCurrentItem)
+                viewModel.saveLastPosition(0)
+                finishLesson()
+            }
+        }
+    }
+
     private val callback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
             adapter.notifyItemChanged(pagerCurrentItem)
-            pagerCurrentItem = position
-
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
                 if (viewModel.mode.value == LessonMode.REPEAT) {
                     card.passed = true
-                } else if (!card.learned) {
-                    card.learned = true
-                    viewModel.saveCard(card)
+                } else {
+                    saveCard(pagerCurrentItem)
                 }
             }
+            if (position > 0) {
+                viewModel.saveLastPosition(position)
+                binding.prevButton.visibility = View.VISIBLE
+            } else {
+                binding.prevButton.visibility = View.INVISIBLE
+            }
+            pagerCurrentItem = position
         }
     }
 
@@ -171,6 +162,16 @@ class LearnSymbolsActivity : AppCompatActivity() {
         intent.putExtra("section", Section.LEARN_SYMBOLS)
         intent.putEnumExtra("mode", viewModel.mode.value)
         startActivity(intent)
+    }
+
+    private fun saveCard(position: Int) {
+        if (position >= 0) {
+            val card = viewModel.cards.value[position]
+            if (!card.learned) {
+                card.learned = true
+                viewModel.saveCard(card)
+            }
+        }
     }
 }
 
