@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.wajahatkarim3.easyflipview.EasyFlipView
+import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,11 +26,12 @@ import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
 import kotlin.math.max
 
-class LearnSymbolsActivity : AppCompatActivity() {
+class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSymbolsBinding.inflate(layoutInflater) }
-    private val adapter by lazy { LearnSymbolAdapter() }
+    private val adapter by lazy { LearnSymbolAdapter(this) }
     private val viewModel: LearnSymbolViewModel by viewModels()
     private var pagerCurrentItem = -1
+    private val tabDots = arrayListOf<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,28 @@ class LearnSymbolsActivity : AppCompatActivity() {
 
         setupCardsView()
         setupButtons()
+    }
+
+    override fun onViewFlipCompleted(
+        easyFlipView: EasyFlipView?,
+        newCurrentSide: EasyFlipView.FlipState?
+    ) {
+        if (newCurrentSide == EasyFlipView.FlipState.BACK_SIDE) {
+            viewModel.cards.value.let { cards ->
+                val card = cards[pagerCurrentItem]
+                if (viewModel.mode.value == LessonMode.REPEAT) {
+                    card.passed = true
+                } else {
+                    saveCard(pagerCurrentItem)
+                }
+                enableNextButton(true)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
     private fun setupButtons() {
@@ -108,10 +133,25 @@ class LearnSymbolsActivity : AppCompatActivity() {
                 binding.viewPager.currentItem = unlearnedItem
             }
             else -> {
-                saveCard(pagerCurrentItem)
                 viewModel.saveLastPosition(0)
                 finishLesson()
             }
+        }
+    }
+
+    private fun enableNextButton(enabled: Boolean) {
+        binding.nextButton.isEnabled = enabled
+
+        if (tabDots.isEmpty()) {
+            tabDots.addAll(binding.tabs.touchables)
+        }
+
+        if (enabled) {
+            tabDots.forEach { it.isEnabled = true }
+            binding.tabs.touchables.clear()
+            binding.tabs.touchables.addAll(tabDots)
+        } else {
+            binding.tabs.touchables.forEach { it.isEnabled = false }
         }
     }
 
@@ -122,11 +162,12 @@ class LearnSymbolsActivity : AppCompatActivity() {
             adapter.notifyItemChanged(pagerCurrentItem)
             viewModel.cards.value.let { cards ->
                 val card = cards[position]
-                if (viewModel.mode.value == LessonMode.REPEAT) {
-                    card.passed = true
+                val done = if (viewModel.mode.value == LessonMode.REPEAT) {
+                    card.passed
                 } else {
-                    saveCard(pagerCurrentItem)
+                    card.learned
                 }
+                enableNextButton(done)
             }
             if (position > 0) {
                 viewModel.saveLastPosition(position)
@@ -136,11 +177,6 @@ class LearnSymbolsActivity : AppCompatActivity() {
             }
             pagerCurrentItem = position
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

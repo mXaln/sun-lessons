@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.wajahatkarim3.easyflipview.EasyFlipView
+import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,11 +26,12 @@ import org.bibletranslationtools.sun.utils.TallyMarkConverter
 import org.bibletranslationtools.sun.utils.putEnumExtra
 import kotlin.math.max
 
-class LearnSentencesActivity : AppCompatActivity() {
+class LearnSentencesActivity : AppCompatActivity(), OnFlipAnimationListener {
     private val binding by lazy { ActivityLearnSentencesBinding.inflate(layoutInflater) }
-    private val adapter by lazy { LearnSentenceAdapter() }
+    private val adapter by lazy { LearnSentenceAdapter(this) }
     private val viewModel: LearnSentencesViewModel by viewModels()
     private var pagerCurrentItem = -1
+    private val tabDots = arrayListOf<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,28 @@ class LearnSentencesActivity : AppCompatActivity() {
 
         setupCardsView()
         setupButtons()
+    }
+
+    override fun onViewFlipCompleted(
+        easyFlipView: EasyFlipView?,
+        newCurrentSide: EasyFlipView.FlipState?
+    ) {
+        if (newCurrentSide == EasyFlipView.FlipState.BACK_SIDE) {
+            viewModel.sentences.value.let { sentences ->
+                val sentence = sentences[pagerCurrentItem]
+                if (viewModel.mode.value == LessonMode.REPEAT) {
+                    sentence.sentence.passed = true
+                } else {
+                    saveSentence(pagerCurrentItem)
+                }
+                enableNextButton(true)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
     private fun setupButtons() {
@@ -110,10 +135,26 @@ class LearnSentencesActivity : AppCompatActivity() {
                 binding.viewPager.currentItem = unlearnedItem
             }
             else -> {
-                saveCard(pagerCurrentItem)
+                saveSentence(pagerCurrentItem)
                 viewModel.saveLastPosition(0)
                 finishLesson()
             }
+        }
+    }
+
+    private fun enableNextButton(enabled: Boolean) {
+        binding.nextButton.isEnabled = enabled
+
+        if (tabDots.isEmpty()) {
+            tabDots.addAll(binding.tabs.touchables)
+        }
+
+        if (enabled) {
+            tabDots.forEach { it.isEnabled = true }
+            binding.tabs.touchables.clear()
+            binding.tabs.touchables.addAll(tabDots)
+        } else {
+            binding.tabs.touchables.forEach { it.isEnabled = false }
         }
     }
 
@@ -124,11 +165,12 @@ class LearnSentencesActivity : AppCompatActivity() {
             adapter.notifyItemChanged(pagerCurrentItem)
             viewModel.sentences.value.let { sentences ->
                 val sentence = sentences[position]
-                if (viewModel.mode.value == LessonMode.REPEAT) {
-                    sentence.sentence.passed = true
+                val done = if (viewModel.mode.value == LessonMode.REPEAT) {
+                    sentence.sentence.passed
                 } else {
-                    saveCard(pagerCurrentItem)
+                    sentence.sentence.learned
                 }
+                enableNextButton(done)
             }
             if (position > 0) {
                 viewModel.saveLastPosition(position)
@@ -138,11 +180,6 @@ class LearnSentencesActivity : AppCompatActivity() {
             }
             pagerCurrentItem = position
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.viewPager.unregisterOnPageChangeCallback(callback)
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -166,7 +203,7 @@ class LearnSentencesActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun saveCard(position: Int) {
+    private fun saveSentence(position: Int) {
         if (position >= 0) {
             val sentence = viewModel.sentences.value[position]
             if (!sentence.sentence.learned) {

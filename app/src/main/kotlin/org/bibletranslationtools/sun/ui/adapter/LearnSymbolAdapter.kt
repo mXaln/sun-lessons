@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
+import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.databinding.ItemSymbolLearnBinding
 
-class LearnSymbolAdapter: ListAdapter<Card, LearnSymbolAdapter.ViewHolder>(callback) {
+class LearnSymbolAdapter(
+    private val onFlipListener: OnFlipAnimationListener
+): ListAdapter<Card, LearnSymbolAdapter.ViewHolder>(callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -46,6 +49,8 @@ class LearnSymbolAdapter: ListAdapter<Card, LearnSymbolAdapter.ViewHolder>(callb
                     .load(Uri.parse("file:///android_asset/images/symbols/${card.primary}"))
                     .fitCenter()
                     .into(itemImage)
+
+                cardViewFlip.onFlipListener = onFlipListener
 
                 val currentState = cardViewFlip.currentFlipState
                 if (currentState == FlipState.BACK_SIDE) {
