@@ -1,6 +1,5 @@
 package org.bibletranslationtools.sun.ui.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,6 +11,7 @@ import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.SentenceWithSymbols
 import org.bibletranslationtools.sun.databinding.ItemSentenceLearnBinding
 import kotlin.math.ceil
+import androidx.core.net.toUri
 
 class LearnSentenceAdapter(
     private val onFlipListener: OnFlipAnimationListener
@@ -82,7 +82,7 @@ class LearnSentenceAdapter(
                 }
 
                 Glide.with(itemImage.context)
-                    .load(Uri.parse("file:///android_asset/images/sentences/${sentence.sentence.correct}"))
+                    .load("file:///android_asset/images/sentences/${sentence.sentence.correct}".toUri())
                     .fitCenter()
                     .into(itemImage)
 

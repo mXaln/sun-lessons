@@ -141,6 +141,7 @@ class LearnSymbolsActivity : AppCompatActivity(), OnFlipAnimationListener {
 
     private fun enableNextButton(enabled: Boolean) {
         binding.nextButton.isEnabled = enabled
+        binding.viewPager.isUserInputEnabled = enabled
 
         if (tabDots.isEmpty()) {
             tabDots.addAll(binding.tabs.touchables)

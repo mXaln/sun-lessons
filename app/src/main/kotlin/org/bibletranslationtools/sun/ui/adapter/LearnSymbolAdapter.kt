@@ -1,6 +1,5 @@
 package org.bibletranslationtools.sun.ui.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +10,7 @@ import com.wajahatkarim3.easyflipview.EasyFlipView.FlipState
 import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 import org.bibletranslationtools.sun.data.model.Card
 import org.bibletranslationtools.sun.databinding.ItemSymbolLearnBinding
+import androidx.core.net.toUri
 
 class LearnSymbolAdapter(
     private val onFlipListener: OnFlipAnimationListener
@@ -46,7 +46,7 @@ class LearnSymbolAdapter(
                 itemText.text = card.symbol
 
                 Glide.with(itemImage.context)
-                    .load(Uri.parse("file:///android_asset/images/symbols/${card.primary}"))
+                    .load("file:///android_asset/images/symbols/${card.primary}".toUri())
                     .fitCenter()
                     .into(itemImage)
 
